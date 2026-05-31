@@ -20,6 +20,7 @@
 | Product | Description | Status | URL |
 |---------|-------------|--------|-----|
 | Luna | AI Business Assistant — memoria persistente, chat, emails, soporte | ✅ Live | https://luna.wizzardbyte.workers.dev |
+| Hermes | Byte Wizzard AI Assistant — demo bot del estudio | ✅ Demo | `demos/hermes/` |
 | Profe Mágico | AI Learning System — inglés con IA para niños | ✅ Live | https://profe-magico-frontend.onrender.com/ |
 | Courier TMS | Logistics Intelligence System — rutas, GPS, clustering | 🚧 Demo | `demos/courier-tms/` |
 | ClipCraft | Mobile Content Creation — edición, render cloud | 🔧 In dev | — |
