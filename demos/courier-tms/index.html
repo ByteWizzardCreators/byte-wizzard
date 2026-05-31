@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Courier TMS — Route Optimizer Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0f;
+      color: #e0e0e0;
+      line-height: 1.6;
+    }
+    .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+    /* HEADER */
+    header {
+      padding: 32px 0 20px;
+      border-bottom: 1px solid #1a1a2e;
+      margin-bottom: 32px;
+    }
+    header .back {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: #555;
+      margin-bottom: 12px;
+    }
+    header .back a { color: #888; text-decoration: none; }
+    header .back a:hover { color: #ff6b35; }
+    header h1 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.5rem;
+      color: #ff6b35;
+      margin-bottom: 6px;
+    }
+    header p { color: #666; font-size: 0.85rem; }
+
+    /* STEPS */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .step {
+      background: #0d0d14;
+      border: 1px solid #1a1a2e;
+      border-radius: 8px;
+      padding: 14px 12px;
+      text-align: center;
+    }
+    .step .icon { font-size: 1.2rem; margin-bottom: 4px; }
+    .step .num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      color: #555;
+      letter-spacing: 0.15em;
+      margin-bottom: 2px;
+    }
+    .step .desc { font-size: 0.75rem; color: #888; }
+
+    /* CARD */
+    .card {
+      background: #0d0d14;
+      border: 1px solid #1a1a2e;
+      border-radius: 12px;
+      padding: 28px;
+      margin-bottom: 24px;
+    }
+    .card h2 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: #888;
+      margin-bottom: 16px;
+      letter-spacing: 0.05em;
+    }
+    .card h2 .badge {
+      font-size: 0.6rem;
+      background: #1a1a2e;
+      color: #666;
+      padding: 2px 10px;
+      border-radius: 10px;
+      margin-left: 8px;
+      font-weight: 400;
+    }
+
+    /* INPUTS */
+    .input-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    textarea {
+      flex: 1;
+      min-height: 120px;
+      background: #0a0a0f;
+      border: 1px solid #1a1a2e;
+      border-radius: 8px;
+      color: #e0e0e0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      padding: 12px;
+      resize: vertical;
+    }
+    textarea:focus { outline: none; border-color: #ff6b35; }
+
+    .csv-zone {
+      flex: 0 0 180px;
+      background: #0a0a0f;
+      border: 1px dashed #2a2a3e;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      min-height: 120px;
+      padding: 16px;
+    }
+    .csv-zone:hover { border-color: #ff6b35; background: #0f0f1a; }
+    .csv-zone.dragover { border-color: #00d488; background: #0f0f1a; }
+    .csv-zone .icon { font-size: 1.5rem; opacity: 0.5; }
+    .csv-zone .label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: #555;
+      text-align: center;
+    }
+    .csv-zone .label strong { color: #888; display: block; }
+    .csv-zone input[type="file"] { display: none; }
+
+    .btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      padding: 10px 22px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: #ff6b35;
+      color: #0a0a0f;
+    }
+    .btn-primary:hover { background: #ff8555; transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+    .btn-secondary {
+      background: transparent;
+      color: #888;
+      border: 1px solid #2a2a3e;
+    }
+    .btn-secondary:hover { border-color: #ff6b35; color: #ff6b35; }
+
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+
+    /* RESULTS */
+    .results {
+      display: none;
+      margin-top: 16px;
+      padding: 16px;
+      background: #0a0a0f;
+      border: 1px solid #1a1a2e;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+    }
+    .results.show { display: block; }
+    .results .stat { color: #ff6b35; font-weight: 700; }
+    .results .stat-green { color: #00d488; font-weight: 700; }
+    .results .error { color: #ff4444; }
+
+    /* STATS ROW */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .stat-box {
+      background: #0a0a0f;
+      border: 1px solid #1a1a2e;
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+    }
+    .stat-box .value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #ff6b35;
+    }
+    .stat-box .value.green { color: #00d488; }
+    .stat-box .label {
+      font-size: 0.65rem;
+      color: #666;
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* MAP */
+    #map {
+      width: 100%;
+      height: 420px;
+      border-radius: 8px;
+      border: 1px solid #1a1a2e;
+      z-index: 1;
+    }
+    .placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 420px;
+      color: #444;
+      text-align: center;
+      gap: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+    }
+    .placeholder .big-icon { font-size: 2.5rem; opacity: 0.25; }
+    .placeholder .hint { color: #555; font-size: 0.7rem; }
+
+    /* STOP LIST */
+    .stops-toggle {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: #666;
+      background: none;
+      border: 1px solid #2a2a3e;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 12px;
+      transition: all 0.2s;
+    }
+    .stops-toggle:hover { border-color: #ff6b35; color: #ff6b35; }
+    .stops-list {
+      display: none;
+      margin-top: 12px;
+      padding: 12px 16px;
+      background: #0a0a0f;
+      border: 1px solid #1a1a2e;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+    }
+    .stops-list.show { display: block; }
+    .stops-list ol { padding-left: 20px; }
+    .stops-list li {
+      padding: 3px 0;
+      color: #999;
+    }
+    .stops-list li::marker { color: #555; }
+    .stops-list .start { color: #00d488; font-weight: 500; }
+    .stops-list .end { color: #ff6b35; font-weight: 500; }
+
+    @media (max-width: 700px) {
+      .input-row { flex-direction: column; }
+      .csv-zone { flex: unset; min-height: 80px; }
+      .steps { grid-template-columns: 1fr; }
+      .stats-row { grid-template-columns: 1fr; }
+      .card { padding: 18px; }
+    }
+
+    /* Leaflet dark tweaks */
+    .leaflet-container { background: #0d0d14 !important; }
+    .leaflet-control-zoom a { background: #1a1a2e !important; color: #ccc !important; border-color: #2a2a3e !important; }
+    .leaflet-control-zoom a:hover { background: #2a2a3e !important; }
+    .leaflet-popup-content-wrapper { background: #0d0d14 !important; color: #ccc !important; border: 1px solid #2a2a3e !important; border-radius: 8px !important; }
+    .leaflet-popup-tip { background: #0d0d14 !important; border: 1px solid #2a2a3e !important; }
+    .leaflet-popup-close-button { color: #555 !important; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="back"><a href="../../web/index.html">← Back to Byte Wizzard</a></div>
+      <h1>🚚 Courier TMS</h1>
+      <p>Route Optimizer Demo — ingresá direcciones o subí un CSV, y mirá cómo se optimiza la ruta automáticamente.</p>
+    </header>
+
+    <div class="steps">
+      <div class="step">
+        <div class="icon">📥</div>
+        <div class="num">STEP 1</div>
+        <div class="desc">Ingresá direcciones o <strong>subí un CSV</strong></div>
+      </div>
+      <div class="step">
+        <div class="icon">🧠</div>
+        <div class="num">STEP 2</div>
+        <div class="desc">Geocodificamos + optimizamos la ruta (TSP)</div>
+      </div>
+      <div class="step">
+        <div class="icon">🗺️</div>
+        <div class="num">STEP 3</div>
+        <div class="desc">Visualizala en el mapa con el orden óptimo</div>
+      </div>
+    </div>
+
+    <!-- INPUT -->
+    <div class="card">
+      <h2>📦 Delivery Addresses <span class="badge">manual or CSV</span></h2>
+      <div class="input-row">
+        <textarea id="addresses" placeholder="Enter one address per line...&#10;&#10;Av. Corrientes 1234, CABA&#10;Callao 567, CABA&#10;Av. Santa Fe 890, CABA">Av. Corrientes 1234, CABA
+Callao 567, CABA
+Av. Santa Fe 890, CABA
+Av. Rivadavia 2345, CABA
+Montevideo 678, CABA
+Av. Alem 901, CABA
+Av. Córdoba 3456, CABA
+Cerrito 123, CABA</textarea>
+        <div class="csv-zone" id="csvZone">
+          <div class="icon">📄</div>
+          <div class="label">
+            <strong>Upload CSV</strong>
+            Drop a file or click to browse
+          </div>
+          <input type="file" id="csvFile" accept=".csv">
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-primary" id="optimizeBtn" onclick="optimizeRoute()">🚀 Optimize Route</button>
+        <button class="btn btn-secondary" onclick="loadSample()">📋 Load Sample</button>
+        <button class="btn btn-secondary" onclick="clearAll()">✕ Clear</button>
+      </div>
+      <div class="results" id="results"></div>
+    </div>
+
+    <!-- MAP -->
+    <div class="card">
+      <h2>🗺️ Route Map</h2>
+      <div id="map">
+        <div class="placeholder" id="mapPlaceholder">
+          <div class="big-icon">🚚</div>
+          <div>Enter addresses and click "Optimize Route"</div>
+          <div class="hint">The optimized route will appear on the map with numbered stops</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STOP LIST -->
+    <div style="text-align: center; margin-bottom: 40px;">
+      <button class="stops-toggle" id="stopsToggle" onclick="toggleStops()">📋 Show stop list</button>
+      <div class="stops-list" id="stopsList">
+        <div style="color: #666; font-size: 0.65rem; margin-bottom: 8px; text-align: center;">OPTIMIZED ORDER</div>
+        <ol id="stopsOrder"></ol>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // ── State ──────────────────────────────────────────────────────
+    let currentMap = null;
+    let currentMarkers = [];
+    let currentPolyline = null;
+    let currentStops = [];
+
+    // ── Samples ────────────────────────────────────────────────────
+    const SAMPLES = [
+      'Av. Corrientes 1234, CABA',
+      'Callao 567, CABA',
+      'Av. Santa Fe 890, CABA',
+      'Av. Rivadavia 2345, CABA',
+      'Montevideo 678, CABA',
+      'Av. Alem 901, CABA',
+      'Av. Córdoba 3456, CABA',
+      'Cerrito 123, CABA',
+    ];
+
+    function loadSample() {
+      document.getElementById('addresses').value = SAMPLES.join('\n');
+    }
+    function clearAll() {
+      document.getElementById('addresses').value = '';
+      document.getElementById('results').classList.remove('show');
+      document.getElementById('stopsList').classList.remove('show');
+      resetMap();
+    }
+
+    // ── CSV Upload ─────────────────────────────────────────────────
+    const csvZone = document.getElementById('csvZone');
+    const csvInput = document.getElementById('csvFile');
+
+    csvZone.addEventListener('click', () => csvInput.click());
+
+    csvZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      csvZone.classList.add('dragover');
+    });
+    csvZone.addEventListener('dragleave', () => {
+      csvZone.classList.remove('dragover');
+    });
+    csvZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      csvZone.classList.remove('dragover');
+      if (e.dataTransfer.files.length > 0) {
+        parseCSVFile(e.dataTransfer.files[0]);
+      }
+    });
+    csvInput.addEventListener('change', () => {
+      if (csvInput.files.length > 0) {
+        parseCSVFile(csvInput.files[0]);
+      }
+    });
+
+    function parseCSVFile(file) {
+      if (!file.name.endsWith('.csv')) {
+        showResult('⚠️ Please upload a .csv file', 'error');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const text = e.target.result;
+        const rows = parseCSV(text);
+        if (rows.length === 0) {
+          showResult('⚠️ CSV is empty or could not be parsed', 'error');
+          return;
+        }
+        // Try to find address-like columns
+        const header = rows[0];
+        let addressCol = -1;
+        let fullAddressCol = -1;
+        let streetCol = -1;
+        let cityCol = -1;
+
+        header.forEach((h, i) => {
+          const hl = h.toLowerCase().trim();
+          if (hl === 'address' || hl === 'direccion' || hl === 'dirección' || hl === 'full_address') fullAddressCol = i;
+          if (hl === 'street' || hl === 'calle' || hl === 'domicilio') streetCol = i;
+          if (hl === 'city' || hl === 'ciudad' || hl === 'localidad') cityCol = i;
+        });
+
+        const lines = [];
+        const dataRows = rows.slice(1); // skip header
+
+        for (const row of dataRows) {
+          if (row.length === 0 || row.every(c => c.trim() === '')) continue;
+
+          let addr = '';
+
+          if (fullAddressCol >= 0 && row[fullAddressCol]?.trim()) {
+            addr = row[fullAddressCol].trim();
+          } else if (streetCol >= 0 && row[streetCol]?.trim()) {
+            addr = row[streetCol].trim();
+            if (cityCol >= 0 && row[cityCol]?.trim()) {
+              addr += ', ' + row[cityCol].trim();
+            }
+          } else {
+            // Fallback: take the first non-empty column that looks like an address
+            for (const cell of row) {
+              if (cell.trim().length > 5) {
+                addr = cell.trim();
+                break;
+              }
+            }
+          }
+
+          if (addr) lines.push(addr);
+        }
+
+        if (lines.length === 0) {
+          showResult('⚠️ Could not find address columns in CSV. Make sure your CSV has columns like: address, street, city', 'error');
+          return;
+        }
+
+        document.getElementById('addresses').value = lines.join('\n');
+        showResult(`✅ Loaded <span class="stat">${lines.length}</span> addresses from CSV. Column: "${rows[0][fullAddressCol >= 0 ? fullAddressCol : streetCol >= 0 ? streetCol : 0]}"`, '');
+      };
+      reader.readAsText(file);
+    }
+
+    function parseCSV(text) {
+      const lines = [];
+      let current = [];
+      let field = '';
+      let inQuotes = false;
+
+      for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        if (ch === '"') {
+          if (inQuotes && i + 1 < text.length && text[i + 1] === '"') {
+            field += '"';
+            i++;
+          } else {
+            inQuotes = !inQuotes;
+          }
+        } else if (ch === ',' && !inQuotes) {
+          current.push(field.trim());
+          field = '';
+        } else if ((ch === '\n' || ch === '\r') && !inQuotes) {
+          if (ch === '\r' && i + 1 < text.length && text[i + 1] === '\n') i++;
+          if (field.trim() || current.length > 0) {
+            current.push(field.trim());
+            lines.push(current);
+          }
+          current = [];
+          field = '';
+        } else {
+          field += ch;
+        }
+      }
+      if (field.trim() || current.length > 0) {
+        current.push(field.trim());
+        lines.push(current);
+      }
+      return lines;
+    }
+
+    // ── Geocoding (Nominatim) ─────────────────────────────────────
+    async function geocodeAddress(addr) {
+      const resp = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(addr)}&limit=1&countrycodes=ar`,
+        { headers: { 'User-Agent': 'ByteWizzard-CourierTMS-Demo/1.0' } }
+      );
+      const data = await resp.json();
+      if (data && data.length > 0) {
+        return {
+          address: addr,
+          lat: parseFloat(data[0].lat),
+          lon: parseFloat(data[0].lon),
+          display: data[0].display_name
+        };
+      }
+      return null;
+    }
+
+    // ── Main Optimize ──────────────────────────────────────────────
+    async function optimizeRoute() {
+      const btn = document.getElementById('optimizeBtn');
+      const textarea = document.getElementById('addresses');
+      const results = document.getElementById('results');
+      const lines = textarea.value.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+
+      if (lines.length < 2) {
+        showResult('⚠️ Enter at least 2 addresses', 'error');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = '⏳ Working...';
+      showResult('📍 Geocoding addresses... (Nominatim rate limit: ~1/sec)', '');
+
+      resetMap();
+      document.getElementById('stopsList').classList.remove('show');
+
+      try {
+        // 1. Geocode with rate limiting
+        const geocoded = [];
+        for (let i = 0; i < lines.length; i++) {
+          showResult(`📍 Geocoding ${i + 1}/${lines.length}: ${lines[i].substring(0, 40)}...`, '');
+          const result = await geocodeAddress(lines[i]);
+          if (result) geocoded.push(result);
+          // Nominatim: 1 req/sec
+          if (i < lines.length - 1) await sleep(1100);
+        }
+
+        if (geocoded.length < 2) {
+          showResult('⚠️ Could not geocode enough addresses. Try adding "CABA" or a more specific location.', 'error');
+          btn.disabled = false;
+          btn.textContent = '🚀 Optimize Route';
+          return;
+        }
+
+        showResult(`🧠 Computing optimal route with Nearest-Neighbor TSP (${geocoded.length} stops)...`, '');
+
+        // 2. Run TSP solver in the browser (Haversine distance)
+        const orderedIndices = solveTSP(geocoded);
+        const orderedStops = orderedIndices.map(i => geocoded[i]);
+
+        showResult(`📍 Route computed. Fetching driving geometry from OSRM...`, '');
+
+        // 3. Get driving route geometry from OSRM (in optimized order)
+        const routeCoords = orderedStops.map(p => `${p.lon},${p.lat}`).join(';');
+        const routeResp = await fetch(
+          `https://router.project-osrm.org/route/v1/driving/${routeCoords}?overview=full&geometries=geojson&steps=false`
+        );
+        const routeData = await routeResp.json();
+
+        if (!routeData.routes || routeData.routes.length === 0) {
+          showResult('⚠️ Could not get driving route. Showing optimized order without map.', '');
+          renderResultsNoRoute(orderedStops);
+          btn.disabled = false;
+          btn.textContent = '🚀 Optimize Route';
+          return;
+        }
+
+        renderResults(orderedStops, routeData.routes[0]);
+
+      } catch (err) {
+        showResult(`❌ Error: ${err.message}`, 'error');
+      }
+
+      btn.disabled = false;
+      btn.textContent = '🚀 Optimize Route';
+    }
+
+    // ── TSP Solver: Nearest-Neighbor with Haversine distance ─────
+    function haversineKm(p1, p2) {
+      const R = 6371; // Earth radius in km
+      const dLat = (p2.lat - p1.lat) * Math.PI / 180;
+      const dLon = (p2.lon - p1.lon) * Math.PI / 180;
+      const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(p1.lat * Math.PI / 180) * Math.cos(p2.lat * Math.PI / 180) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return R * c;
+    }
+
+    function solveTSP(points) {
+      // Nearest-Neighbor: start at the first point, then always pick the closest unvisited
+      const n = points.length;
+      if (n <= 2) return Array.from({ length: n }, (_, i) => i);
+
+      const visited = new Array(n).fill(false);
+      const order = [];
+
+      // Start at index 0
+      order.push(0);
+      visited[0] = true;
+      let current = 0;
+
+      for (let step = 1; step < n; step++) {
+        let nearest = -1;
+        let nearestDist = Infinity;
+
+        for (let j = 0; j < n; j++) {
+          if (!visited[j]) {
+            const dist = haversineKm(points[current], points[j]);
+            if (dist < nearestDist) {
+              nearestDist = dist;
+              nearest = j;
+            }
+          }
+        }
+
+        order.push(nearest);
+        visited[nearest] = true;
+        current = nearest;
+      }
+
+      return order;
+    }
+
+    // ── Render Results (with driving route from OSRM) ──────────
+    function renderResults(orderedStops, route) {
+      const distanceKm = (route.distance / 1000).toFixed(1);
+      const durationMin = Math.round(route.duration / 60);
+      const coordinates = route.geometry.coordinates;
+      currentStops = orderedStops;
+
+      // Stats
+      const statsHtml = `
+        <div class="stats-row">
+          <div class="stat-box">
+            <div class="value green">${distanceKm}</div>
+            <div class="label">Total Distance (km)</div>
+          </div>
+          <div class="stat-box">
+            <div class="value">${durationMin}</div>
+            <div class="label">Est. Time (min)</div>
+          </div>
+          <div class="stat-box">
+            <div class="value">${orderedStops.length}</div>
+            <div class="label">Stops</div>
+          </div>
+        </div>
+        <div style="font-size:0.7rem; color:#666; text-align:center;">
+          ✅ Route <strong>optimized</strong> (Nearest-Neighbor TSP) — each stop is the closest unvisited
+        </div>
+      `;
+      showResult(statsHtml, '');
+
+      // Stop list
+      const ol = document.getElementById('stopsOrder');
+      ol.innerHTML = orderedStops.map((s, i) => {
+        const cls = i === 0 ? 'start' : i === orderedStops.length - 1 ? 'end' : '';
+        const dist = i > 0 ? ` (${haversineKm(orderedStops[i-1], s).toFixed(1)} km)` : '';
+        return `<li class="${cls}">${s.address}<span style="color:#555; font-size:0.65rem;">${dist}</span></li>`;
+      }).join('');
+      document.getElementById('stopsToggle').textContent = '📋 Show stop list';
+
+      // ── Map ──
+      const mapContainer = document.getElementById('map');
+      const placeholder = document.getElementById('mapPlaceholder');
+      if (placeholder) placeholder.remove();
+      if (currentMap) currentMap.remove();
+
+      const center = [orderedStops[0].lat, orderedStops[0].lon];
+      currentMap = L.map('map', {
+        center,
+        zoom: 12,
+        zoomControl: true,
+        attributionControl: false,
+      });
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+      }).addTo(currentMap);
+
+      // Route polyline
+      const latlngs = coordinates.map(c => [c[1], c[0]]);
+      currentPolyline = L.polyline(latlngs, {
+        color: '#ff6b35',
+        weight: 4,
+        opacity: 0.8,
+      }).addTo(currentMap);
+
+      // Markers
+      const bounds = [];
+      currentMarkers = [];
+
+      orderedStops.forEach((s, i) => {
+        const color = i === 0 ? '#00d488' : i === orderedStops.length - 1 ? '#ff4444' : '#ff6b35';
+        const label = i === 0 ? '🏁 START' : i === orderedStops.length - 1 ? '🏁 END' : `${i}`;
+
+        const icon = L.divIcon({
+          html: `<div style="
+            background: ${color};
+            color: #0a0a0f;
+            width: ${i === 0 || i === orderedStops.length - 1 ? 28 : 24}px;
+            height: ${i === 0 || i === orderedStops.length - 1 ? 28 : 24}px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: ${i === 0 || i === orderedStops.length - 1 ? 10 : 9}px;
+            font-weight: 700;
+            border: 2px solid ${color === '#00d488' ? '#00e899' : color === '#ff4444' ? '#ff6666' : '#ff8555'};
+            box-shadow: 0 0 8px rgba(0,0,0,0.5);
+          ">${label}</div>`,
+          className: '',
+          iconSize: [24, 24],
+          iconAnchor: [12, 12],
+        });
+
+        const marker = L.marker([s.lat, s.lon], { icon }).addTo(currentMap);
+        marker.bindPopup(`
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; max-width: 220px;">
+            <strong style="color:${color};">Stop ${label}</strong><br>
+            <span style="color:#999;">${s.address}</span>
+          </div>
+        `);
+
+        currentMarkers.push(marker);
+        bounds.push([s.lat, s.lon]);
+      });
+
+      // Fit bounds
+      if (bounds.length > 0) {
+        currentMap.fitBounds(bounds, { padding: [40, 40] });
+      }
+
+      // Force resize after render
+      setTimeout(() => {
+        if (currentMap) currentMap.invalidateSize();
+      }, 200);
+    }
+
+    // ── Render Results (no OSRM route — fallback) ─────────────────
+    function renderResultsNoRoute(orderedStops) {
+      currentStops = orderedStops;
+      const totalKm = orderedStops.slice(1).reduce((sum, s, i) => sum + haversineKm(orderedStops[i], s), 0);
+
+      const statsHtml = `
+        <div class="stats-row">
+          <div class="stat-box">
+            <div class="value green">${totalKm.toFixed(1)}</div>
+            <div class="label">Straight-line Distance (km)</div>
+          </div>
+          <div class="stat-box">
+            <div class="value">${orderedStops.length}</div>
+            <div class="label">Stops</div>
+          </div>
+        </div>
+        <div style="font-size:0.7rem; color:#666; text-align:center;">
+          ✅ Route <strong>optimized</strong> (Nearest-Neighbor TSP)<br>
+          <span style="color:#555;">⚠️ Driving route unavailable — showing straight-line distances</span>
+        </div>
+      `;
+      showResult(statsHtml, '');
+
+      // Stop list
+      const ol = document.getElementById('stopsOrder');
+      ol.innerHTML = orderedStops.map((s, i) => {
+        const cls = i === 0 ? 'start' : i === orderedStops.length - 1 ? 'end' : '';
+        const dist = i > 0 ? ` (${haversineKm(orderedStops[i-1], s).toFixed(1)} km)` : '';
+        return `<li class="${cls}">${s.address}<span style="color:#555; font-size:0.65rem;">${dist}</span></li>`;
+      }).join('');
+      document.getElementById('stopsToggle').textContent = '📋 Show stop list';
+
+      // Map with straight lines
+      const placeholder = document.getElementById('mapPlaceholder');
+      if (placeholder) placeholder.remove();
+      if (currentMap) currentMap.remove();
+
+      const center = [orderedStops[0].lat, orderedStops[0].lon];
+      currentMap = L.map('map', {
+        center,
+        zoom: 12,
+        zoomControl: true,
+        attributionControl: false,
+      });
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+      }).addTo(currentMap);
+
+      const bounds = [];
+      currentMarkers = [];
+
+      // Straight lines between stops
+      const lineLatLngs = orderedStops.map(s => [s.lat, s.lon]);
+      L.polyline(lineLatLngs, {
+        color: '#ff6b35',
+        weight: 3,
+        opacity: 0.6,
+        dashArray: '8, 8',
+      }).addTo(currentMap);
+
+      orderedStops.forEach((s, i) => {
+        const color = i === 0 ? '#00d488' : i === orderedStops.length - 1 ? '#ff4444' : '#ff6b35';
+        const label = i === 0 ? '🏁 START' : i === orderedStops.length - 1 ? '🏁 END' : `${i}`;
+
+        const icon = L.divIcon({
+          html: `<div style="
+            background: ${color};
+            color: #0a0a0f;
+            width: ${i === 0 || i === orderedStops.length - 1 ? 28 : 24}px;
+            height: ${i === 0 || i === orderedStops.length - 1 ? 28 : 24}px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: ${i === 0 || i === orderedStops.length - 1 ? 10 : 9}px;
+            font-weight: 700;
+            border: 2px solid ${color === '#00d488' ? '#00e899' : color === '#ff4444' ? '#ff6666' : '#ff8555'};
+            box-shadow: 0 0 8px rgba(0,0,0,0.5);
+          ">${label}</div>`,
+          className: '',
+          iconSize: [24, 24],
+          iconAnchor: [12, 12],
+        });
+
+        const marker = L.marker([s.lat, s.lon], { icon }).addTo(currentMap);
+        marker.bindPopup(`
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; max-width: 220px;">
+            <strong style="color:${color};">Stop ${label}</strong><br>
+            <span style="color:#999;">${s.address}</span>
+          </div>
+        `);
+        currentMarkers.push(marker);
+        bounds.push([s.lat, s.lon]);
+      });
+
+      if (bounds.length > 0) {
+        currentMap.fitBounds(bounds, { padding: [40, 40] });
+      }
+      setTimeout(() => { if (currentMap) currentMap.invalidateSize(); }, 200);
+    }
+
+    // ── Helpers ────────────────────────────────────────────────────
+    function showResult(html, type) {
+      const el = document.getElementById('results');
+      el.innerHTML = html;
+      el.className = 'results show';
+      if (type === 'error') el.style.borderColor = '#ff444433';
+      else el.style.borderColor = '#1a1a2e';
+    }
+
+    function resetMap() {
+      if (currentMap) { currentMap.remove(); currentMap = null; }
+      currentMarkers = [];
+      currentPolyline = null;
+      currentStops = [];
+
+      const mapDiv = document.getElementById('map');
+      const existing = document.getElementById('mapPlaceholder');
+      if (!existing) {
+        mapDiv.innerHTML = `
+          <div class="placeholder" id="mapPlaceholder">
+            <div class="big-icon">🚚</div>
+            <div>Enter addresses and click "Optimize Route"</div>
+            <div class="hint">The optimized route will appear on the map with numbered stops</div>
+          </div>
+        `;
+      }
+    }
+
+    function toggleStops() {
+      const el = document.getElementById('stopsList');
+      const btn = document.getElementById('stopsToggle');
+      el.classList.toggle('show');
+      btn.textContent = el.classList.contains('show') ? '📋 Hide stop list' : '📋 Show stop list';
+    }
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    // ── Init ───────────────────────────────────────────────────────
+    loadSample();
+  </script>
+</body>
+</html>

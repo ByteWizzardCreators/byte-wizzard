@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luna — Byte Wizzard Demo Bot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      font-family: 'JetBrains Mono', monospace;
+      background: #0a0a0f;
+      color: #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .chat-container {
+      width: 100%;
+      max-width: 600px;
+      height: min(90vh, 700px);
+      background: #0d0d14;
+      border: 1px solid #1a1a2e;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ─── HEADER ─── */
+    .chat-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid #1a1a2e;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+    .chat-header .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #00d488, #00aaff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    .chat-header .info { flex: 1; }
+    .chat-header .name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #e0e0e0;
+    }
+    .chat-header .status {
+      font-size: 0.65rem;
+      color: #00d488;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .chat-header .status::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: #00d488;
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    .chat-header .back-link {
+      font-size: 0.7rem;
+      color: #555;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .chat-header .back-link:hover { color: #00d488; }
+
+    /* ─── MESSAGES ─── */
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      scroll-behavior: smooth;
+    }
+    .messages::-webkit-scrollbar { width: 4px; }
+    .messages::-webkit-scrollbar-track { background: transparent; }
+    .messages::-webkit-scrollbar-thumb { background: #1a1a2e; border-radius: 2px; }
+
+    .msg {
+      max-width: 85%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      line-height: 1.6;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .msg.bot {
+      align-self: flex-start;
+      background: #13131e;
+      border: 1px solid #1a1a2e;
+      color: #ccc;
+    }
+    .msg.bot .msg-label {
+      font-size: 0.6rem;
+      color: #00d488;
+      margin-bottom: 4px;
+      letter-spacing: 0.1em;
+    }
+    .msg.bot strong { color: #00d488; }
+    .msg.bot em { color: #888; font-style: normal; }
+    .msg.bot ul { margin: 6px 0; padding-left: 16px; }
+    .msg.bot li { margin: 2px 0; }
+    .msg.bot hr {
+      border: none;
+      border-top: 1px solid #1a1a2e;
+      margin: 10px 0;
+    }
+    .msg.bot .product-ref {
+      display: inline-block;
+      font-size: 0.75rem;
+      color: #00aaff;
+      background: #0d0d14;
+      border: 1px solid #1a1a2e;
+      border-radius: 4px;
+      padding: 2px 8px;
+      margin: 2px 0;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .msg.bot .product-ref:hover {
+      border-color: #00d488;
+      color: #00d488;
+    }
+
+    .msg.user {
+      align-self: flex-end;
+      background: #00d488;
+      color: #0a0a0f;
+      font-weight: 500;
+    }
+
+    .msg.typing {
+      align-self: flex-start;
+      background: transparent;
+      border: none;
+      display: flex;
+      gap: 4px;
+      padding: 8px 14px;
+    }
+    .msg.typing span {
+      width: 6px;
+      height: 6px;
+      background: #555;
+      border-radius: 50%;
+      animation: typing 1.4s ease-in-out infinite;
+    }
+    .msg.typing span:nth-child(2) { animation-delay: 0.2s; }
+    .msg.typing span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typing {
+      0%, 60%, 100% { opacity: 0.2; transform: translateY(0); }
+      30% { opacity: 1; transform: translateY(-4px); }
+    }
+
+    /* ─── SUGGESTIONS ─── */
+    .suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 0 20px 8px;
+    }
+    .suggestions button {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      padding: 6px 12px;
+      background: #13131e;
+      border: 1px solid #1a1a2e;
+      border-radius: 16px;
+      color: #777;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .suggestions button:hover {
+      border-color: #00d488;
+      color: #00d488;
+      background: #0d0d14;
+    }
+
+    /* ─── INPUT ─── */
+    .input-area {
+      padding: 12px 20px;
+      border-top: 1px solid #1a1a2e;
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .input-area .prompt {
+      font-size: 0.8rem;
+      color: #00d488;
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .input-area input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: #e0e0e0;
+    }
+    .input-area input::placeholder { color: #444; }
+    .input-area button {
+      background: #00d488;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #0a0a0f;
+      cursor: pointer;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .input-area button:hover { background: #00e899; }
+    .input-area button:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    @media (max-width: 480px) {
+      .chat-container { height: 100vh; border-radius: 0; border: none; }
+      body { padding: 0; }
+      .msg { max-width: 90%; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="chat-container">
+  <!-- HEADER -->
+  <div class="chat-header">
+    <div class="avatar">🧠</div>
+    <div class="info">
+      <div class="name">Luna</div>
+      <div class="status">Byte Wizzard — Demo Bot</div>
+    </div>
+    <a href="../../web/index.html" class="back-link">← Back</a>
+  </div>
+
+  <!-- MESSAGES -->
+  <div class="messages" id="messages"></div>
+
+  <!-- SUGGESTIONS -->
+  <div class="suggestions" id="suggestions"></div>
+
+  <!-- INPUT -->
+  <div class="input-area">
+    <span class="prompt">$</span>
+    <input type="text" id="input" placeholder="Ask about Byte Wizzard..." autofocus>
+    <button id="send">Send</button>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// KNOWLEDGE BASE
+// ═══════════════════════════════════════════════════════════════
+
+const KB = [
+  {
+    id: 'identity',
+    keywords: ['byte wizzard', 'byte', 'wizzard', 'estudio', 'empresa', 'quién es', 'quien es', 'quienes son', 'quienes', 'qué es', 'que es', 'ai systems studio', 'systems studio', 'hacen', 'dedican'],
+    label: 'Byte Wizzard',
+    response: () => `<strong>Byte Wizzard</strong> es un AI Systems Studio.
+
+Construimos productos de software basados en inteligencia artificial, automatización y sistemas modernos para resolver problemas reales en empresas y usuarios.
+
+No somos una agencia tradicional ni un proyecto académico. Somos un estudio de construcción de <strong>productos funcionales</strong>.
+
+${''/* one-liner */}
+
+<em>"Build AI-first systems for automation, logistics, education and intelligent assistants."</em>`
+  },
+
+  {
+    id: 'what-we-do',
+    keywords: ['hacen', 'productos', 'servicios', 'desarrollan', 'crean', 'ofrecen', 'rubro', 'trabajan'],
+    label: 'What We Do',
+    response: () => `Diseñamos y desarrollamos:
+
+• Sistemas de inteligencia artificial aplicados
+• Software de automatización de procesos
+• Herramientas de logística y optimización
+• Plataformas educativas con IA
+• Aplicaciones móviles y web full-stack
+• Integraciones con cloud y edge computing`
+
+  },
+
+  {
+    id: 'luna',
+    keywords: ['luna', 'asistente', 'asistant', 'business', 'chat', 'bot', 'inteligente', 'ai assistant', 'virtual'],
+    label: 'Luna',
+    response: () => `<strong>Luna</strong> — AI Business Assistant
+
+Asistente inteligente con memoria y contexto empresarial.
+
+<strong>Funciones:</strong>
+• Chat con IA en tiempo real
+• Memoria por usuario y sesión
+• Redacción automática de emails
+• Soporte interno para empresas
+• Automatización de tareas administrativas
+
+<em>Estado: producto en uso real con cliente.</em>`
+  },
+
+  {
+    id: 'courier',
+    keywords: ['courier', 'tms', 'logistics', 'logística', 'rutas', 'delivery', 'optimización', 'tsp', 'tracking', 'gps', 'repartidores', 'transporte'],
+    label: 'Courier TMS',
+    response: () => `<strong>Courier TMS</strong> — Logistics Intelligence System
+
+Sistema de optimización logística para empresas de delivery.
+
+<strong>Funciones:</strong>
+• Agrupación de entregas por zona
+• Optimización de rutas (TSP)
+• Tracking GPS en tiempo real
+• Panel administrativo completo
+• App para repartidores
+• Importación de órdenes CSV
+
+<em>Estado: desarrollo activo + <a href="../courier-tms/index.html" style="color:#00aaff">demo funcional</a>.</em>`
+  },
+
+  {
+    id: 'clipcraft',
+    keywords: ['clipcraft', 'clip', 'craft', 'content', 'contenido', 'multimedia', 'video', 'foto', 'edición', 'mobile', 'creación'],
+    label: 'ClipCraft',
+    response: () => `<strong>ClipCraft</strong> — Content Creation Platform
+
+App móvil para creación de contenido multimedia.
+
+<strong>Funciones:</strong>
+• Edición de fotos y videos
+• Generación automática de videos
+• Música integrada
+• Render en la nube
+• Exportación directa al dispositivo
+
+<em>Estado: MVP funcional.</em>`
+  },
+
+  {
+    id: 'profe',
+    keywords: ['profe', 'mágico', 'magico', 'educación', 'educacion', 'aprendizaje', 'learning', 'inglés', 'ingles', 'niños', 'kids', 'enseñanza', 'school'],
+    label: 'Profe Mágico',
+    response: () => `<strong>Profe Mágico</strong> — AI Learning System
+
+Plataforma educativa con inteligencia artificial.
+
+<strong>Funciones:</strong>
+• Enseñanza interactiva de inglés
+• Traducción y audio automático
+• Contenido adaptado para niños
+• Ejercicios dinámicos
+• Aprendizaje guiado
+
+<em>Estado: funcional y en iteración.</em>`
+  },
+
+  {
+    id: 'vision',
+    keywords: ['visión', 'vision', 'objetivo', 'goal', 'misión', 'mision', 'propósito', 'proposito', 'futuro', 'buscan'],
+    label: 'Visión',
+    response: () => `<strong>Visión:</strong> Reducir el trabajo manual mediante sistemas inteligentes.
+
+Automatizamos procesos en:
+
+• Empresas
+• Logística
+• Educación
+• Creación de contenido`
+  },
+
+  {
+    id: 'differential',
+    keywords: ['diferencia', 'diferencias', 'distinto', 'unique', 'propuesta', 'valor', 'por qué', 'porque', 'por que elegir', 'ventaja'],
+    label: 'Diferencial',
+    response: () => `Byte Wizzard no solo construye interfaces.
+
+Construimos <strong>sistemas completos</strong>:
+
+• frontend + backend + AI + cloud + mobile
+• Integración real con APIs modernas
+• Enfoque en problemas operativos reales`
+  },
+
+  {
+    id: 'stack',
+    keywords: ['stack', 'tecnología', 'tecnologia', 'tech', 'tools', 'herramientas', 'lenguaje', 'framework', 'cloudflare', 'workers', 'node', 'fastify', 'react', 'vite', 'react native', 'expo', 'llama', 'openstreetmap', 'osrm', 'nominatim', 'prisma', 'postgresql', 'postgis', 'motor'],
+    label: 'Stack Tecnológico',
+    response: () => `<strong>Stack Tecnológico:</strong>
+
+☁️ Cloudflare Workers / Edge Computing
+🟢 Node.js / Fastify / Express
+⚛️ React / Vite / Vanilla JS
+📱 React Native / Expo
+🧠 AI Models (Llama 3 + APIs externas)
+🗺️ OpenStreetMap / OSRM / Nominatim
+🗄️ PostgreSQL / Prisma`
+  },
+
+  {
+    id: 'status',
+    keywords: ['estado', 'status', 'progreso', 'activo', 'desarrollo', 'fase', 'alpha', 'beta', 'lanzamiento'],
+    label: 'Estado del Proyecto',
+    response: () => `Byte Wizzard está en <strong>fase activa de desarrollo</strong>.
+
+• Productos reales funcionando
+• MVPs desplegados
+• Iteración constante
+• Enfoque AI-first`
+  },
+
+  {
+    id: 'contact',
+    keywords: ['contacto', 'contact', 'hablar', 'contratar', 'presupuesto', 'email', 'mail', 'teléfono', 'telefono', 'whatsapp', 'redes'],
+    label: 'Contacto',
+    response: () => `Por ahora la mejor forma de conocernos es explorando nuestros <a href="../../web/index.html#products" style="color:#00aaff">productos</a> y demos.
+
+Si querés contactarnos, escribinos a través de los canales del estudio.`
+  }
+];
+
+const GREETING = `¡Hola! Soy <strong>Luna</strong>, el asistente virtual de Byte Wizzard. 🧠
+
+Preguntame lo que quieras sobre el estudio, nuestros productos, el stack tecnológico o la visión.
+
+Por ejemplo:
+• <em>"¿Qué es Byte Wizzard?"</em>
+• <em>"Contame sobre Courier TMS"</em>
+• <em>"¿Qué stack usan?"</em>`
+
+const FALLBACK = `No tengo información específica sobre eso, pero puedo contarte sobre:
+
+• <strong>Byte Wizzard</strong> — qué es el estudio
+• <strong>Luna</strong> — AI Business Assistant
+• <strong>Courier TMS</strong> — Logistics Intelligence
+• <strong>ClipCraft</strong> — Content Creation
+• <strong>Profe Mágico</strong> — AI Learning
+• <strong>Stack</strong> — tecnologías que usamos
+• <strong>Visión</strong> — nuestro enfoque
+
+¿Sobre qué querés saber?`
+
+// ═══════════════════════════════════════════════════════════════
+// CHAT ENGINE
+// ═══════════════════════════════════════════════════════════════
+
+const messagesEl = document.getElementById('messages');
+const inputEl = document.getElementById('input');
+const sendBtn = document.getElementById('send');
+const suggestionsEl = document.getElementById('suggestions');
+
+let isProcessing = false;
+
+// ─── Find best KB match ───
+function findMatch(query) {
+  const q = query.toLowerCase().trim();
+  const tokens = q.split(/\s+/).filter(t => t.length > 2);
+
+  let best = null;
+  let bestScore = 0;
+
+  for (const entry of KB) {
+    let score = 0;
+    for (const kw of entry.keywords) {
+      // Direct substring match
+      if (q.includes(kw)) {
+        score += kw.length * 3;
+      }
+      // Token-level match
+      for (const token of tokens) {
+        if (kw.includes(token) || token.includes(kw)) {
+          score += token.length;
+        }
+      }
+    }
+    if (score > bestScore) {
+      bestScore = score;
+      best = entry;
+    }
+  }
+
+  return bestScore > 5 ? best : null;
+}
+
+// ─── Render markdown-like to HTML ───
+function renderResponse(text) {
+  // Code blocks
+  text = text.replace(/`([^`]+)`/g, '<code style="color:#00d488;background:#0a0a0f;padding:1px 5px;border-radius:3px;font-size:0.75rem">$1</code>');
+  // Bold
+  text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  // Italic
+  text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
+  // Newlines
+  text = text.replace(/\n/g, '<br>');
+  // Bullet lists
+  text = text.replace(/• /g, '• ');
+  return text;
+}
+
+// ─── Add message ───
+function addMessage(text, type) {
+  const div = document.createElement('div');
+  div.className = `msg ${type}`;
+
+  if (type === 'bot') {
+    const label = document.createElement('div');
+    label.className = 'msg-label';
+    label.textContent = 'luna';
+    div.appendChild(label);
+    const content = document.createElement('div');
+    content.innerHTML = text;
+    div.appendChild(content);
+  } else {
+    div.textContent = text;
+  }
+
+  messagesEl.appendChild(div);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+// ─── Typing indicator ───
+function showTyping() {
+  const div = document.createElement('div');
+  div.className = 'msg typing';
+  div.id = 'typing-indicator';
+  for (let i = 0; i < 3; i++) {
+    const span = document.createElement('span');
+    div.appendChild(span);
+  }
+  messagesEl.appendChild(div);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+function hideTyping() {
+  const el = document.getElementById('typing-indicator');
+  if (el) el.remove();
+}
+
+// ─── Show suggestions ───
+function showSuggestions() {
+  suggestionsEl.innerHTML = '';
+  const quick = ['What is Byte Wizzard?', 'Tell me about Courier TMS', 'What stack do you use?', 'Products'];
+  quick.forEach(text => {
+    const btn = document.createElement('button');
+    btn.textContent = text;
+    btn.addEventListener('click', () => {
+      inputEl.value = text;
+      handleSend();
+    });
+    suggestionsEl.appendChild(btn);
+  });
+}
+
+// ─── Process query ───
+function handleSend() {
+  const text = inputEl.value.trim();
+  if (!text || isProcessing) return;
+
+  inputEl.value = '';
+  isProcessing = true;
+  sendBtn.disabled = true;
+  suggestionsEl.innerHTML = '';
+
+  addMessage(text, 'user');
+  showTyping();
+
+  setTimeout(() => {
+    hideTyping();
+
+    const match = findMatch(text);
+
+    if (text.toLowerCase().includes('hola') || text.toLowerCase().includes('buenas') || text.toLowerCase().includes('hello') || text.toLowerCase().includes('hi')) {
+      addMessage(GREETING, 'bot');
+    } else if (match) {
+      addMessage(renderResponse(match.response()), 'bot');
+      // Offer follow-up suggestions based on context
+      showSuggestions();
+    } else {
+      addMessage(renderResponse(FALLBACK), 'bot');
+      showSuggestions();
+    }
+
+    isProcessing = false;
+    sendBtn.disabled = false;
+    inputEl.focus();
+  }, 600 + Math.random() * 400); // Simulate thinking time
+}
+
+// ─── Init ───
+addMessage(GREETING, 'bot');
+showSuggestions();
+inputEl.focus();
+
+// ─── Events ───
+sendBtn.addEventListener('click', handleSend);
+inputEl.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') handleSend();
+});
+</script>
+</body>
+</html>
