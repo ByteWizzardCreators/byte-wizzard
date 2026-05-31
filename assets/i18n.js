@@ -46,7 +46,7 @@ const I18N = (() => {
           name: 'Courier TMS',
           tagline: 'Logistics Intelligence System',
           features: ['Agrupación inteligente por zonas', 'Optimización de rutas (TSP)', 'Tracking GPS en tiempo real', 'App para repartidores', 'Panel administrativo completo', 'Importación de órdenes CSV'],
-          link: '→ Probar Demo',
+          link: '→ Probar Demo (en desarrollo)',
         },
         clipcraft: {
           icon: '📱',
@@ -212,7 +212,7 @@ const I18N = (() => {
           name: 'Courier TMS',
           tagline: 'Logistics Intelligence System',
           features: ['Smart zone clustering', 'Route optimization (TSP)', 'Real-time GPS tracking', 'Driver mobile app', 'Complete admin panel', 'CSV order import'],
-          link: '→ Try Demo',
+          link: '→ Try Demo (in development)',
         },
         clipcraft: {
           icon: '📱',
@@ -366,7 +366,7 @@ const I18N = (() => {
           name: 'Courier TMS',
           tagline: 'Sistema de Inteligência Logística',
           features: ['Agrupamento inteligente por zona', 'Otimização de rotas (TSP)', 'Tracking GPS em tempo real', 'App para entregadores', 'Painel administrativo completo', 'Importação de pedidos CSV'],
-          link: '→ Testar Demo',
+          link: '→ Testar Demo (em desenvolvimento)',
         },
         clipcraft: {
           icon: '📱',
