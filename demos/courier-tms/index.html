@@ -276,39 +276,67 @@
     .leaflet-popup-content-wrapper { background: #0d0d14 !important; color: #ccc !important; border: 1px solid #2a2a3e !important; border-radius: 8px !important; }
     .leaflet-popup-tip { background: #0d0d14 !important; border: 1px solid #2a2a3e !important; }
     .leaflet-popup-close-button { color: #555 !important; }
+
+    /* LANG SWITCHER */
+    .lang-switcher {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      display: flex;
+      gap: 4px;
+      z-index: 1000;
+    }
+    .lang-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      background: #0d0d14;
+      border: 1px solid #2a2a3e;
+      color: #666;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .lang-btn:hover { border-color: #ff6b35; color: #ff6b35; }
+    .lang-btn.active { background: #ff6b35; color: #0a0a0f; border-color: #ff6b35; }
   </style>
 </head>
 <body>
+  <div class="lang-switcher">
+    <button class="lang-btn" data-lang="es" onclick="I18N.setLang('es')">ES</button>
+    <button class="lang-btn" data-lang="en" onclick="I18N.setLang('en')">EN</button>
+    <button class="lang-btn" data-lang="pt" onclick="I18N.setLang('pt')">PT</button>
+  </div>
   <div class="container">
     <header>
-      <div class="back"><a href="../../index.html">← Back to Byte Wizzard</a></div>
-      <h1>🚚 Courier TMS</h1>
-      <p>Route Optimizer Demo — ingresá direcciones o subí un CSV, y mirá cómo se optimiza la ruta automáticamente.</p>
+      <div class="back"><a href="../../" data-i18n="courierDemo.back">← Back to Byte Wizzard</a></div>
+      <h1 data-i18n="courierDemo.header.title">🚚 Courier TMS</h1>
+      <p data-i18n="courierDemo.header.subtitle">Route Optimizer Demo — ingresá direcciones o subí un CSV, y mirá cómo se optimiza la ruta automáticamente.</p>
     </header>
 
     <div class="steps">
       <div class="step">
         <div class="icon">📥</div>
         <div class="num">STEP 1</div>
-        <div class="desc">Ingresá direcciones o <strong>subí un CSV</strong></div>
+        <div class="desc" data-i18n="courierDemo.step1">Ingresá direcciones o <strong>subí un CSV</strong></div>
       </div>
       <div class="step">
         <div class="icon">🧠</div>
         <div class="num">STEP 2</div>
-        <div class="desc">Geocodificamos + optimizamos la ruta (TSP)</div>
+        <div class="desc" data-i18n="courierDemo.step2">Geocodificamos + optimizamos la ruta (TSP)</div>
       </div>
       <div class="step">
         <div class="icon">🗺️</div>
         <div class="num">STEP 3</div>
-        <div class="desc">Visualizala en el mapa con el orden óptimo</div>
+        <div class="desc" data-i18n="courierDemo.step3">Visualizala en el mapa con el orden óptimo</div>
       </div>
     </div>
 
     <!-- INPUT -->
     <div class="card">
-      <h2>📦 Delivery Addresses <span class="badge">manual or CSV</span></h2>
+      <h2><span data-i18n="courierDemo.inputTitle">📦 Delivery Addresses</span> <span class="badge" data-i18n="courierDemo.inputBadge">manual or CSV</span></h2>
       <div class="input-row">
-        <textarea id="addresses" placeholder="Enter one address per line...&#10;&#10;Av. Corrientes 1234, CABA&#10;Callao 567, CABA&#10;Av. Santa Fe 890, CABA">Av. Corrientes 1234, CABA
+        <textarea id="addresses">Av. Corrientes 1234, CABA
 Callao 567, CABA
 Av. Santa Fe 890, CABA
 Av. Rivadavia 2345, CABA
@@ -318,45 +346,51 @@ Av. Córdoba 3456, CABA
 Cerrito 123, CABA</textarea>
         <div class="csv-zone" id="csvZone">
           <div class="icon">📄</div>
-          <div class="label">
-            <strong>Upload CSV</strong>
-            Drop a file or click to browse
+          <div class="label" data-i18n="courierDemo.csvLabel">
+            <strong data-i18n="courierDemo.selectFile">Upload CSV</strong>
+            <span data-i18n="courierDemo.orDrag">or drag and drop here</span>
           </div>
           <input type="file" id="csvFile" accept=".csv">
         </div>
       </div>
       <div class="actions">
-        <button class="btn btn-primary" id="optimizeBtn" onclick="optimizeRoute()">🚀 Optimize Route</button>
-        <button class="btn btn-secondary" onclick="loadSample()">📋 Load Sample</button>
-        <button class="btn btn-secondary" onclick="clearAll()">✕ Clear</button>
+        <button class="btn btn-primary" id="optimizeBtn" onclick="optimizeRoute()"><span data-i18n="courierDemo.optimize">🗺️ Optimize Route</span></button>
+        <button class="btn btn-secondary" onclick="loadSample()"><span data-i18n="courierDemo.loadSample">📋 Load Sample</span></button>
+        <button class="btn btn-secondary" onclick="clearAll()"><span data-i18n="courierDemo.clear">✕ Clear</span></button>
       </div>
       <div class="results" id="results"></div>
     </div>
 
     <!-- MAP -->
     <div class="card">
-      <h2>🗺️ Route Map</h2>
+      <h2 data-i18n="courierDemo.optimalRoute">🗺️ Route Map</h2>
       <div id="map">
         <div class="placeholder" id="mapPlaceholder">
           <div class="big-icon">🚚</div>
-          <div>Enter addresses and click "Optimize Route"</div>
-          <div class="hint">The optimized route will appear on the map with numbered stops</div>
+          <div data-i18n="courierDemo.mapPlaceholder">Enter addresses and click "Optimize Route"</div>
+          <div class="hint" data-i18n="courierDemo.mapHint">The optimized route will appear on the map with numbered stops</div>
         </div>
       </div>
     </div>
 
     <!-- STOP LIST -->
     <div style="text-align: center; margin-bottom: 40px;">
-      <button class="stops-toggle" id="stopsToggle" onclick="toggleStops()">📋 Show stop list</button>
+      <button class="stops-toggle" id="stopsToggle" onclick="toggleStops()" data-i18n="courierDemo.showStops">📋 Show stop list</button>
       <div class="stops-list" id="stopsList">
-        <div style="color: #666; font-size: 0.65rem; margin-bottom: 8px; text-align: center;">OPTIMIZED ORDER</div>
+        <div style="color: #666; font-size: 0.65rem; margin-bottom: 8px; text-align: center;" data-i18n="courierDemo.optimizedOrder">OPTIMIZED ORDER</div>
         <ol id="stopsOrder"></ol>
       </div>
     </div>
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="../../assets/i18n.js"></script>
   <script>
+    // ── i18n helper ─────────────────────────────────────────────────
+    function __(key) {
+      const lang = window.__lang || 'es';
+      return key.split('.').reduce((o, k) => o?.[k], I18N.getLocale(lang));
+    }
     // ── State ──────────────────────────────────────────────────────
     let currentMap = null;
     let currentMarkers = [];
@@ -413,7 +447,7 @@ Cerrito 123, CABA</textarea>
 
     function parseCSVFile(file) {
       if (!file.name.endsWith('.csv')) {
-        showResult('⚠️ Please upload a .csv file', 'error');
+        showResult('⚠️ ' + __('courierDemo.csvParseError'), 'error');
         return;
       }
       const reader = new FileReader();
@@ -421,7 +455,7 @@ Cerrito 123, CABA</textarea>
         const text = e.target.result;
         const rows = parseCSV(text);
         if (rows.length === 0) {
-          showResult('⚠️ CSV is empty or could not be parsed', 'error');
+          showResult('⚠️ ' + __('courierDemo.csvEmptyError'), 'error');
           return;
         }
         // Try to find address-like columns
@@ -467,12 +501,12 @@ Cerrito 123, CABA</textarea>
         }
 
         if (lines.length === 0) {
-          showResult('⚠️ Could not find address columns in CSV. Make sure your CSV has columns like: address, street, city', 'error');
+          showResult('⚠️ ' + __('courierDemo.csvNoAddrError'), 'error');
           return;
         }
 
         document.getElementById('addresses').value = lines.join('\n');
-        showResult(`✅ Loaded <span class="stat">${lines.length}</span> addresses from CSV. Column: "${rows[0][fullAddressCol >= 0 ? fullAddressCol : streetCol >= 0 ? streetCol : 0]}"`, '');
+        showResult(__('courierDemo.csvLoaded').replace('{n}', lines.length) + ` Column: "${rows[0][fullAddressCol >= 0 ? fullAddressCol : streetCol >= 0 ? streetCol : 0]}"`, '');
       };
       reader.readAsText(file);
     }
@@ -540,13 +574,13 @@ Cerrito 123, CABA</textarea>
       const lines = textarea.value.split('\n').map(l => l.trim()).filter(l => l.length > 0);
 
       if (lines.length < 2) {
-        showResult('⚠️ Enter at least 2 addresses', 'error');
+        showResult('⚠️ ' + __('courierDemo.noStops'), 'error');
         return;
       }
 
       btn.disabled = true;
-      btn.textContent = '⏳ Working...';
-      showResult('📍 Geocoding addresses... (Nominatim rate limit: ~1/sec)', '');
+      btn.innerHTML = __('courierDemo.workingBtn');
+      showResult('📍 ' + __('courierDemo.geocoding'), '');
 
       resetMap();
       document.getElementById('stopsList').classList.remove('show');
@@ -555,7 +589,7 @@ Cerrito 123, CABA</textarea>
         // 1. Geocode with rate limiting
         const geocoded = [];
         for (let i = 0; i < lines.length; i++) {
-          showResult(`📍 Geocoding ${i + 1}/${lines.length}: ${lines[i].substring(0, 40)}...`, '');
+          showResult(__('courierDemo.geoProgress').replace('{i}', i+1).replace('{n}', lines.length).replace('{addr}', lines[i].substring(0, 40)), '');
           const result = await geocodeAddress(lines[i]);
           if (result) geocoded.push(result);
           // Nominatim: 1 req/sec
@@ -563,19 +597,19 @@ Cerrito 123, CABA</textarea>
         }
 
         if (geocoded.length < 2) {
-          showResult('⚠️ Could not geocode enough addresses. Try adding "CABA" or a more specific location.', 'error');
+          showResult('⚠️ ' + __('courierDemo.geoFailed'), 'error');
           btn.disabled = false;
-          btn.textContent = '🚀 Optimize Route';
+          btn.innerHTML = __('courierDemo.optimize');
           return;
         }
 
-        showResult(`🧠 Computing optimal route with Nearest-Neighbor TSP (${geocoded.length} stops)...`, '');
+        showResult(__('courierDemo.computingRoute').replace('{n}', geocoded.length), '');
 
         // 2. Run TSP solver in the browser (Haversine distance)
         const orderedIndices = solveTSP(geocoded);
         const orderedStops = orderedIndices.map(i => geocoded[i]);
 
-        showResult(`📍 Route computed. Fetching driving geometry from OSRM...`, '');
+        showResult('📍 ' + __('courierDemo.fetchingRoute'), '');
 
         // 3. Get driving route geometry from OSRM (in optimized order)
         const routeCoords = orderedStops.map(p => `${p.lon},${p.lat}`).join(';');
@@ -585,21 +619,21 @@ Cerrito 123, CABA</textarea>
         const routeData = await routeResp.json();
 
         if (!routeData.routes || routeData.routes.length === 0) {
-          showResult('⚠️ Could not get driving route. Showing optimized order without map.', '');
+          showResult('⚠️ ' + __('courierDemo.noRoute'), '');
           renderResultsNoRoute(orderedStops);
           btn.disabled = false;
-          btn.textContent = '🚀 Optimize Route';
+          btn.innerHTML = __('courierDemo.optimize');
           return;
         }
 
         renderResults(orderedStops, routeData.routes[0]);
 
       } catch (err) {
-        showResult(`❌ Error: ${err.message}`, 'error');
+        showResult(__('courierDemo.error').replace('{msg}', err.message), 'error');
       }
 
       btn.disabled = false;
-      btn.textContent = '🚀 Optimize Route';
+      btn.innerHTML = __('courierDemo.optimize');
     }
 
     // ── TSP Solver: Nearest-Neighbor with Haversine distance ─────
@@ -661,19 +695,19 @@ Cerrito 123, CABA</textarea>
         <div class="stats-row">
           <div class="stat-box">
             <div class="value green">${distanceKm}</div>
-            <div class="label">Total Distance (km)</div>
+            <div class="label">${__('courierDemo.distanceLabel')}</div>
           </div>
           <div class="stat-box">
             <div class="value">${durationMin}</div>
-            <div class="label">Est. Time (min)</div>
+            <div class="label">${__('courierDemo.timeLabel')}</div>
           </div>
           <div class="stat-box">
             <div class="value">${orderedStops.length}</div>
-            <div class="label">Stops</div>
+            <div class="label">${__('courierDemo.stopsLabel')}</div>
           </div>
         </div>
         <div style="font-size:0.7rem; color:#666; text-align:center;">
-          ✅ Route <strong>optimized</strong> (Nearest-Neighbor TSP) — each stop is the closest unvisited
+          ${__('courierDemo.routeOptimized')}
         </div>
       `;
       showResult(statsHtml, '');
@@ -682,10 +716,10 @@ Cerrito 123, CABA</textarea>
       const ol = document.getElementById('stopsOrder');
       ol.innerHTML = orderedStops.map((s, i) => {
         const cls = i === 0 ? 'start' : i === orderedStops.length - 1 ? 'end' : '';
-        const dist = i > 0 ? ` (${haversineKm(orderedStops[i-1], s).toFixed(1)} km)` : '';
+        const dist = i > 0 ? ` (${haversineKm(orderedStops[i-1], s).toFixed(1)} ${__('courierDemo.km')})` : '';
         return `<li class="${cls}">${s.address}<span style="color:#555; font-size:0.65rem;">${dist}</span></li>`;
       }).join('');
-      document.getElementById('stopsToggle').textContent = '📋 Show stop list';
+      document.getElementById('stopsToggle').textContent = __('courierDemo.showStops');
 
       // ── Map ──
       const mapContainer = document.getElementById('map');
@@ -774,16 +808,16 @@ Cerrito 123, CABA</textarea>
         <div class="stats-row">
           <div class="stat-box">
             <div class="value green">${totalKm.toFixed(1)}</div>
-            <div class="label">Straight-line Distance (km)</div>
+            <div class="label">${__('courierDemo.distanceLabel')}</div>
           </div>
           <div class="stat-box">
             <div class="value">${orderedStops.length}</div>
-            <div class="label">Stops</div>
+            <div class="label">${__('courierDemo.stopsLabel')}</div>
           </div>
         </div>
         <div style="font-size:0.7rem; color:#666; text-align:center;">
-          ✅ Route <strong>optimized</strong> (Nearest-Neighbor TSP)<br>
-          <span style="color:#555;">⚠️ Driving route unavailable — showing straight-line distances</span>
+          ${__('courierDemo.routeOptimized')}<br>
+          <span style="color:#555;">⚠️ ${__('courierDemo.noRoute')}</span>
         </div>
       `;
       showResult(statsHtml, '');
@@ -792,10 +826,10 @@ Cerrito 123, CABA</textarea>
       const ol = document.getElementById('stopsOrder');
       ol.innerHTML = orderedStops.map((s, i) => {
         const cls = i === 0 ? 'start' : i === orderedStops.length - 1 ? 'end' : '';
-        const dist = i > 0 ? ` (${haversineKm(orderedStops[i-1], s).toFixed(1)} km)` : '';
+        const dist = i > 0 ? ` (${haversineKm(orderedStops[i-1], s).toFixed(1)} ${__('courierDemo.km')})` : '';
         return `<li class="${cls}">${s.address}<span style="color:#555; font-size:0.65rem;">${dist}</span></li>`;
       }).join('');
-      document.getElementById('stopsToggle').textContent = '📋 Show stop list';
+      document.getElementById('stopsToggle').textContent = __('courierDemo.showStops');
 
       // Map with straight lines
       const placeholder = document.getElementById('mapPlaceholder');
@@ -889,8 +923,8 @@ Cerrito 123, CABA</textarea>
         mapDiv.innerHTML = `
           <div class="placeholder" id="mapPlaceholder">
             <div class="big-icon">🚚</div>
-            <div>Enter addresses and click "Optimize Route"</div>
-            <div class="hint">The optimized route will appear on the map with numbered stops</div>
+            <div>${__('courierDemo.mapPlaceholder')}</div>
+            <div class="hint">${__('courierDemo.mapHint')}</div>
           </div>
         `;
       }
@@ -900,7 +934,7 @@ Cerrito 123, CABA</textarea>
       const el = document.getElementById('stopsList');
       const btn = document.getElementById('stopsToggle');
       el.classList.toggle('show');
-      btn.textContent = el.classList.contains('show') ? '📋 Hide stop list' : '📋 Show stop list';
+      btn.textContent = el.classList.contains('show') ? __('courierDemo.hideStops') : __('courierDemo.showStops');
     }
 
     function sleep(ms) {
@@ -909,6 +943,28 @@ Cerrito 123, CABA</textarea>
 
     // ── Init ───────────────────────────────────────────────────────
     loadSample();
+
+    // ── Re-apply dynamic content on lang change ──────────────────
+    I18N.onLangChange(() => {
+      // Re-set toggle button text (data-i18n gets overwritten by toggleStops)
+      const stopsList = document.getElementById('stopsList');
+      const stopsToggle = document.getElementById('stopsToggle');
+      stopsToggle.textContent = stopsList.classList.contains('show')
+        ? __('courierDemo.hideStops')
+        : __('courierDemo.showStops');
+
+      // Clear results since dynamic content won't re-translate
+      const results = document.getElementById('results');
+      if (results.classList.contains('show')) {
+        results.innerHTML = '<div style="color:#666; font-size:0.7rem;">🌐 ' + __('courierDemo.optimize') + '</div>';
+      }
+
+      // Re-set optimize button text (handled by data-i18n but safeguard)
+      const optimizeBtn = document.getElementById('optimizeBtn');
+      if (!optimizeBtn.disabled) {
+        optimizeBtn.innerHTML = '<span data-i18n="courierDemo.optimize">' + __('courierDemo.optimize') + '</span>';
+      }
+    });
   </script>
 </body>
 </html>

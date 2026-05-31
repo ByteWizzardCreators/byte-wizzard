@@ -19,6 +19,29 @@
       padding: 16px;
     }
 
+    /* LANG SWITCHER */
+    .lang-switcher {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      display: flex;
+      gap: 4px;
+      z-index: 1000;
+    }
+    .lang-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      background: #0d0d14;
+      border: 1px solid #2a2a3e;
+      color: #666;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .lang-btn:hover { border-color: #00d488; color: #00d488; }
+    .lang-btn.active { background: #00d488; color: #0a0a0f; border-color: #00d488; }
+
     .chat-container {
       width: 100%;
       max-width: 600px;
@@ -252,15 +275,21 @@
 </head>
 <body>
 
+<div class="lang-switcher">
+  <button class="lang-btn" data-lang="es" onclick="I18N.setLang('es')">ES</button>
+  <button class="lang-btn" data-lang="en" onclick="I18N.setLang('en')">EN</button>
+  <button class="lang-btn" data-lang="pt" onclick="I18N.setLang('pt')">PT</button>
+</div>
+
 <div class="chat-container">
   <!-- HEADER -->
   <div class="chat-header">
-    <div class="avatar">🧠</div>
+    <div class="avatar">⚡</div>
     <div class="info">
-      <div class="name">Hermes</div>
-          <div class="status">Byte Wizzard — Demo Bot</div>
+      <div class="name" data-i18n="hermesDemo.header.name">Hermes</div>
+      <div class="status" data-i18n="hermesDemo.header.status">Byte Wizzard — Demo Bot</div>
     </div>
-    <a href="../../index.html" class="back-link">← Back</a>
+    <a href="../../index.html" class="back-link" data-i18n="hermesDemo.backLink">← Back</a>
   </div>
 
   <!-- MESSAGES -->
@@ -277,199 +306,56 @@
   </div>
 </div>
 
+<script src="../../assets/i18n.js"></script>
 <script>
 // ═══════════════════════════════════════════════════════════════
-// KNOWLEDGE BASE
+// i18n helper
 // ═══════════════════════════════════════════════════════════════
 
-const KB = [
-  {
-    id: 'identity',
-    keywords: ['byte wizzard', 'byte', 'wizzard', 'estudio', 'empresa', 'quién es', 'quien es', 'quienes son', 'quienes', 'qué es', 'que es', 'ai systems studio', 'systems studio', 'hacen', 'dedican'],
-    label: 'Byte Wizzard',
-    response: () => `<strong>Byte Wizzard</strong> es un AI Systems Studio.
+function __(key) {
+  const lang = window.__lang || I18N.currentLang || 'es';
+  return key.split('.').reduce((o, k) => o?.[k], I18N.getLocale(lang));
+}
 
-Construimos productos de software basados en inteligencia artificial, automatización y sistemas modernos para resolver problemas reales en empresas y usuarios.
+// ═══════════════════════════════════════════════════════════════
+// KNOWLEDGE BASE — built from translations
+// ═══════════════════════════════════════════════════════════════
 
-No somos una agencia tradicional ni un proyecto académico. Somos un estudio de construcción de <strong>productos funcionales</strong>.
+function buildKB(langCode) {
+  const locale = I18N.getLocale(langCode);
+  const demo = locale.hermesDemo;
+  if (!demo || !demo.kb) return [];
+  return demo.kb.map(entry => ({
+    ...entry,
+    response: () => entry.response,
+  }));
+}
 
-${''/* one-liner */}
+function getGreeting(langCode) {
+  const locale = I18N.getLocale(langCode);
+  return locale.hermesDemo?.greeting || '¡Hola! Soy Hermes ⚡';
+}
 
-<em>"Build AI-first systems for automation, logistics, education and intelligent assistants."</em>`
-  },
+function getFallback(langCode) {
+  const locale = I18N.getLocale(langCode);
+  return locale.hermesDemo?.fallback || 'Preguntame sobre Byte Wizzard...';
+}
 
-  {
-    id: 'what-we-do',
-    keywords: ['hacen', 'productos', 'servicios', 'desarrollan', 'crean', 'ofrecen', 'rubro', 'trabajan'],
-    label: 'What We Do',
-    response: () => `Diseñamos y desarrollamos:
+function getSuggestions(langCode) {
+  const locale = I18N.getLocale(langCode);
+  return locale.hermesDemo?.suggestions || ['What is Byte Wizzard?', 'Products'];
+}
 
-• Sistemas de inteligencia artificial aplicados
-• Software de automatización de procesos
-• Herramientas de logística y optimización
-• Plataformas educativas con IA
-• Aplicaciones móviles y web full-stack
-• Integraciones con cloud y edge computing`
+// State
+let KB = [];
+let GREETING = '';
+let FALLBACK = '';
 
-  },
-
-  {
-    id: 'luna',
-    keywords: ['luna', 'asistente', 'asistant', 'business', 'chat', 'bot', 'inteligente', 'ai assistant', 'virtual'],
-    label: 'Luna',
-    response: () => `<strong>Luna</strong> — AI Business Assistant
-
-Asistente inteligente con memoria y contexto empresarial.
-
-<strong>Funciones:</strong>
-• Chat con IA en tiempo real
-• Memoria por usuario y sesión
-• Redacción automática de emails
-• Soporte interno para empresas
-• Automatización de tareas administrativas
-
-<em>Estado: producto en uso real con cliente.</em>`
-  },
-
-  {
-    id: 'courier',
-    keywords: ['courier', 'tms', 'logistics', 'logística', 'rutas', 'delivery', 'optimización', 'tsp', 'tracking', 'gps', 'repartidores', 'transporte'],
-    label: 'Courier TMS',
-    response: () => `<strong>Courier TMS</strong> — Logistics Intelligence System
-
-Sistema de optimización logística para empresas de delivery.
-
-<strong>Funciones:</strong>
-• Agrupación de entregas por zona
-• Optimización de rutas (TSP)
-• Tracking GPS en tiempo real
-• Panel administrativo completo
-• App para repartidores
-• Importación de órdenes CSV
-
-<em>Estado: desarrollo activo + <a href="../courier-tms/index.html" style="color:#00aaff">demo funcional</a>.</em>`
-  },
-
-  {
-    id: 'clipcraft',
-    keywords: ['clipcraft', 'clip', 'craft', 'content', 'contenido', 'multimedia', 'video', 'foto', 'edición', 'mobile', 'creación'],
-    label: 'ClipCraft',
-    response: () => `<strong>ClipCraft</strong> — Content Creation Platform
-
-App móvil para creación de contenido multimedia.
-
-<strong>Funciones:</strong>
-• Edición de fotos y videos
-• Generación automática de videos
-• Música integrada
-• Render en la nube
-• Exportación directa al dispositivo
-
-<em>Estado: MVP funcional.</em>`
-  },
-
-  {
-    id: 'profe',
-    keywords: ['profe', 'mágico', 'magico', 'educación', 'educacion', 'aprendizaje', 'learning', 'inglés', 'ingles', 'niños', 'kids', 'enseñanza', 'school'],
-    label: 'Profe Mágico',
-    response: () => `<strong>Profe Mágico</strong> — AI Learning System
-
-Plataforma educativa con inteligencia artificial.
-
-<strong>Funciones:</strong>
-• Enseñanza interactiva de inglés
-• Traducción y audio automático
-• Contenido adaptado para niños
-• Ejercicios dinámicos
-• Aprendizaje guiado
-
-<em>Estado: funcional y en iteración.</em>`
-  },
-
-  {
-    id: 'vision',
-    keywords: ['visión', 'vision', 'objetivo', 'goal', 'misión', 'mision', 'propósito', 'proposito', 'futuro', 'buscan'],
-    label: 'Visión',
-    response: () => `<strong>Visión:</strong> Reducir el trabajo manual mediante sistemas inteligentes.
-
-Automatizamos procesos en:
-
-• Empresas
-• Logística
-• Educación
-• Creación de contenido`
-  },
-
-  {
-    id: 'differential',
-    keywords: ['diferencia', 'diferencias', 'distinto', 'unique', 'propuesta', 'valor', 'por qué', 'porque', 'por que elegir', 'ventaja'],
-    label: 'Diferencial',
-    response: () => `Byte Wizzard no solo construye interfaces.
-
-Construimos <strong>sistemas completos</strong>:
-
-• frontend + backend + AI + cloud + mobile
-• Integración real con APIs modernas
-• Enfoque en problemas operativos reales`
-  },
-
-  {
-    id: 'stack',
-    keywords: ['stack', 'tecnología', 'tecnologia', 'tech', 'tools', 'herramientas', 'lenguaje', 'framework', 'cloudflare', 'workers', 'node', 'fastify', 'react', 'vite', 'react native', 'expo', 'llama', 'openstreetmap', 'osrm', 'nominatim', 'prisma', 'postgresql', 'postgis', 'motor'],
-    label: 'Stack Tecnológico',
-    response: () => `<strong>Stack Tecnológico:</strong>
-
-☁️ Cloudflare Workers / Edge Computing
-🟢 Node.js / Fastify / Express
-⚛️ React / Vite / Vanilla JS
-📱 React Native / Expo
-🧠 AI Models (Llama 3 + APIs externas)
-🗺️ OpenStreetMap / OSRM / Nominatim
-🗄️ PostgreSQL / Prisma`
-  },
-
-  {
-    id: 'status',
-    keywords: ['estado', 'status', 'progreso', 'activo', 'desarrollo', 'fase', 'alpha', 'beta', 'lanzamiento'],
-    label: 'Estado del Proyecto',
-    response: () => `Byte Wizzard está en <strong>fase activa de desarrollo</strong>.
-
-• Productos reales funcionando
-• MVPs desplegados
-• Iteración constante
-• Enfoque AI-first`
-  },
-
-  {
-    id: 'contact',
-    keywords: ['contacto', 'contact', 'hablar', 'contratar', 'presupuesto', 'email', 'mail', 'teléfono', 'telefono', 'whatsapp', 'redes'],
-    label: 'Contacto',
-    response: () => `Por ahora la mejor forma de conocernos es explorando nuestros <a href="../../index.html#products" style="color:#00aaff">productos</a> y demos.
-
-Si querés contactarnos, escribinos a través de los canales del estudio.`
-  }
-];
-
-  const GREETING = `¡Hola! Soy <strong>Hermes</strong>, el mensajero de Byte Wizzard. ⚡
-
-Preguntame lo que quieras sobre el estudio, nuestros productos, el stack tecnológico o la visión.
-
-Por ejemplo:
-• <em>"¿Qué es Byte Wizzard?"</em>
-• <em>"Contame sobre Courier TMS"</em>
-• <em>"¿Qué stack usan?"</em>`
-
-const FALLBACK = `No tengo información específica sobre eso, pero puedo contarte sobre:
-
-• <strong>Byte Wizzard</strong> — qué es el estudio
-• <strong>Luna</strong> — AI Business Assistant
-• <strong>Courier TMS</strong> — Logistics Intelligence
-• <strong>ClipCraft</strong> — Content Creation
-• <strong>Profe Mágico</strong> — AI Learning
-• <strong>Stack</strong> — tecnologías que usamos
-• <strong>Visión</strong> — nuestro enfoque
-
-¿Sobre qué querés saber?`
+function rebuildLanguageState(langCode) {
+  KB = buildKB(langCode);
+  GREETING = getGreeting(langCode);
+  FALLBACK = getFallback(langCode);
+}
 
 // ═══════════════════════════════════════════════════════════════
 // CHAT ENGINE
@@ -570,7 +456,8 @@ function hideTyping() {
 // ─── Show suggestions ───
 function showSuggestions() {
   suggestionsEl.innerHTML = '';
-  const quick = ['What is Byte Wizzard?', 'Tell me about Courier TMS', 'What stack do you use?', 'Products'];
+  const lang = window.__lang || I18N.currentLang || 'es';
+  const quick = getSuggestions(lang);
   quick.forEach(text => {
     const btn = document.createElement('button');
     btn.textContent = text;
@@ -600,7 +487,7 @@ function handleSend() {
 
     const match = findMatch(text);
 
-    if (text.toLowerCase().includes('hola') || text.toLowerCase().includes('buenas') || text.toLowerCase().includes('hello') || text.toLowerCase().includes('hi')) {
+    if (text.toLowerCase().includes('hola') || text.toLowerCase().includes('buenas') || text.toLowerCase().includes('hello') || text.toLowerCase().includes('hi') || text.toLowerCase().includes('olá') || text.toLowerCase().includes('ola')) {
       addMessage(GREETING, 'bot');
     } else if (match) {
       addMessage(renderResponse(match.response()), 'bot');
@@ -618,9 +505,26 @@ function handleSend() {
 }
 
 // ─── Init ───
-addMessage(GREETING, 'bot');
-showSuggestions();
+function initChat(langCode) {
+  rebuildLanguageState(langCode);
+  messagesEl.innerHTML = '';
+  suggestionsEl.innerHTML = '';
+  addMessage(GREETING, 'bot');
+  showSuggestions();
+}
+
+const initialLang = I18N.currentLang || 'es';
+initChat(initialLang);
+inputEl.placeholder = __('hermesDemo.inputPlaceholder');
+sendBtn.textContent = __('hermesDemo.sendBtn');
 inputEl.focus();
+
+// ─── Language change ───
+I18N.onLangChange((lang) => {
+  initChat(lang);
+  inputEl.placeholder = __('hermesDemo.inputPlaceholder');
+  sendBtn.textContent = __('hermesDemo.sendBtn');
+});
 
 // ─── Events ───
 sendBtn.addEventListener('click', handleSend);
