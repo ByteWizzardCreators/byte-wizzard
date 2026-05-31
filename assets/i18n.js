@@ -25,7 +25,7 @@ const I18N = (() => {
       hero: {
         label: './byte-wizzard --whoami',
         title: 'BYTE<br><span class="accent">WIZZARD</span>',
-        subtitle: 'AI-first systems for automation, logistics,<br>education and intelligent assistants.',
+        subtitle: 'Sistemas AI-first para automatización, logística,<br>educación y asistentes inteligentes.',
         btnProducts: 'Ver Productos →',
         btnContact: 'Contacto',
         scroll: 'SCROLL ▼',
@@ -68,12 +68,12 @@ const I18N = (() => {
       wwd: {
         title: 'Qué Hacemos',
         items: [
-          { emoji: '🧠', label: 'AI Systems', desc: 'Intelligent automation for real processes' },
-          { emoji: '⚙️', label: 'Automation', desc: 'Reduce manual work through smart flows' },
-          { emoji: '🚛', label: 'Logistics', desc: 'Route optimization & live tracking' },
-          { emoji: '🎓', label: 'Education', desc: 'AI-powered learning experiences' },
-          { emoji: '📱', label: 'Mobile', desc: 'React Native & Expo apps' },
-          { emoji: '☁️', label: 'Cloud', desc: 'Cloudflare Workers & edge computing' },
+          { emoji: '🧠', label: 'Sistemas de IA', desc: 'Automatización inteligente para procesos reales' },
+          { emoji: '⚙️', label: 'Automatización', desc: 'Reducí el trabajo manual con flujos inteligentes' },
+          { emoji: '🚛', label: 'Logística', desc: 'Optimización de rutas y seguimiento en vivo' },
+          { emoji: '🎓', label: 'Educación', desc: 'Experiencias de aprendizaje potenciadas por IA' },
+          { emoji: '📱', label: 'Mobile', desc: 'Apps con React Native y Expo' },
+          { emoji: '☁️', label: 'Cloud', desc: 'Cloudflare Workers y edge computing' },
         ],
       },
 
@@ -84,7 +84,7 @@ const I18N = (() => {
       },
 
       // ─── QUOTE ───
-      quote: '“We don\'t build ideas. <span class="highlight">We build working systems.</span>”',
+      quote: '“No construimos ideas. <span class="highlight">Construimos sistemas que funcionan.</span>”',
 
       // ─── STACK ───
       stack: {
@@ -101,7 +101,7 @@ const I18N = (() => {
       // ─── FOOTER ───
       footer: {
         brand: 'BYTE <span class="accent">WIZZARD</span>',
-        tagline: 'AI & Software Systems Studio',
+        tagline: 'Estudio de Sistemas IA & Software',
         copyright: '© 2026 Byte Wizzard — Productos reales. Sistemas reales.',
       },
 
@@ -386,12 +386,12 @@ const I18N = (() => {
       wwd: {
         title: 'O Que Fazemos',
         items: [
-          { emoji: '🧠', label: 'AI Systems', desc: 'Intelligent automation for real processes' },
-          { emoji: '⚙️', label: 'Automation', desc: 'Reduce manual work through smart flows' },
-          { emoji: '🚛', label: 'Logistics', desc: 'Route optimization & live tracking' },
-          { emoji: '🎓', label: 'Education', desc: 'AI-powered learning experiences' },
-          { emoji: '📱', label: 'Mobile', desc: 'React Native & Expo apps' },
-          { emoji: '☁️', label: 'Cloud', desc: 'Cloudflare Workers & edge computing' },
+          { emoji: '🧠', label: 'Sistemas de IA', desc: 'Automação inteligente para processos reais' },
+          { emoji: '⚙️', label: 'Automação', desc: 'Reduza o trabalho manual com fluxos inteligentes' },
+          { emoji: '🚛', label: 'Logística', desc: 'Otimização de rotas e rastreamento ao vivo' },
+          { emoji: '🎓', label: 'Educação', desc: 'Experiências de aprendizado com IA' },
+          { emoji: '📱', label: 'Mobile', desc: 'Apps com React Native e Expo' },
+          { emoji: '☁️', label: 'Cloud', desc: 'Cloudflare Workers e edge computing' },
         ],
       },
       vision: {
