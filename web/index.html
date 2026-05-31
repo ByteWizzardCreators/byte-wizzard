@@ -120,6 +120,28 @@
       gap: 12px;
       flex-wrap: wrap;
     }
+
+    .hero-status {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: #555;
+      margin-bottom: 28px;
+      letter-spacing: 0.05em;
+    }
+    .hero-status .dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #00d488;
+      margin-right: 6px;
+      vertical-align: middle;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .hero-status .sep {
+      color: #333;
+      margin: 0 8px;
+    }
     .btn {
       display: inline-flex;
       align-items: center;
@@ -223,6 +245,21 @@
     .product-card.clipcraft::before { background: linear-gradient(90deg, #a855f7, #ec4899); }
     .product-card.profe::before { background: linear-gradient(90deg, #3b82f6, #06b6d4); }
 
+    .product-status {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      font-weight: 600;
+      padding: 2px 10px;
+      border-radius: 4px;
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+    }
+    .product-status.demo { background: #00d48822; color: #00d488; border: 1px solid #00d48833; }
+    .product-status.dev { background: #ff6b3522; color: #ff6b35; border: 1px solid #ff6b3533; }
+    .product-status.live { background: #3b82f622; color: #3b82f6; border: 1px solid #3b82f633; }
+    .product-status.mvp { background: #a855f722; color: #a855f7; border: 1px solid #a855f733; }
+
     .product-icon {
       font-size: 2rem;
       margin-bottom: 16px;
@@ -266,6 +303,28 @@
       gap: 6px;
     }
     .product-card:hover .product-link { color: #00d488; }
+
+    /* ─── COMING SOON ─── */
+    .coming-soon {
+      padding: 60px 0 80px;
+    }
+    .coming-soon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .coming-soon .product-card {
+      opacity: 0.5;
+      border-style: dashed;
+    }
+    .coming-soon .product-card:hover {
+      opacity: 0.7;
+      border-color: #2a2a4e;
+      transform: none;
+    }
+    .coming-soon .product-card::before { display: none; }
+    .coming-soon .product-features { margin-bottom: 0; }
+    .coming-soon .product-link { color: #444; cursor: default; }
 
     /* ============================================================
        WHAT WE DO
@@ -324,6 +383,18 @@
       text-align: left;
     }
     .vision blockquote strong {
+      color: #00d488;
+    }
+    .vision-motto {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: #666;
+      max-width: 600px;
+      margin: 0 auto 32px;
+      line-height: 1.8;
+      text-align: center;
+    }
+    .vision-motto .highlight {
       color: #00d488;
     }
 
@@ -409,6 +480,26 @@
       font-size: 0.8rem;
       color: #444;
     }
+    footer .built-by {
+      font-size: 0.75rem;
+      color: #444;
+      margin-top: 12px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    footer .contact-links {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin: 12px 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+    }
+    footer .contact-links a {
+      color: #555;
+      transition: color 0.2s;
+    }
+    footer .contact-links a:hover { color: #00d488; }
+    footer .contact-links .sep { color: #333; }
     footer .divider {
       width: 40px;
       height: 1px;
@@ -464,23 +555,6 @@
       color: #0a0a0f;
     }
 
-    /* ============================================================
-       QUOTE RIBBON
-       ============================================================ */
-    .quote-ribbon {
-      padding: 24px 0;
-      text-align: center;
-      border-top: 1px solid #111;
-    }
-    .quote-ribbon p {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      color: #444;
-      letter-spacing: 0.1em;
-    }
-    .quote-ribbon .highlight {
-      color: #00d488;
-    }
   </style>
 </head>
 <body>
@@ -506,6 +580,9 @@
         AI-first systems for automation, logistics,<br>
         education and intelligent assistants.
       </p>
+      <div class="hero-status" data-i18n="hero.status">
+        <span class="dot"></span> 4 active products · 2 demos · AI-first
+      </div>
       <div class="hero-actions">
         <a href="#products" class="btn btn-primary" data-i18n="hero.btnProducts">View Products →</a>
         <a href="#contact" class="btn btn-outline" data-i18n="hero.btnContact">Contact</a>
@@ -526,13 +603,14 @@
         <!-- Hermes -->
         <article class="product-card hermes">
           <div class="product-icon" data-i18n="products.hermes.icon">⚡</div>
+          <div class="product-status demo" data-i18n="products.hermes.status">DEMO</div>
           <h3 class="product-name" data-i18n="products.hermes.name">Hermes</h3>
           <p class="product-tagline" data-i18n="products.hermes.tagline">Byte Wizzard AI Assistant</p>
           <ul class="product-features" data-i18n-features="products.hermes.features">
-            <li>Conocimiento completo del estudio</li>
-            <li>Info de productos y demos</li>
-            <li>Stack tecnológico y visión</li>
-            <li>Chat interactivo en vivo</li>
+            <li>Full studio knowledge</li>
+            <li>Product & demo info</li>
+            <li>Tech stack & vision</li>
+            <li>Interactive live chat</li>
           </ul>
           <a href="demos/hermes/index.html" target="_blank" class="product-link" data-i18n="products.hermes.link">
             → Try Demo Bot
@@ -542,51 +620,64 @@
         <!-- Courier TMS -->
         <article class="product-card courier">
           <div class="product-icon" data-i18n="products.courier.icon">🚚</div>
+          <div class="product-status dev" data-i18n="products.courier.status">IN DEVELOPMENT</div>
           <h3 class="product-name" data-i18n="products.courier.name">Courier TMS</h3>
           <p class="product-tagline" data-i18n="products.courier.tagline">Logistics Intelligence System</p>
           <ul class="product-features" data-i18n-features="products.courier.features">
-            <li>Agrupación inteligente por zonas</li>
-            <li>Optimización de rutas (TSP)</li>
-            <li>Tracking GPS en tiempo real</li>
-            <li>App para repartidores</li>
-            <li>Panel administrativo completo</li>
-            <li>Importación de órdenes CSV</li>
+            <li>Smart zone clustering</li>
+            <li>Route optimization (TSP)</li>
+            <li>Real-time GPS tracking</li>
+            <li>Driver mobile app</li>
+            <li>Complete admin panel</li>
+            <li>CSV order import</li>
           </ul>
           <a href="demos/courier-tms/index.html" target="_blank" class="product-link" data-i18n="products.courier.link">
             → Try Demo
           </a>
         </article>
 
-        <!-- ClipCraft -->
-        <article class="product-card clipcraft">
-          <div class="product-icon" data-i18n="products.clipcraft.icon">📱</div>
-          <h3 class="product-name" data-i18n="products.clipcraft.name">ClipCraft</h3>
-          <p class="product-tagline" data-i18n="products.clipcraft.tagline">Mobile Content Creation Platform</p>
-          <ul class="product-features" data-i18n-features="products.clipcraft.features">
-            <li>Edición de fotos y videos</li>
-            <li>Generación automática de videos</li>
-            <li>Música integrada</li>
-            <li>Render en la nube</li>
-            <li>Exportación directa al dispositivo</li>
-          </ul>
-          <span class="product-link" data-i18n="products.clipcraft.link">→ In development</span>
-        </article>
-
         <!-- Profe Mágico -->
         <article class="product-card profe">
           <div class="product-icon" data-i18n="products.profe.icon">📚</div>
+          <div class="product-status live" data-i18n="products.profe.status">LIVE</div>
           <h3 class="product-name" data-i18n="products.profe.name">Profe Mágico</h3>
           <p class="product-tagline" data-i18n="products.profe.tagline">AI Learning System</p>
           <ul class="product-features" data-i18n-features="products.profe.features">
-            <li>Enseñanza interactiva con IA</li>
-            <li>Traducción y audio automático</li>
-            <li>Contenido adaptado para niños</li>
-            <li>Ejercicios dinámicos</li>
-            <li>Experiencia educativa guiada</li>
+            <li>Interactive AI teaching</li>
+            <li>Auto translation & audio</li>
+            <li>Kids-friendly content</li>
+            <li>Dynamic exercises</li>
+            <li>Guided learning experience</li>
           </ul>
           <a href="https://profe-magico-frontend.onrender.com/" target="_blank" class="product-link" data-i18n="products.profe.link">
-            → Try Demo
+            → Visit site
           </a>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       COMING SOON
+       ============================================================ -->
+  <section class="coming-soon">
+    <div class="container">
+      <h2 class="section-title" data-i18n="comingSoon.title">Coming Soon</h2>
+      <div class="coming-soon-grid">
+
+        <!-- ClipCraft -->
+        <article class="product-card clipcraft">
+          <div class="product-icon" data-i18n="comingSoon.clipcraft.icon">📱</div>
+          <div class="product-status mvp" data-i18n="comingSoon.clipcraft.status">Internal MVP</div>
+          <h3 class="product-name" data-i18n="comingSoon.clipcraft.name">ClipCraft</h3>
+          <p class="product-tagline" data-i18n="comingSoon.clipcraft.tagline">Mobile Content Creation Platform</p>
+          <ul class="product-features" data-i18n-features="comingSoon.clipcraft.features">
+            <li>Multimedia content creation platform</li>
+            <li>Photo & video editing</li>
+            <li>Automatic video generation</li>
+          </ul>
+          <span class="product-link">→ Internal MVP</span>
         </article>
 
       </div>
@@ -640,6 +731,9 @@
   <section class="vision" id="vision">
     <div class="container">
       <h2 class="section-title" data-i18n="vision.title">Vision</h2>
+      <div class="vision-motto" data-i18n="vision.motto">
+        “We don’t build ideas. <span class="highlight">We build working systems.</span>”
+      </div>
       <blockquote data-i18n="vision.quote">
         Reducir trabajo manual a través de sistemas inteligentes<br>
         que automatizan <strong>operaciones reales</strong> en empresas,<br>
@@ -647,15 +741,6 @@
       </blockquote>
     </div>
   </section>
-
-  <!-- ============================================================
-       QUOTE RIBBON
-       ============================================================ -->
-  <div class="quote-ribbon">
-    <p data-i18n="quote">
-      “We don’t build ideas. <span class="highlight">We build working systems.</span>”
-    </p>
-  </div>
 
   <!-- ============================================================
        STACK
@@ -712,6 +797,14 @@
   <footer id="contact">
     <div class="brand" data-i18n="footer.brand">BYTE <span class="accent">WIZZARD</span></div>
     <p class="tagline" data-i18n="footer.tagline">AI &amp; Software Systems Studio</p>
+    <p class="built-by" data-i18n="footer.builtBy">Built by Matías Bagnasco — AI Systems Developer</p>
+    <div class="contact-links">
+      <a href="mailto:hello@bytewizzard.com">hello@bytewizzard.com</a>
+      <span class="sep">·</span>
+      <a href="https://github.com/ByteWizzardCreators" target="_blank" rel="noopener">GitHub</a>
+      <span class="sep">·</span>
+      <a href="https://www.linkedin.com/in/matiasbagnasco/" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
     <div class="divider"></div>
     <p class="copyright" data-i18n="footer.copyright">© 2026 Byte Wizzard — Real products. Real systems.</p>
   </footer>

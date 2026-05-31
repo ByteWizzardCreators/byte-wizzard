@@ -29,6 +29,7 @@ const I18N = (() => {
         btnProducts: 'Ver Productos →',
         btnContact: 'Contacto',
         scroll: 'SCROLL ▼',
+        status: '4 productos activos · 2 demos · AI-first',
       },
 
       // ─── PRODUCTS ───
@@ -39,6 +40,7 @@ const I18N = (() => {
           name: 'Hermes',
           tagline: 'Byte Wizzard AI Assistant',
           features: ['Conocimiento completo del estudio', 'Info de productos y demos', 'Stack tecnológico y visión', 'Chat interactivo en vivo'],
+          status: 'DEMO',
           link: '→ Probar Demo Bot',
         },
         courier: {
@@ -46,21 +48,28 @@ const I18N = (() => {
           name: 'Courier TMS',
           tagline: 'Logistics Intelligence System',
           features: ['Agrupación inteligente por zonas', 'Optimización de rutas (TSP)', 'Tracking GPS en tiempo real', 'App para repartidores', 'Panel administrativo completo', 'Importación de órdenes CSV'],
+          status: 'EN DESARROLLO',
           link: '→ Probar Demo (en desarrollo)',
-        },
-        clipcraft: {
-          icon: '📱',
-          name: 'ClipCraft',
-          tagline: 'Mobile Content Creation Platform',
-          features: ['Edición de fotos y videos', 'Generación automática de videos', 'Música integrada', 'Render en la nube', 'Exportación directa al dispositivo'],
-          link: '→ En desarrollo',
         },
         profe: {
           icon: '📚',
           name: 'Profe Mágico',
           tagline: 'AI Learning System',
           features: ['Enseñanza interactiva con IA', 'Traducción y audio automático', 'Contenido adaptado para niños', 'Ejercicios dinámicos', 'Experiencia educativa guiada'],
+          status: 'LIVE',
           link: '→ Visitar sitio',
+        },
+      },
+
+      // ─── PRÓXIMAMENTE ───
+      comingSoon: {
+        title: 'Próximamente',
+        clipcraft: {
+          icon: '📱',
+          name: 'ClipCraft',
+          tagline: 'Mobile Content Creation Platform',
+          status: 'MVP Interno',
+          features: ['Plataforma de creación de contenido multimedia', 'Edición de fotos y videos', 'Generación automática de videos'],
         },
       },
 
@@ -80,11 +89,9 @@ const I18N = (() => {
       // ─── VISION ───
       vision: {
         title: 'Visión',
+        motto: '“No construimos ideas. <span class="highlight">Construimos sistemas que funcionan.</span>”',
         quote: 'Reducir trabajo manual a través de sistemas inteligentes<br>que automatizan <strong>operaciones reales</strong> en empresas,<br>logística y educación.',
       },
-
-      // ─── QUOTE ───
-      quote: '“No construimos ideas. <span class="highlight">Construimos sistemas que funcionan.</span>”',
 
       // ─── STACK ───
       stack: {
@@ -102,6 +109,7 @@ const I18N = (() => {
       footer: {
         brand: 'BYTE <span class="accent">WIZZARD</span>',
         tagline: 'Estudio de Sistemas IA & Software',
+        builtBy: 'Built by Matías Bagnasco — AI Systems Developer',
         copyright: '© 2026 Byte Wizzard — Productos reales. Sistemas reales.',
       },
 
@@ -197,6 +205,7 @@ const I18N = (() => {
         btnProducts: 'View Products →',
         btnContact: 'Contact',
         scroll: 'SCROLL ▼',
+        status: '4 active products · 2 demos · AI-first',
       },
       products: {
         title: 'Products',
@@ -205,6 +214,7 @@ const I18N = (() => {
           name: 'Hermes',
           tagline: 'Byte Wizzard AI Assistant',
           features: ['Full studio knowledge', 'Product & demo info', 'Tech stack & vision', 'Interactive live chat'],
+          status: 'DEMO',
           link: '→ Try Demo Bot',
         },
         courier: {
@@ -212,21 +222,26 @@ const I18N = (() => {
           name: 'Courier TMS',
           tagline: 'Logistics Intelligence System',
           features: ['Smart zone clustering', 'Route optimization (TSP)', 'Real-time GPS tracking', 'Driver mobile app', 'Complete admin panel', 'CSV order import'],
+          status: 'IN DEVELOPMENT',
           link: '→ Try Demo (in development)',
-        },
-        clipcraft: {
-          icon: '📱',
-          name: 'ClipCraft',
-          tagline: 'Mobile Content Creation Platform',
-          features: ['Photo & video editing', 'Auto video generation', 'Integrated music library', 'Cloud rendering', 'Direct device export'],
-          link: '→ In development',
         },
         profe: {
           icon: '📚',
           name: 'Profe Mágico',
           tagline: 'AI Learning System',
           features: ['Interactive AI teaching', 'Auto translation & audio', 'Kids-friendly content', 'Dynamic exercises', 'Guided learning experience'],
+          status: 'LIVE',
           link: '→ Visit site',
+        },
+      },
+      comingSoon: {
+        title: 'Coming Soon',
+        clipcraft: {
+          icon: '📱',
+          name: 'ClipCraft',
+          tagline: 'Mobile Content Creation Platform',
+          status: 'Internal MVP',
+          features: ['Multimedia content creation platform', 'Photo & video editing', 'Automatic video generation'],
         },
       },
       wwd: {
@@ -242,9 +257,9 @@ const I18N = (() => {
       },
       vision: {
         title: 'Vision',
+        motto: '“We don\'t build ideas. <span class="highlight">We build working systems.</span>”',
         quote: 'Reduce manual work through intelligent systems<br>that automate <strong>real operations</strong> in business,<br>logistics and education.',
       },
-      quote: '“We don\'t build ideas. <span class="highlight">We build working systems.</span>”',
       stack: {
         title: 'Stack',
         tags: ['Cloudflare Workers', 'Node.js', 'Fastify', 'Express', 'React', 'Vite', 'React Native', 'Expo', 'Llama 3', 'OpenStreetMap', 'OSRM', 'Nominatim', 'Prisma', 'PostgreSQL', 'PostGIS'],
@@ -256,6 +271,7 @@ const I18N = (() => {
       footer: {
         brand: 'BYTE <span class="accent">WIZZARD</span>',
         tagline: 'AI & Software Systems Studio',
+        builtBy: 'Built by Matías Bagnasco — AI Systems Developer',
         copyright: '© 2026 Byte Wizzard — Real products. Real systems.',
       },
 
@@ -351,6 +367,7 @@ const I18N = (() => {
         btnProducts: 'Ver Produtos →',
         btnContact: 'Contato',
         scroll: 'ROLAR ▼',
+        status: '4 produtos ativos · 2 demos · AI-first',
       },
       products: {
         title: 'Produtos',
@@ -359,6 +376,7 @@ const I18N = (() => {
           name: 'Hermes',
           tagline: 'Assistente IA da Byte Wizzard',
           features: ['Conhecimento completo do estúdio', 'Informações de produtos e demos', 'Stack tecnológico e visão', 'Chat interativo ao vivo'],
+          status: 'DEMO',
           link: '→ Testar Bot Demo',
         },
         courier: {
@@ -366,21 +384,26 @@ const I18N = (() => {
           name: 'Courier TMS',
           tagline: 'Sistema de Inteligência Logística',
           features: ['Agrupamento inteligente por zona', 'Otimização de rotas (TSP)', 'Tracking GPS em tempo real', 'App para entregadores', 'Painel administrativo completo', 'Importação de pedidos CSV'],
+          status: 'EM DESENVOLVIMENTO',
           link: '→ Testar Demo (em desenvolvimento)',
-        },
-        clipcraft: {
-          icon: '📱',
-          name: 'ClipCraft',
-          tagline: 'Plataforma de Criação de Conteúdo',
-          features: ['Edição de fotos e vídeos', 'Geração automática de vídeos', 'Música integrada', 'Render na nuvem', 'Exportação direta para o dispositivo'],
-          link: '→ Em desenvolvimento',
         },
         profe: {
           icon: '📚',
           name: 'Profe Mágico',
           tagline: 'Sistema de Aprendizagem com IA',
           features: ['Ensino interativo com IA', 'Tradução e áudio automáticos', 'Conteúdo adaptado para crianças', 'Exercícios dinâmicos', 'Experiência educativa guiada'],
+          status: 'LIVE',
           link: '→ Visitar site',
+        },
+      },
+      comingSoon: {
+        title: 'Em Breve',
+        clipcraft: {
+          icon: '📱',
+          name: 'ClipCraft',
+          tagline: 'Plataforma de Criação de Conteúdo',
+          status: 'MVP Interno',
+          features: ['Plataforma de criação de conteúdo multimídia', 'Edição de fotos e vídeos', 'Geração automática de vídeos'],
         },
       },
       wwd: {
@@ -396,9 +419,9 @@ const I18N = (() => {
       },
       vision: {
         title: 'Visão',
+        motto: '“Não construímos ideias. <span class="highlight">Construímos sistemas funcionais.</span>”',
         quote: 'Reduzir o trabalho manual através de sistemas inteligentes<br>que automatizam <strong>operações reais</strong> em empresas,<br>logística e educação.',
       },
-      quote: '“Não construímos ideias. <span class="highlight">Construímos sistemas funcionais.</span>”',
       stack: {
         title: 'Stack',
         tags: ['Cloudflare Workers', 'Node.js', 'Fastify', 'Express', 'React', 'Vite', 'React Native', 'Expo', 'Llama 3', 'OpenStreetMap', 'OSRM', 'Nominatim', 'Prisma', 'PostgreSQL', 'PostGIS'],
@@ -410,6 +433,7 @@ const I18N = (() => {
       footer: {
         brand: 'BYTE <span class="accent">WIZZARD</span>',
         tagline: 'Estúdio de Sistemas IA & Software',
+        builtBy: 'Built by Matías Bagnasco — AI Systems Developer',
         copyright: '© 2026 Byte Wizzard — Produtos reais. Sistemas reais.',
       },
 
