@@ -60,7 +60,7 @@ const I18N = (() => {
           name: 'Profe Mágico',
           tagline: 'AI Learning System',
           features: ['Enseñanza interactiva con IA', 'Traducción y audio automático', 'Contenido adaptado para niños', 'Ejercicios dinámicos', 'Experiencia educativa guiada'],
-          link: '→ Probar Demo',
+          link: '→ Visitar sitio',
         },
       },
 
@@ -226,7 +226,7 @@ const I18N = (() => {
           name: 'Profe Mágico',
           tagline: 'AI Learning System',
           features: ['Interactive AI teaching', 'Auto translation & audio', 'Kids-friendly content', 'Dynamic exercises', 'Guided learning experience'],
-          link: '→ Try Demo',
+          link: '→ Visit site',
         },
       },
       wwd: {
@@ -380,7 +380,7 @@ const I18N = (() => {
           name: 'Profe Mágico',
           tagline: 'Sistema de Aprendizagem com IA',
           features: ['Ensino interativo com IA', 'Tradução e áudio automáticos', 'Conteúdo adaptado para crianças', 'Exercícios dinâmicos', 'Experiência educativa guiada'],
-          link: '→ Testar Demo',
+          link: '→ Visitar site',
         },
       },
       wwd: {
