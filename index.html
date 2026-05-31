@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Byte Wizzard — AI-first systems</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================================
+       RESET & BASE
+       ============================================================ */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0f;
+      color: #e0e0e0;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    /* ============================================================
+       UTILITIES
+       ============================================================ */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .section-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #666;
+      margin-bottom: 48px;
+      text-align: center;
+    }
+    .section-title::before,
+    .section-title::after {
+      content: ' ─── ';
+      color: #333;
+    }
+
+    /* ============================================================
+       TERMINAL HERO
+       ============================================================ */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      position: relative;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(0,255,170,0.03) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .terminal-box {
+      background: #0d0d14;
+      border: 1px solid #1a1a2e;
+      border-radius: 12px;
+      padding: 48px 40px;
+      max-width: 640px;
+      width: 100%;
+      position: relative;
+    }
+    .terminal-box::before {
+      content: '● ● ●';
+      position: absolute;
+      top: 16px;
+      left: 24px;
+      font-size: 10px;
+      letter-spacing: 6px;
+      color: #333;
+    }
+
+    .hero-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: #555;
+      margin-bottom: 24px;
+      letter-spacing: 0.15em;
+    }
+    .hero-label span { color: #00d488; }
+
+    .hero-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .hero-title .accent {
+      background: linear-gradient(135deg, #00d488, #00aaff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: 1rem;
+      color: #888;
+      margin-bottom: 32px;
+      line-height: 1.7;
+      max-width: 500px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary {
+      background: #00d488;
+      color: #0a0a0f;
+    }
+    .btn-primary:hover {
+      background: #00e899;
+      transform: translateY(-1px);
+    }
+    .btn-outline {
+      background: transparent;
+      color: #888;
+      border: 1px solid #2a2a3e;
+    }
+    .btn-outline:hover {
+      border-color: #00d488;
+      color: #00d488;
+    }
+
+    .hero-cursor {
+      display: inline-block;
+      width: 10px;
+      height: 1.2em;
+      background: #00d488;
+      animation: blink 1s step-end infinite;
+      vertical-align: text-bottom;
+      margin-left: 4px;
+    }
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    /* scroll indicator */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: #444;
+      letter-spacing: 0.2em;
+      animation: float 2s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ============================================================
+       PRODUCTS
+       ============================================================ */
+    .products {
+      padding: 100px 0;
+    }
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .product-card {
+      background: #0d0d14;
+      border: 1px solid #1a1a2e;
+      border-radius: 12px;
+      padding: 32px 28px;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .product-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .product-card:hover {
+      border-color: #2a2a4e;
+      transform: translateY(-4px);
+    }
+    .product-card:hover::before { opacity: 1; }
+
+    .product-card.hermes::before { background: linear-gradient(90deg, #00d488, #00aaff); }
+    .product-card.courier::before { background: linear-gradient(90deg, #ff6b35, #ffb347); }
+    .product-card.clipcraft::before { background: linear-gradient(90deg, #a855f7, #ec4899); }
+    .product-card.profe::before { background: linear-gradient(90deg, #3b82f6, #06b6d4); }
+
+    .product-icon {
+      font-size: 2rem;
+      margin-bottom: 16px;
+    }
+    .product-name {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .product-tagline {
+      font-size: 0.8rem;
+      color: #666;
+      margin-bottom: 20px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .product-features {
+      list-style: none;
+      margin-bottom: 24px;
+    }
+    .product-features li {
+      font-size: 0.85rem;
+      color: #999;
+      padding: 4px 0;
+      padding-left: 16px;
+      position: relative;
+    }
+    .product-features li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      color: #555;
+    }
+    .product-link {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: #555;
+      transition: color 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .product-card:hover .product-link { color: #00d488; }
+
+    /* ============================================================
+       WHAT WE DO
+       ============================================================ */
+    .what-we-do {
+      padding: 80px 0;
+      border-top: 1px solid #111;
+    }
+    .wwd-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .wwd-item {
+      background: #0d0d14;
+      border: 1px solid #1a1a2e;
+      border-radius: 8px;
+      padding: 24px 20px;
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: #888;
+      transition: all 0.2s;
+    }
+    .wwd-item:hover {
+      border-color: #2a2a4e;
+      color: #00d488;
+    }
+    .wwd-item strong {
+      display: block;
+      font-size: 0.7rem;
+      color: #555;
+      margin-bottom: 8px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    .wwd-item .emoji { font-size: 1.5rem; margin-bottom: 8px; }
+
+    /* ============================================================
+       VISION
+       ============================================================ */
+    .vision {
+      padding: 80px 0;
+      border-top: 1px solid #111;
+      text-align: center;
+    }
+    .vision blockquote {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: #666;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.8;
+      border-left: 2px solid #1a1a2e;
+      padding-left: 24px;
+      text-align: left;
+    }
+    .vision blockquote strong {
+      color: #00d488;
+    }
+
+    /* ============================================================
+       STACK
+       ============================================================ */
+    .stack {
+      padding: 80px 0;
+      border-top: 1px solid #111;
+    }
+    .stack-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+    .stack-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      padding: 8px 18px;
+      background: #0d0d14;
+      border: 1px solid #1a1a2e;
+      border-radius: 20px;
+      color: #777;
+      transition: all 0.2s;
+    }
+    .stack-tag:hover {
+      border-color: #00d488;
+      color: #00d488;
+    }
+
+    /* ============================================================
+       STATUS BAR
+       ============================================================ */
+    .status-bar {
+      padding: 60px 0;
+      border-top: 1px solid #111;
+      text-align: center;
+    }
+    .status-dots {
+      display: flex;
+      gap: 32px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .status-dot {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: #666;
+    }
+    .status-dot .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #00d488;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* ============================================================
+       FOOTER
+       ============================================================ */
+    footer {
+      border-top: 1px solid #111;
+      padding: 40px 0;
+      text-align: center;
+    }
+    footer .brand {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: #333;
+      margin-bottom: 8px;
+    }
+    footer .brand .accent { color: #00d488; }
+    footer .tagline {
+      font-size: 0.8rem;
+      color: #444;
+    }
+    footer .divider {
+      width: 40px;
+      height: 1px;
+      background: #222;
+      margin: 16px auto;
+    }
+    footer .copyright {
+      font-size: 0.7rem;
+      color: #333;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 640px) {
+      .terminal-box { padding: 36px 24px; }
+      .hero-actions { flex-direction: column; }
+      .btn { justify-content: center; }
+      .products-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ============================================================
+       QUOTE RIBBON
+       ============================================================ */
+    .quote-ribbon {
+      padding: 24px 0;
+      text-align: center;
+      border-top: 1px solid #111;
+    }
+    .quote-ribbon p {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: #444;
+      letter-spacing: 0.1em;
+    }
+    .quote-ribbon .highlight {
+      color: #00d488;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       HERO
+       ============================================================ -->
+  <header class="hero" id="top">
+    <div class="terminal-box">
+      <div class="hero-label"><span>$</span> ./byte-wizzard --whoami</div>
+      <h1 class="hero-title">
+        BYTE<br>
+        <span class="accent">WIZZARD</span>
+      </h1>
+      <p class="hero-sub">
+        AI-first systems for automation, logistics,<br>
+        education and intelligent assistants.
+      </p>
+      <div class="hero-actions">
+        <a href="#products" class="btn btn-primary">View Products →</a>
+        <a href="#contact" class="btn btn-outline">Contact</a>
+      </div>
+      <div class="hero-cursor"></div>
+    </div>
+    <div class="scroll-indicator">SCROLL ▼</div>
+  </header>
+
+  <!-- ============================================================
+       PRODUCTS
+       ============================================================ -->
+  <section class="products" id="products">
+    <div class="container">
+      <h2 class="section-title">Products</h2>
+      <div class="products-grid">
+
+        <!-- Hermes -->
+        <article class="product-card hermes">
+          <div class="product-icon">⚡</div>
+          <h3 class="product-name">Hermes</h3>
+          <p class="product-tagline">Byte Wizzard AI Assistant</p>
+          <ul class="product-features">
+            <li>Conocimiento completo del estudio</li>
+            <li>Info de productos y demos</li>
+            <li>Stack tecnológico y visión</li>
+            <li>Chat interactivo en vivo</li>
+          </ul>
+          <a href="demos/hermes/index.html" target="_blank" class="product-link">
+            → Try Demo Bot
+          </a>
+        </article>
+
+        <!-- Courier TMS -->
+        <article class="product-card courier">
+          <div class="product-icon">🚚</div>
+          <h3 class="product-name">Courier TMS</h3>
+          <p class="product-tagline">Logistics Intelligence System</p>
+          <ul class="product-features">
+            <li>Agrupación inteligente por zonas</li>
+            <li>Optimización de rutas (TSP)</li>
+            <li>Tracking GPS en tiempo real</li>
+            <li>App para repartidores</li>
+            <li>Panel administrativo completo</li>
+            <li>Importación de órdenes CSV</li>
+          </ul>
+          <a href="demos/courier-tms/index.html" target="_blank" class="product-link">
+            → Try Demo
+          </a>
+        </article>
+
+        <!-- ClipCraft -->
+        <article class="product-card clipcraft">
+          <div class="product-icon">📱</div>
+          <h3 class="product-name">ClipCraft</h3>
+          <p class="product-tagline">Mobile Content Creation Platform</p>
+          <ul class="product-features">
+            <li>Edición de fotos y videos</li>
+            <li>Generación automática desde imágenes</li>
+            <li>Música integrada</li>
+            <li>Render en la nube</li>
+            <li>Exportación directa al dispositivo</li>
+          </ul>
+          <span class="product-link">→ In development</span>
+        </article>
+
+        <!-- Profe Mágico -->
+        <article class="product-card profe">
+          <div class="product-icon">📚</div>
+          <h3 class="product-name">Profe Mágico</h3>
+          <p class="product-tagline">AI Learning System</p>
+          <ul class="product-features">
+            <li>Enseñanza interactiva con IA</li>
+            <li>Traducción y audio automático</li>
+            <li>Contenido adaptado para niños</li>
+            <li>Ejercicios dinámicos</li>
+            <li>Experiencia educativa guiada</li>
+          </ul>
+          <a href="https://profe-magico-frontend.onrender.com/" target="_blank" class="product-link">
+            → Try Demo
+          </a>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       WHAT WE DO
+       ============================================================ -->
+  <section class="what-we-do" id="what">
+    <div class="container">
+      <h2 class="section-title">What We Do</h2>
+      <div class="wwd-grid">
+        <div class="wwd-item">
+          <div class="emoji">🧠</div>
+          <strong>AI Systems</strong>
+          Intelligent automation for real processes
+        </div>
+        <div class="wwd-item">
+          <div class="emoji">⚙️</div>
+          <strong>Automation</strong>
+          Reduce manual work through smart flows
+        </div>
+        <div class="wwd-item">
+          <div class="emoji">🚛</div>
+          <strong>Logistics</strong>
+          Route optimization &amp; live tracking
+        </div>
+        <div class="wwd-item">
+          <div class="emoji">🎓</div>
+          <strong>Education</strong>
+          AI-powered learning experiences
+        </div>
+        <div class="wwd-item">
+          <div class="emoji">📱</div>
+          <strong>Mobile</strong>
+          React Native &amp; Expo apps
+        </div>
+        <div class="wwd-item">
+          <div class="emoji">☁️</div>
+          <strong>Cloud</strong>
+          Cloudflare Workers &amp; edge computing
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       VISION
+       ============================================================ -->
+  <section class="vision" id="vision">
+    <div class="container">
+      <h2 class="section-title">Vision</h2>
+      <blockquote>
+        Reducir trabajo manual a través de sistemas inteligentes<br>
+        que automatizan <strong>operaciones reales</strong> en empresas,<br>
+        logística y educación.
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       QUOTE RIBBON
+       ============================================================ -->
+  <div class="quote-ribbon">
+    <p>
+      “We don’t build ideas. <span class="highlight">We build working systems.</span>”
+    </p>
+  </div>
+
+  <!-- ============================================================
+       STACK
+       ============================================================ -->
+  <section class="stack" id="stack">
+    <div class="container">
+      <h2 class="section-title">Stack</h2>
+      <div class="stack-tags">
+        <span class="stack-tag">Cloudflare Workers</span>
+        <span class="stack-tag">Node.js</span>
+        <span class="stack-tag">Fastify</span>
+        <span class="stack-tag">Express</span>
+        <span class="stack-tag">React</span>
+        <span class="stack-tag">Vite</span>
+        <span class="stack-tag">React Native</span>
+        <span class="stack-tag">Expo</span>
+        <span class="stack-tag">Llama 3</span>
+        <span class="stack-tag">OpenStreetMap</span>
+        <span class="stack-tag">OSRM</span>
+        <span class="stack-tag">Nominatim</span>
+        <span class="stack-tag">Prisma</span>
+        <span class="stack-tag">PostgreSQL</span>
+        <span class="stack-tag">PostGIS</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       STATUS
+       ============================================================ -->
+  <section class="status-bar" id="status">
+    <div class="container">
+      <h2 class="section-title">Status</h2>
+      <div class="status-dots">
+        <div class="status-dot">
+          <span class="dot"></span>
+          Active development
+        </div>
+        <div class="status-dot">
+          <span class="dot"></span>
+          Real deployed systems
+        </div>
+        <div class="status-dot">
+          <span class="dot"></span>
+          Continuous iteration
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       CONTACT / FOOTER
+       ============================================================ -->
+  <footer id="contact">
+    <div class="brand">BYTE <span class="accent">WIZZARD</span></div>
+    <p class="tagline">AI &amp; Software Systems Studio</p>
+    <div class="divider"></div>
+    <p class="copyright">© 2026 Byte Wizzard — Real products. Real systems.</p>
+  </footer>
+
+</body>
+</html>
