@@ -432,6 +432,39 @@
     }
 
     /* ============================================================
+       LANGUAGE SWITCHER
+       ============================================================ */
+    .lang-switcher {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 100;
+      display: flex;
+      gap: 4px;
+      background: #0d0d14;
+      border: 1px solid #1a1a2e;
+      border-radius: 8px;
+      padding: 4px;
+    }
+    .lang-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      padding: 4px 10px;
+      border: none;
+      border-radius: 5px;
+      background: transparent;
+      color: #555;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 500;
+    }
+    .lang-btn:hover { color: #888; }
+    .lang-btn.active {
+      background: #00d488;
+      color: #0a0a0f;
+    }
+
+    /* ============================================================
        QUOTE RIBBON
        ============================================================ */
     .quote-ribbon {
@@ -452,27 +485,34 @@
 </head>
 <body>
 
+  <!-- Language Switcher -->
+  <div class="lang-switcher">
+    <button class="lang-btn active" data-lang="es" onclick="I18N.setLang('es')">ES</button>
+    <button class="lang-btn" data-lang="en" onclick="I18N.setLang('en')">EN</button>
+    <button class="lang-btn" data-lang="pt" onclick="I18N.setLang('pt')">PT</button>
+  </div>
+
   <!-- ============================================================
        HERO
        ============================================================ -->
   <header class="hero" id="top">
     <div class="terminal-box">
-      <div class="hero-label"><span>$</span> ./byte-wizzard --whoami</div>
-      <h1 class="hero-title">
+      <div class="hero-label" data-i18n="hero.label"><span>$</span> ./byte-wizzard --whoami</div>
+      <h1 class="hero-title" data-i18n="hero.title">
         BYTE<br>
         <span class="accent">WIZZARD</span>
       </h1>
-      <p class="hero-sub">
+      <p class="hero-sub" data-i18n="hero.subtitle">
         AI-first systems for automation, logistics,<br>
         education and intelligent assistants.
       </p>
       <div class="hero-actions">
-        <a href="#products" class="btn btn-primary">View Products →</a>
-        <a href="#contact" class="btn btn-outline">Contact</a>
+        <a href="#products" class="btn btn-primary" data-i18n="hero.btnProducts">View Products →</a>
+        <a href="#contact" class="btn btn-outline" data-i18n="hero.btnContact">Contact</a>
       </div>
       <div class="hero-cursor"></div>
     </div>
-    <div class="scroll-indicator">SCROLL ▼</div>
+    <div class="scroll-indicator" data-i18n="hero.scroll">SCROLL ▼</div>
   </header>
 
   <!-- ============================================================
@@ -480,31 +520,31 @@
        ============================================================ -->
   <section class="products" id="products">
     <div class="container">
-      <h2 class="section-title">Products</h2>
+      <h2 class="section-title" data-i18n="products.title">Products</h2>
       <div class="products-grid">
 
         <!-- Hermes -->
         <article class="product-card hermes">
-          <div class="product-icon">⚡</div>
-          <h3 class="product-name">Hermes</h3>
-          <p class="product-tagline">Byte Wizzard AI Assistant</p>
-          <ul class="product-features">
+          <div class="product-icon" data-i18n="products.hermes.icon">⚡</div>
+          <h3 class="product-name" data-i18n="products.hermes.name">Hermes</h3>
+          <p class="product-tagline" data-i18n="products.hermes.tagline">Byte Wizzard AI Assistant</p>
+          <ul class="product-features" data-i18n-features="products.hermes.features">
             <li>Conocimiento completo del estudio</li>
             <li>Info de productos y demos</li>
             <li>Stack tecnológico y visión</li>
             <li>Chat interactivo en vivo</li>
           </ul>
-          <a href="demos/hermes/index.html" target="_blank" class="product-link">
+          <a href="demos/hermes/index.html" target="_blank" class="product-link" data-i18n="products.hermes.link">
             → Try Demo Bot
           </a>
         </article>
 
         <!-- Courier TMS -->
         <article class="product-card courier">
-          <div class="product-icon">🚚</div>
-          <h3 class="product-name">Courier TMS</h3>
-          <p class="product-tagline">Logistics Intelligence System</p>
-          <ul class="product-features">
+          <div class="product-icon" data-i18n="products.courier.icon">🚚</div>
+          <h3 class="product-name" data-i18n="products.courier.name">Courier TMS</h3>
+          <p class="product-tagline" data-i18n="products.courier.tagline">Logistics Intelligence System</p>
+          <ul class="product-features" data-i18n-features="products.courier.features">
             <li>Agrupación inteligente por zonas</li>
             <li>Optimización de rutas (TSP)</li>
             <li>Tracking GPS en tiempo real</li>
@@ -512,39 +552,39 @@
             <li>Panel administrativo completo</li>
             <li>Importación de órdenes CSV</li>
           </ul>
-          <a href="demos/courier-tms/index.html" target="_blank" class="product-link">
+          <a href="demos/courier-tms/index.html" target="_blank" class="product-link" data-i18n="products.courier.link">
             → Try Demo
           </a>
         </article>
 
         <!-- ClipCraft -->
         <article class="product-card clipcraft">
-          <div class="product-icon">📱</div>
-          <h3 class="product-name">ClipCraft</h3>
-          <p class="product-tagline">Mobile Content Creation Platform</p>
-          <ul class="product-features">
+          <div class="product-icon" data-i18n="products.clipcraft.icon">📱</div>
+          <h3 class="product-name" data-i18n="products.clipcraft.name">ClipCraft</h3>
+          <p class="product-tagline" data-i18n="products.clipcraft.tagline">Mobile Content Creation Platform</p>
+          <ul class="product-features" data-i18n-features="products.clipcraft.features">
             <li>Edición de fotos y videos</li>
-            <li>Generación automática desde imágenes</li>
+            <li>Generación automática de videos</li>
             <li>Música integrada</li>
             <li>Render en la nube</li>
             <li>Exportación directa al dispositivo</li>
           </ul>
-          <span class="product-link">→ In development</span>
+          <span class="product-link" data-i18n="products.clipcraft.link">→ In development</span>
         </article>
 
         <!-- Profe Mágico -->
         <article class="product-card profe">
-          <div class="product-icon">📚</div>
-          <h3 class="product-name">Profe Mágico</h3>
-          <p class="product-tagline">AI Learning System</p>
-          <ul class="product-features">
+          <div class="product-icon" data-i18n="products.profe.icon">📚</div>
+          <h3 class="product-name" data-i18n="products.profe.name">Profe Mágico</h3>
+          <p class="product-tagline" data-i18n="products.profe.tagline">AI Learning System</p>
+          <ul class="product-features" data-i18n-features="products.profe.features">
             <li>Enseñanza interactiva con IA</li>
             <li>Traducción y audio automático</li>
             <li>Contenido adaptado para niños</li>
             <li>Ejercicios dinámicos</li>
             <li>Experiencia educativa guiada</li>
           </ul>
-          <a href="https://profe-magico-frontend.onrender.com/" target="_blank" class="product-link">
+          <a href="https://profe-magico-frontend.onrender.com/" target="_blank" class="product-link" data-i18n="products.profe.link">
             → Try Demo
           </a>
         </article>
@@ -558,8 +598,8 @@
        ============================================================ -->
   <section class="what-we-do" id="what">
     <div class="container">
-      <h2 class="section-title">What We Do</h2>
-      <div class="wwd-grid">
+      <h2 class="section-title" data-i18n="wwd.title">What We Do</h2>
+      <div class="wwd-grid" data-i18n-wwd>
         <div class="wwd-item">
           <div class="emoji">🧠</div>
           <strong>AI Systems</strong>
@@ -599,8 +639,8 @@
        ============================================================ -->
   <section class="vision" id="vision">
     <div class="container">
-      <h2 class="section-title">Vision</h2>
-      <blockquote>
+      <h2 class="section-title" data-i18n="vision.title">Vision</h2>
+      <blockquote data-i18n="vision.quote">
         Reducir trabajo manual a través de sistemas inteligentes<br>
         que automatizan <strong>operaciones reales</strong> en empresas,<br>
         logística y educación.
@@ -612,7 +652,7 @@
        QUOTE RIBBON
        ============================================================ -->
   <div class="quote-ribbon">
-    <p>
+    <p data-i18n="quote">
       “We don’t build ideas. <span class="highlight">We build working systems.</span>”
     </p>
   </div>
@@ -622,8 +662,8 @@
        ============================================================ -->
   <section class="stack" id="stack">
     <div class="container">
-      <h2 class="section-title">Stack</h2>
-      <div class="stack-tags">
+      <h2 class="section-title" data-i18n="stack.title">Stack</h2>
+      <div class="stack-tags" data-i18n-stack>
         <span class="stack-tag">Cloudflare Workers</span>
         <span class="stack-tag">Node.js</span>
         <span class="stack-tag">Fastify</span>
@@ -648,8 +688,8 @@
        ============================================================ -->
   <section class="status-bar" id="status">
     <div class="container">
-      <h2 class="section-title">Status</h2>
-      <div class="status-dots">
+      <h2 class="section-title" data-i18n="status.title">Status</h2>
+      <div class="status-dots" data-i18n-status>
         <div class="status-dot">
           <span class="dot"></span>
           Active development
@@ -670,11 +710,12 @@
        CONTACT / FOOTER
        ============================================================ -->
   <footer id="contact">
-    <div class="brand">BYTE <span class="accent">WIZZARD</span></div>
-    <p class="tagline">AI &amp; Software Systems Studio</p>
+    <div class="brand" data-i18n="footer.brand">BYTE <span class="accent">WIZZARD</span></div>
+    <p class="tagline" data-i18n="footer.tagline">AI &amp; Software Systems Studio</p>
     <div class="divider"></div>
-    <p class="copyright">© 2026 Byte Wizzard — Real products. Real systems.</p>
+    <p class="copyright" data-i18n="footer.copyright">© 2026 Byte Wizzard — Real products. Real systems.</p>
   </footer>
 
+  <script src="assets/i18n.js"></script>
 </body>
 </html>
