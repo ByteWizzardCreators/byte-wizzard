@@ -392,6 +392,100 @@
       color: #555;
       margin-left: auto;
     }
+    .reviews-loading,
+    .reviews-empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: #555;
+      padding: 40px 0;
+    }
+
+    /* ─── REVIEW FORM ─── */
+    .review-form-section {
+      margin-top: 48px;
+      padding-top: 40px;
+      border-top: 1px solid #1a1a2e;
+    }
+    .review-form-section h3 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #666;
+      margin-bottom: 24px;
+      text-align: left;
+    }
+    .review-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      max-width: 560px;
+    }
+    .review-form .full-width {
+      grid-column: 1 / -1;
+    }
+    .review-form label {
+      display: block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: #666;
+      margin-bottom: 6px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .review-form input,
+    .review-form select,
+    .review-form textarea {
+      width: 100%;
+      background: #0d0d14;
+      border: 1px solid #1a1a2e;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      color: #e0e0e0;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    .review-form input:focus,
+    .review-form select:focus,
+    .review-form textarea:focus {
+      border-color: #00d488;
+    }
+    .review-form textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    .review-form select option {
+      background: #0d0d14;
+      color: #e0e0e0;
+    }
+    .review-form .btn-submit {
+      grid-column: 1 / -1;
+      justify-self: start;
+    }
+    .review-form-status {
+      grid-column: 1 / -1;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      padding: 8px 12px;
+      border-radius: 6px;
+      display: none;
+    }
+    .review-form-status.success {
+      display: block;
+      background: #00d48811;
+      color: #00d488;
+      border: 1px solid #00d48822;
+    }
+    .review-form-status.error {
+      display: block;
+      background: #ff444411;
+      color: #ff4444;
+      border: 1px solid #ff444422;
+    }
 
     /* ============================================================
        WHAT WE DO
@@ -754,7 +848,44 @@
   <section class="reviews" id="reviews">
     <div class="container">
       <h2 class="section-title" data-i18n="reviews.title">Reviews</h2>
-      <div class="reviews-grid" data-i18n-reviews></div>
+      <div class="reviews-grid"></div>
+
+      <!-- Review form -->
+      <div class="review-form-section" id="review-form-section">
+        <h3 data-i18n-form="title">Dejá tu reseña</h3>
+        <form class="review-form" id="review-form">
+          <div>
+            <label for="review-author" data-i18n-form="nameLabel">Tu nombre</label>
+            <input type="text" id="review-author" required minlength="2" placeholder="María">
+          </div>
+          <div>
+            <label for="review-product" data-i18n-form="productLabel">Producto</label>
+            <select id="review-product">
+              <option value="profe">Profe Mágico</option>
+              <option value="courier">Courier TMS</option>
+              <option value="hermes">Hermes - AI Assistant</option>
+              <option value="clipcraft">ClipCraft</option>
+            </select>
+          </div>
+          <div>
+            <label for="review-rating" data-i18n-form="ratingLabel">Calificación</label>
+            <select id="review-rating">
+              <option value="5">★★★★★</option>
+              <option value="4">★★★★○</option>
+              <option value="3">★★★○○</option>
+              <option value="2">★★○○○</option>
+              <option value="1">★○○○○</option>
+            </select>
+          </div>
+          <div></div>
+          <div class="full-width">
+            <label for="review-text" data-i18n-form="textLabel">Tu experiencia</label>
+            <textarea id="review-text" required minlength="10" placeholder="¿Qué te pareció el producto?"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-submit" data-i18n-form="submit">Enviar reseña</button>
+          <div class="review-form-status" aria-live="polite"></div>
+        </form>
+      </div>
     </div>
   </section>
 
@@ -879,6 +1010,10 @@
     <p class="copyright" data-i18n="footer.copyright">© 2026 Byte Wizzard — Real products. Real systems.</p>
   </footer>
 
+  <script>
+    window.REVIEWS_API = 'https://reviews.byte-wizzard.workers.dev';
+  </script>
+  <script src="assets/reviews.js"></script>
   <script src="assets/i18n.js"></script>
 </body>
 </html>

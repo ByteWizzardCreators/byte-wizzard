@@ -1,0 +1,15 @@
+name = "reviews"
+main = "src/index.js"
+compatibility_date = "2025-04-01"
+
+# KV namespace for storing reviews
+kv_namespaces = [
+  { binding = "REVIEWS_KV", id = "REPLACE_ME" }
+]
+
+# Admin token for moderation — set via `npx wrangler secret put ADMIN_TOKEN`
+# with a secure random value, e.g. `openssl rand -hex 16`
+
+# CORS: allowed origin for the landing page
+[vars]
+ALLOWED_ORIGINS = "https://bytewizzardcreators.github.io,https://byte-wizzard.xyz"

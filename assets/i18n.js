@@ -96,6 +96,24 @@ const I18N = (() => {
       // ─── REVIEWS ───
       reviews: {
         title: 'Reseñas',
+        formTitle: 'Dejá tu reseña',
+        nameLabel: 'Tu nombre',
+        productLabel: 'Producto',
+        ratingLabel: 'Calificación',
+        textLabel: 'Tu experiencia',
+        submit: 'Enviar reseña',
+        sending: 'Enviando...',
+        success: '¡Gracias! Tu reseña será publicada después de revisión.',
+        error: 'Error al enviar. Intentá de nuevo.',
+        errorShort: 'El texto debe tener al menos 10 caracteres.',
+        loading: 'Cargando reseñas...',
+        empty: 'Todavía no hay reseñas. ¡Sé el primero!',
+        products: {
+          hermes: 'Hermes - AI Assistant',
+          courier: 'Courier TMS',
+          profe: 'Profe Mágico',
+          clipcraft: 'ClipCraft',
+        },
         items: [
           {
             text: 'Profe Mágico transformó la forma en que mi hijo aprende inglés. La IA se adapta a su ritmo y los ejercicios son realmente entretenidos.',
@@ -114,56 +132,10 @@ const I18N = (() => {
         ],
       },
 
-      // ─── REVIEWS ───
-      reviews: {
-        title: 'Reviews',
-        items: [
-          {
-            text: 'Profe Mágico transformed how my son learns English. The AI adapts to his pace and the exercises are genuinely fun.',
-            author: 'María G.',
-            product: 'profe',
-            rating: 5,
-            date: 'May 2026',
-          },
-          {
-            text: 'The Hermes bot is surprisingly fast and accurate. Answers any question about the studio instantly.',
-            author: 'Andrés M.',
-            product: 'hermes',
-            rating: 5,
-            date: 'Jun 2026',
-          },
-        ],
-      },
-
-      // ─── REVIEWS ───
-      reviews: {
-        title: 'Avaliações',
-        items: [
-          {
-            text: 'O Profe Mágico transformou a forma como meu filho aprende inglês. A IA se adapta ao ritmo dele e os exercícios são realmente divertidos.',
-            author: 'María G.',
-            product: 'profe',
-            rating: 5,
-            date: 'Mai 2026',
-          },
-          {
-            text: 'O bot Hermes é surpreendentemente rápido e preciso. Responde qualquer pergunta sobre o estúdio instantaneamente.',
-            author: 'Andrés M.',
-            product: 'hermes',
-            rating: 5,
-            date: 'Jun 2026',
-          },
-        ],
-      },
-
       // ─── STACK ───
       stack: {
         title: 'Stack',
-
-      // ─── STATUS ───
-      status: {
-        title: 'Status',
-        items: ['Active development', 'Real deployed systems', 'Continuous iteration'],
+        tags: ['Cloudflare Workers', 'Node.js', 'Fastify', 'Express', 'React', 'Vite', 'React Native', 'Expo', 'Llama 3', 'OpenStreetMap', 'OSRM', 'Nominatim', 'Prisma', 'PostgreSQL', 'PostGIS'],
       },
 
       // ─── STATUS ───
@@ -327,6 +299,46 @@ const I18N = (() => {
         motto: '“We don\'t build ideas. <span class="highlight">We build working systems.</span>”',
         quote: 'Reduce manual work through intelligent systems<br>that automate <strong>real operations</strong> in business,<br>logistics and education.',
       },
+
+      // ─── REVIEWS ───
+      reviews: {
+        title: 'Reviews',
+        formTitle: 'Leave your review',
+        nameLabel: 'Your name',
+        productLabel: 'Product',
+        ratingLabel: 'Rating',
+        textLabel: 'Your experience',
+        submit: 'Submit review',
+        sending: 'Sending...',
+        success: 'Thank you! Your review will be published after moderation.',
+        error: 'Error submitting. Please try again.',
+        errorShort: 'Review text must be at least 10 characters.',
+        loading: 'Loading reviews...',
+        empty: 'No reviews yet. Be the first!',
+        products: {
+          hermes: 'Hermes - AI Assistant',
+          courier: 'Courier TMS',
+          profe: 'Profe Mágico',
+          clipcraft: 'ClipCraft',
+        },
+        items: [
+          {
+            text: 'Profe Mágico transformed how my son learns English. The AI adapts to his pace and the exercises are genuinely fun.',
+            author: 'María G.',
+            product: 'profe',
+            rating: 5,
+            date: 'May 2026',
+          },
+          {
+            text: 'The Hermes bot is surprisingly fast and accurate. Answers any question about the studio instantly.',
+            author: 'Andrés M.',
+            product: 'hermes',
+            rating: 5,
+            date: 'Jun 2026',
+          },
+        ],
+      },
+
       stack: {
         title: 'Stack',
         tags: ['Cloudflare Workers', 'Node.js', 'Fastify', 'Express', 'React', 'Vite', 'React Native', 'Expo', 'Llama 3', 'OpenStreetMap', 'OSRM', 'Nominatim', 'Prisma', 'PostgreSQL', 'PostGIS'],
@@ -489,6 +501,46 @@ const I18N = (() => {
         motto: '“Não construímos ideias. <span class="highlight">Construímos sistemas funcionais.</span>”',
         quote: 'Reduzir o trabalho manual através de sistemas inteligentes<br>que automatizam <strong>operações reais</strong> em empresas,<br>logística e educação.',
       },
+
+      // ─── REVIEWS ───
+      reviews: {
+        title: 'Avaliações',
+        formTitle: 'Deixe sua avaliação',
+        nameLabel: 'Seu nome',
+        productLabel: 'Produto',
+        ratingLabel: 'Avaliação',
+        textLabel: 'Sua experiência',
+        submit: 'Enviar avaliação',
+        sending: 'Enviando...',
+        success: 'Obrigado! Sua avaliação será publicada após revisão.',
+        error: 'Erro ao enviar. Tente novamente.',
+        errorShort: 'O texto deve ter pelo menos 10 caracteres.',
+        loading: 'Carregando avaliações...',
+        empty: 'Nenhuma avaliação ainda. Seja o primeiro!',
+        products: {
+          hermes: 'Hermes - AI Assistant',
+          courier: 'Courier TMS',
+          profe: 'Profe Mágico',
+          clipcraft: 'ClipCraft',
+        },
+        items: [
+          {
+            text: 'O Profe Mágico transformou a forma como meu filho aprende inglês. A IA se adapta ao ritmo dele e os exercícios são realmente divertidos.',
+            author: 'María G.',
+            product: 'profe',
+            rating: 5,
+            date: 'Mai 2026',
+          },
+          {
+            text: 'O bot Hermes é surpreendentemente rápido e preciso. Responde qualquer pergunta sobre o estúdio instantaneamente.',
+            author: 'Andrés M.',
+            product: 'hermes',
+            rating: 5,
+            date: 'Jun 2026',
+          },
+        ],
+      },
+
       stack: {
         title: 'Stack',
         tags: ['Cloudflare Workers', 'Node.js', 'Fastify', 'Express', 'React', 'Vite', 'React Native', 'Expo', 'Llama 3', 'OpenStreetMap', 'OSRM', 'Nominatim', 'Prisma', 'PostgreSQL', 'PostGIS'],
@@ -675,32 +727,8 @@ const I18N = (() => {
       }
     });
 
-    // Reviews
-    document.querySelectorAll('[data-i18n-reviews]').forEach(el => {
-      const items = t.reviews?.items;
-      if (items) {
-        const productNames = {
-          hermes: t.products?.hermes?.name || 'Hermes',
-          courier: t.products?.courier?.name || 'Courier TMS',
-          profe: t.products?.profe?.name || 'Profe Mágico',
-          clipcraft: t.comingSoon?.clipcraft?.name || 'ClipCraft',
-        };
-        const stars = (n) => '●'.repeat(n) + '○'.repeat(5 - n);
-        el.innerHTML = items.map(item => `
-          <article class="review-card">
-            <p class="review-text">"${item.text}"</p>
-            <div class="review-footer">
-              <span class="review-author">— ${item.author}</span>
-              <div class="review-meta">
-                <span class="review-product badge-${item.product}">${productNames[item.product] || item.product}</span>
-                <span class="review-stars">${stars(item.rating)}</span>
-                <span class="review-date">${item.date}</span>
-              </div>
-            </div>
-          </article>
-        `).join('');
-      }
-    });
+    // Reviews — now handled by assets/reviews.js (dynamic API load)
+    // If reviews.js hasn't loaded, this is a no-op
   }
 
   // ─── Init ───
