@@ -67,7 +67,7 @@ const I18N = (() => {
         clipcraft: {
           icon: '📱',
           name: 'ClipCraft',
-          tagline: 'Mobile Content Creation Platform',
+          tagline: 'Centro Multimedia Mobile',
           status: 'MVP Interno',
           features: ['Plataforma de creación de contenido multimedia', 'Edición de fotos y videos', 'Generación automática de videos'],
         },
@@ -239,7 +239,7 @@ const I18N = (() => {
         clipcraft: {
           icon: '📱',
           name: 'ClipCraft',
-          tagline: 'Mobile Content Creation Platform',
+          tagline: 'Mobile Media Center',
           status: 'Internal MVP',
           features: ['Multimedia content creation platform', 'Photo & video editing', 'Automatic video generation'],
         },
@@ -401,7 +401,7 @@ const I18N = (() => {
         clipcraft: {
           icon: '📱',
           name: 'ClipCraft',
-          tagline: 'Plataforma de Criação de Conteúdo',
+          tagline: 'Centro Multimídia Mobile',
           status: 'MVP Interno',
           features: ['Plataforma de criação de conteúdo multimídia', 'Edição de fotos e vídeos', 'Geração automática de vídeos'],
         },
