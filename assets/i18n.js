@@ -93,10 +93,77 @@ const I18N = (() => {
         quote: 'Reducir trabajo manual a través de sistemas inteligentes<br>que automatizan <strong>operaciones reales</strong> en empresas,<br>logística y educación.',
       },
 
+      // ─── REVIEWS ───
+      reviews: {
+        title: 'Reseñas',
+        items: [
+          {
+            text: 'Profe Mágico transformó la forma en que mi hijo aprende inglés. La IA se adapta a su ritmo y los ejercicios son realmente entretenidos.',
+            author: 'María G.',
+            product: 'profe',
+            rating: 5,
+            date: 'May 2026',
+          },
+          {
+            text: 'El bot de Hermes es sorprendentemente rápido y preciso. Responde cualquier duda sobre el estudio al instante.',
+            author: 'Andrés M.',
+            product: 'hermes',
+            rating: 5,
+            date: 'Jun 2026',
+          },
+        ],
+      },
+
+      // ─── REVIEWS ───
+      reviews: {
+        title: 'Reviews',
+        items: [
+          {
+            text: 'Profe Mágico transformed how my son learns English. The AI adapts to his pace and the exercises are genuinely fun.',
+            author: 'María G.',
+            product: 'profe',
+            rating: 5,
+            date: 'May 2026',
+          },
+          {
+            text: 'The Hermes bot is surprisingly fast and accurate. Answers any question about the studio instantly.',
+            author: 'Andrés M.',
+            product: 'hermes',
+            rating: 5,
+            date: 'Jun 2026',
+          },
+        ],
+      },
+
+      // ─── REVIEWS ───
+      reviews: {
+        title: 'Avaliações',
+        items: [
+          {
+            text: 'O Profe Mágico transformou a forma como meu filho aprende inglês. A IA se adapta ao ritmo dele e os exercícios são realmente divertidos.',
+            author: 'María G.',
+            product: 'profe',
+            rating: 5,
+            date: 'Mai 2026',
+          },
+          {
+            text: 'O bot Hermes é surpreendentemente rápido e preciso. Responde qualquer pergunta sobre o estúdio instantaneamente.',
+            author: 'Andrés M.',
+            product: 'hermes',
+            rating: 5,
+            date: 'Jun 2026',
+          },
+        ],
+      },
+
       // ─── STACK ───
       stack: {
         title: 'Stack',
-        tags: ['Cloudflare Workers', 'Node.js', 'Fastify', 'Express', 'React', 'Vite', 'React Native', 'Expo', 'Llama 3', 'OpenStreetMap', 'OSRM', 'Nominatim', 'Prisma', 'PostgreSQL', 'PostGIS'],
+
+      // ─── STATUS ───
+      status: {
+        title: 'Status',
+        items: ['Active development', 'Real deployed systems', 'Continuous iteration'],
       },
 
       // ─── STATUS ───
@@ -605,6 +672,33 @@ const I18N = (() => {
       const tags = t.stack?.tags;
       if (tags) {
         el.innerHTML = tags.map(tag => `<span class="stack-tag">${tag}</span>`).join('');
+      }
+    });
+
+    // Reviews
+    document.querySelectorAll('[data-i18n-reviews]').forEach(el => {
+      const items = t.reviews?.items;
+      if (items) {
+        const productNames = {
+          hermes: t.products?.hermes?.name || 'Hermes',
+          courier: t.products?.courier?.name || 'Courier TMS',
+          profe: t.products?.profe?.name || 'Profe Mágico',
+          clipcraft: t.comingSoon?.clipcraft?.name || 'ClipCraft',
+        };
+        const stars = (n) => '●'.repeat(n) + '○'.repeat(5 - n);
+        el.innerHTML = items.map(item => `
+          <article class="review-card">
+            <p class="review-text">"${item.text}"</p>
+            <div class="review-footer">
+              <span class="review-author">— ${item.author}</span>
+              <div class="review-meta">
+                <span class="review-product badge-${item.product}">${productNames[item.product] || item.product}</span>
+                <span class="review-stars">${stars(item.rating)}</span>
+                <span class="review-date">${item.date}</span>
+              </div>
+            </div>
+          </article>
+        `).join('');
       }
     });
   }
