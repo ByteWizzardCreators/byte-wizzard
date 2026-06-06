@@ -2,6 +2,9 @@ name = "reviews"
 main = "src/index.js"
 compatibility_date = "2025-04-01"
 
+# Tu cuenta de Cloudflare (de Luna)
+account_id = "9cfdfc511c06601a2b669916d2ddb73b"
+
 # KV namespace for storing reviews
 kv_namespaces = [
   { binding = "REVIEWS_KV", id = "REPLACE_ME" }

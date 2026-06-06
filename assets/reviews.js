@@ -6,8 +6,8 @@
 const REVIEWS = (() => {
   // ─── Config ───
   // Set window.REVIEWS_API in the HTML before loading this script, e.g.:
-  //   <script>window.REVIEWS_API = 'https://reviews.yourdomain.workers.dev'</script>
-  const API_BASE = window.REVIEWS_API || 'http://localhost:8787';
+  //   <script>window.REVIEWS_API = 'https://your-app.onrender.com'</script>
+  const API_BASE = window.REVIEWS_API || 'http://localhost:3001';
   const STORAGE_KEY = 'bw-reviews-cache';
 
   // ─── Get current language's reviews translations ───
