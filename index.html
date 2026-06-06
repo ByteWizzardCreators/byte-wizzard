@@ -743,6 +743,7 @@
       </div>
       <div class="hero-actions">
         <a href="#products" class="btn btn-primary" data-i18n="hero.btnProducts">View Products →</a>
+        <a href="#reviews" class="btn btn-outline" data-i18n="hero.btnReviews">Reviews</a>
         <a href="#contact" class="btn btn-outline" data-i18n="hero.btnContact">Contact</a>
       </div>
       <div class="hero-cursor"></div>
@@ -838,53 +839,6 @@
           <span class="product-link" data-i18n="comingSoon.clipcraft.status">→ MVP Interno</span>
         </article>
 
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       REVIEWS
-       ============================================================ -->
-  <section class="reviews" id="reviews">
-    <div class="container">
-      <h2 class="section-title" data-i18n="reviews.title">Reviews</h2>
-      <div class="reviews-grid"></div>
-
-      <!-- Review form -->
-      <div class="review-form-section" id="review-form-section">
-        <h3 data-i18n-form="title">Dejá tu reseña</h3>
-        <form class="review-form" id="review-form">
-          <div>
-            <label for="review-author" data-i18n-form="nameLabel">Tu nombre</label>
-            <input type="text" id="review-author" required minlength="2" placeholder="María">
-          </div>
-          <div>
-            <label for="review-product" data-i18n-form="productLabel">Producto</label>
-            <select id="review-product">
-              <option value="profe">Profe Mágico</option>
-              <option value="courier">Courier TMS</option>
-              <option value="hermes">Hermes - AI Assistant</option>
-              <option value="clipcraft">ClipCraft</option>
-            </select>
-          </div>
-          <div>
-            <label for="review-rating" data-i18n-form="ratingLabel">Calificación</label>
-            <select id="review-rating">
-              <option value="5">★★★★★</option>
-              <option value="4">★★★★○</option>
-              <option value="3">★★★○○</option>
-              <option value="2">★★○○○</option>
-              <option value="1">★○○○○</option>
-            </select>
-          </div>
-          <div></div>
-          <div class="full-width">
-            <label for="review-text" data-i18n-form="textLabel">Tu experiencia</label>
-            <textarea id="review-text" required minlength="10" placeholder="¿Qué te pareció el producto?"></textarea>
-          </div>
-          <button type="submit" class="btn btn-primary btn-submit" data-i18n-form="submit">Enviar reseña</button>
-          <div class="review-form-status" aria-live="polite"></div>
-        </form>
       </div>
     </div>
   </section>
@@ -992,6 +946,53 @@
           <span class="dot"></span>
           Continuous iteration
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       REVIEWS
+       ============================================================ -->
+  <section class="reviews" id="reviews">
+    <div class="container">
+      <h2 class="section-title" data-i18n="reviews.title">Reviews</h2>
+      <div class="reviews-grid"></div>
+
+      <!-- Review form -->
+      <div class="review-form-section" id="review-form-section">
+        <h3 data-i18n-form="title">Dejá tu reseña</h3>
+        <form class="review-form" id="review-form">
+          <div>
+            <label for="review-author" data-i18n-form="nameLabel">Tu nombre</label>
+            <input type="text" id="review-author" required minlength="2" placeholder="María">
+          </div>
+          <div>
+            <label for="review-product" data-i18n-form="productLabel">Producto</label>
+            <select id="review-product">
+              <option value="profe">Profe Mágico</option>
+              <option value="courier">Courier TMS</option>
+              <option value="hermes">Hermes - AI Assistant</option>
+              <option value="clipcraft">ClipCraft</option>
+            </select>
+          </div>
+          <div>
+            <label for="review-rating" data-i18n-form="ratingLabel">Calificación</label>
+            <select id="review-rating">
+              <option value="5">★★★★★</option>
+              <option value="4">★★★★○</option>
+              <option value="3">★★★○○</option>
+              <option value="2">★★○○○</option>
+              <option value="1">★○○○○</option>
+            </select>
+          </div>
+          <div></div>
+          <div class="full-width">
+            <label for="review-text" data-i18n-form="textLabel">Tu experiencia</label>
+            <textarea id="review-text" required minlength="10" placeholder="¿Qué te pareció el producto?"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-submit" data-i18n-form="submit">Enviar reseña</button>
+          <div class="review-form-status" aria-live="polite"></div>
+        </form>
       </div>
     </div>
   </section>
