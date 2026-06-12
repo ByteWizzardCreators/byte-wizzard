@@ -115,7 +115,7 @@ app.post('/api/reviews', (req, res) => {
   }
 
   const stmt = db.prepare(
-    'INSERT INTO reviews (text, author, product, rating, ip) VALUES (?, ?, ?, ?, ?)'
+    'INSERT INTO reviews (text, author, product, rating, approved, ip) VALUES (?, ?, ?, ?, 1, ?)'
   );
   const result = stmt.run(text.trim(), author.trim(), product, ratingNum, ip);
 

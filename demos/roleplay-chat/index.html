@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="es" translate="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RolePlay Chat — Byte Wizzard Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; overflow: hidden; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0f;
+      color: #e0e0e0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ── */
+    .demo-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 24px;
+      background: #0d0d14;
+      border-bottom: 1px solid #1a1a2e;
+      flex-shrink: 0;
+    }
+    .demo-header .brand {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 800;
+      font-size: 14px;
+      color: #555;
+    }
+    .demo-header .brand .accent { color: #00d488; }
+    .demo-header h1 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 15px;
+      font-weight: 700;
+      color: #e0e0e0;
+    }
+    .demo-header h1 span { color: #00d488; }
+    .demo-header .badge {
+      font-size: 10px;
+      background: #00d48822;
+      color: #00d488;
+      border: 1px solid #00d48833;
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+    }
+
+    /* ── SCENARIO BAR ── */
+    .scenario-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 24px;
+      background: #0d0d14;
+      border-bottom: 1px solid #1a1a2e;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+    .scenario-bar label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: #555;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    .scenario-bar select {
+      background: #0d0d14;
+      border: 1px solid #1a1a2e;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: #e0e0e0;
+      outline: none;
+      cursor: pointer;
+      min-width: 160px;
+    }
+    .scenario-bar select:focus { border-color: #00d488; }
+    .scenario-bar select option { background: #0d0d14; color: #e0e0e0; }
+    .scenario-bar .btn-scenario {
+      background: transparent;
+      border: 1px solid #1a1a2e;
+      color: #888;
+      padding: 6px 16px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .scenario-bar .btn-scenario:hover {
+      border-color: #00d488;
+      color: #00d488;
+    }
+    .scenario-bar .btn-scenario:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .scenario-bar .hint {
+      font-size: 11px;
+      color: #555;
+      margin-left: auto;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ── PANELS ── */
+    .panels {
+      display: flex;
+      flex: 1;
+      gap: 1px;
+      background: #1a1a2e;
+      overflow: hidden;
+      min-height: 0;
+    }
+    .panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #0d0d14;
+      min-width: 0;
+    }
+    .panel-header {
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid #1a1a2e;
+      flex-shrink: 0;
+    }
+    .panel-header .avatar {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+    .panel-header .avatar.agent { background: #00d48822; color: #00d488; }
+    .panel-header .avatar.client { background: #3b82f622; color: #3b82f6; }
+    .panel-header .info { flex: 1; min-width: 0; }
+    .panel-header .info .name {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .panel-header .info .role {
+      font-size: 10px;
+      color: #666;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .panel-header .status {
+      font-size: 10px;
+      color: #00d488;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .panel-header .status .dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: #00d488;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+    /* ── MESSAGES ── */
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .messages::-webkit-scrollbar { width: 4px; }
+    .messages::-webkit-scrollbar-track { background: transparent; }
+    .messages::-webkit-scrollbar-thumb { background: #2a2a3e; border-radius: 2px; }
+
+    .msg {
+      max-width: 82%;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 12.5px;
+      line-height: 1.45;
+      position: relative;
+    }
+    .msg .msg-name {
+      font-size: 9px;
+      font-weight: 600;
+      margin-bottom: 2px;
+      letter-spacing: 0.05em;
+    }
+    .msg .msg-text { word-wrap: break-word; }
+    .msg .msg-time {
+      font-size: 9px;
+      color: #555;
+      text-align: right;
+      margin-top: 3px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .msg.mine {
+      align-self: flex-end;
+      border-bottom-right-radius: 3px;
+    }
+    .msg.theirs {
+      align-self: flex-start;
+      border-bottom-left-radius: 3px;
+    }
+    .msg.agent.mine { background: #00d48822; }
+    .msg.agent.mine .msg-name { color: #00d488; }
+    .msg.agent.theirs { background: #0d1a14; }
+    .msg.agent.theirs .msg-name { color: #4ade80; }
+    .msg.client.mine { background: #3b82f622; }
+    .msg.client.mine .msg-name { color: #3b82f6; }
+    .msg.client.theirs { background: #0d1424; }
+    .msg.client.theirs .msg-name { color: #60a5fa; }
+    .msg.system {
+      background: transparent;
+      align-self: center;
+      font-size: 10px;
+      color: #555;
+      padding: 2px 0;
+      text-align: center;
+      width: 100%;
+      max-width: 100%;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ── TYPING ── */
+    .typing {
+      font-size: 10px;
+      color: #555;
+      padding: 2px 16px 6px;
+      font-style: italic;
+      font-family: 'JetBrains Mono', monospace;
+      min-height: 20px;
+      flex-shrink: 0;
+    }
+
+    /* ── INPUT ── */
+    .input-area {
+      display: flex;
+      gap: 6px;
+      padding: 8px 16px 12px;
+      border-top: 1px solid #1a1a2e;
+      flex-shrink: 0;
+    }
+    .input-area input {
+      flex: 1;
+      padding: 8px 14px;
+      border: 1.5px solid #1a1a2e;
+      border-radius: 20px;
+      font-size: 12.5px;
+      outline: none;
+      background: #0a0a0f;
+      color: #e0e0e0;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.2s;
+    }
+    .input-area input:focus { border-color: #00d488; }
+    .input-area input::placeholder { color: #444; }
+    .input-area input:disabled { opacity: 0.5; cursor: not-allowed; }
+    .input-area button {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      border: none;
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .input-area button.agent-btn { background: #00d488; color: #0a0a0f; }
+    .input-area button.agent-btn:hover { background: #00e899; }
+    .input-area button.agent-btn:disabled { background: #1a1a2e; color: #444; cursor: not-allowed; }
+    .input-area button.client-btn { background: #3b82f6; color: #fff; }
+    .input-area button.client-btn:hover { background: #2563eb; }
+    .input-area button.client-btn:disabled { background: #1a1a2e; color: #444; cursor: not-allowed; }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 2px;
+      background: #1a1a2e;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .divider span {
+      background: #1a1a2e;
+      color: #555;
+      font-size: 9px;
+      padding: 3px 5px;
+      border-radius: 3px;
+      writing-mode: vertical-lr;
+      letter-spacing: 2px;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #0d0d14;
+      color: #888;
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 12px;
+      border: 1px solid #1a1a2e;
+      opacity: 0;
+      transition: all 0.4s ease;
+      z-index: 100;
+      pointer-events: none;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .panels { flex-direction: column; }
+      .divider span { writing-mode: horizontal-tb; padding: 3px 10px; }
+      .scenario-bar .hint { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="demo-header">
+    <div class="brand">BYTE <span class="accent">WIZZARD</span></div>
+    <h1>🎭 <span>RolePlay</span> Chat</h1>
+    <span class="badge">Call Center Digital</span>
+  </header>
+
+  <!-- SCENARIO BAR -->
+  <div class="scenario-bar">
+    <label>Escenario</label>
+    <select id="scenario-select">
+      <option value="reclamo">📦 Reclamo por pedido</option>
+      <option value="soporte">💻 Soporte técnico</option>
+      <option value="facturacion">💰 Consulta de facturación</option>
+      <option value="venta">🛒 Venta consultiva</option>
+      <option value="whatsapp">💬 Interacción WhatsApp</option>
+    </select>
+    <button class="btn-scenario" id="btn-scenario" onclick="loadScenario()">▶ Cargar</button>
+    <button class="btn-scenario" onclick="resetChat()">⟳ Limpiar</button>
+    <span class="hint">Escribí en cualquier panel para simular la interacción</span>
+  </div>
+
+  <!-- PANELS -->
+  <div class="panels">
+    <!-- Agente -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="avatar agent">💼</div>
+        <div class="info">
+          <div class="name" style="color:#00d488;">Agente Digital</div>
+          <div class="role">Call Center — Área Digital</div>
+        </div>
+        <div class="status"><span class="dot"></span> En línea</div>
+      </div>
+      <div class="messages" id="msgs-agent"></div>
+      <div class="typing" id="typing-agent"></div>
+      <div class="input-area">
+        <input id="input-agent" placeholder="Respondé como Agente..." onkeydown="if(event.key==='Enter') sendMsg('agent')" oninput="onTyping('agent')" autocomplete="off">
+        <button class="agent-btn" id="btn-agent" onclick="sendMsg('agent')" disabled>➤</button>
+      </div>
+    </div>
+
+    <div class="divider"><span>CHAT</span></div>
+
+    <!-- Cliente -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="avatar client">👤</div>
+        <div class="info">
+          <div class="name" style="color:#3b82f6;">Cliente</div>
+          <div class="role">Usuario digital</div>
+        </div>
+        <div class="status"><span class="dot"></span> En línea</div>
+      </div>
+      <div class="messages" id="msgs-client"></div>
+      <div class="typing" id="typing-client"></div>
+      <div class="input-area">
+        <input id="input-client" placeholder="Escribí como Cliente..." onkeydown="if(event.key==='Enter') sendMsg('client')" oninput="onTyping('client')" autocomplete="off">
+        <button class="client-btn" id="btn-client" onclick="sendMsg('client')" disabled>➤</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+<script>
+// ─── RolePlay Chat — Demo 100% Frontend ───
+// Sin backend, sin WebSocket. Simulación local completa.
+
+const AGENT_NAME = "Agente Digital";
+const CLIENT_NAME = "Cliente";
+
+// ─── Escenarios predefinidos ───
+const SCENARIOS = {
+  reclamo: {
+    title: "📦 Reclamo por pedido",
+    messages: [
+      { side: "client", text: "Hola, buenos días. Hice un pedido hace 5 días y todavía no llegó. El número es #10234." },
+      { side: "agent", text: "¡Hola! Buen día. Déjame verificar el estado de tu pedido. Un momento por favor 🙋‍♂️" },
+      { side: "agent", text: "Gracias por esperar. Veo que tu pedido #10234 está en tránsito, pero hubo una demora en el centro de distribución. La nueva fecha estimada es mañana antes de las 18hs." },
+      { side: "client", text: "Ahh buenísimo, gracias. ¿Y si no llega mañana?" },
+      { side: "agent", text: "Si no recibís nada mañana, te pido que me escribas de nuevo y lo escalamos como prioritario. Te dejo también el número de seguimiento: 1ZABC983247." },
+      { side: "client", text: "Perfecto, muchas gracias por la ayuda 🙌" },
+      { side: "agent", text: "¡A las órdenes! Que tengas buen día 😊" },
+    ]
+  },
+  soporte: {
+    title: "💻 Soporte técnico",
+    messages: [
+      { side: "client", text: "Hola, no puedo iniciar sesión en mi cuenta. Me dice 'credenciales inválidas'." },
+      { side: "agent", text: "Hola, lamento el inconveniente. ¿Probaste restablecer tu contraseña desde 'Olvidé mi contraseña'?" },
+      { side: "client", text: "Sí, lo intenté pero no me llega el correo de recuperación." },
+      { side: "agent", text: "Entiendo. Dame un momento y verifico tu cuenta. ¿Me podés confirmar el correo asociado?" },
+      { side: "client", text: "juan.perez@correo.com" },
+      { side: "agent", text: "Gracias. Veo que el correo está verificado. Te reenvié manualmente el enlace de recuperación. Revisá también la carpeta de spam." },
+      { side: "client", text: "Ahí lo vi, gracias. Ya pude cambiar la contraseña y entré. ¡Muchas gracias!" },
+      { side: "agent", text: "¡Perfecto! Cualquier otra cosa acá estamos. Que tengas excelente día 🚀" },
+    ]
+  },
+  facturacion: {
+    title: "💰 Consulta de facturación",
+    messages: [
+      { side: "client", text: "Buenas, quería consultar por un cobro duplicado que me apareció en el resumen de la tarjeta." },
+      { side: "agent", text: "¡Hola! Lamento escuchar eso. Decime el número de factura o los detalles del cobro y lo revisamos." },
+      { side: "client", text: "Es el cobro de la suscripción premium. Me llegaron dos débitos por $8999 el mismo día." },
+      { side: "agent", text: "Perfecto, ya localicé tu cuenta. Veo que efectivamente se generaron dos cobros por error el 10/06. Te voy a gestionar el reintegro del segundo cobro." },
+      { side: "client", text: "Genial, ¿y en cuánto tiempo se acredita?" },
+      { side: "agent", text: "El reintegro se procesa en 48 a 72 horas hábiles. Te voy a enviar el comprobante por correo electrónico." },
+      { side: "client", text: "Perfecto, muchas gracias por la rápida respuesta 🙏" },
+      { side: "agent", text: "¡Gracias a vos! Quedamos atentos si necesitás algo más 😊" },
+    ]
+  },
+  venta: {
+    title: "🛒 Venta consultiva",
+    messages: [
+      { side: "client", text: "Hola, estaba viendo el plan empresarial pero no sé si es lo que necesito." },
+      { side: "agent", text: "¡Hola! Te cuento, el plan empresarial incluye usuarios ilimitados, soporte prioritario 24/7 y automatización de tareas. ¿Cuántos usuarios serían?" },
+      { side: "client", text: "Seríamos unos 15 usuarios, y necesitamos algo para gestionar pedidos y clientes." },
+      { side: "agent", text: "Perfecto, con 15 usuarios el plan empresarial es el indicado. Además incluye integración con sistemas externos vía API. Te paso un demo de 14 días sin cargo para que lo prueben." },
+      { side: "client", text: "Dale, mandame eso. ¿Hay algún costo de implementación?" },
+      { side: "agent", text: "No, la implementación básica está incluida. Te asignamos un onboarding specialist que los guía durante la primera semana. ¿Te parece si agendamos una llamada para arrancar?" },
+      { side: "client", text: "Sí, perfecto. Agendemos para la semana que viene." },
+      { side: "agent", text: "Excelente, te voy a mandar los links de disponibilidad por mail. ¡Gracias por confiar en nosotros! 🚀" },
+    ]
+  },
+  whatsapp: {
+    title: "💬 Interacción WhatsApp",
+    messages: [
+      { side: "client", text: "Hola, quería saber el horario de la sucursal de Asunción centro." },
+      { side: "agent", text: "¡Hola! La sucursal de Asunción centro abre de 7:00 a 19:00 de lunes a viernes, y sábados de 8:00 a 13:00. ¿Necesitás algo más?" },
+      { side: "client", text: "Sí, ¿hacen envíos a Encarnación?" },
+      { side: "agent", text: "Sí, hacemos envíos a todo Paraguay. El tiempo estimado para Encarnación es de 2 a 3 días hábiles, sin cargo para pedidos superiores a Gs. 150.000." },
+      { side: "client", text: "Perfecto, gracias por la info. Después hago el pedido online." },
+      { side: "agent", text: "Genial, te esperamos. Cualquier consulta estamos acá. ¡Buen día! 😊" },
+    ]
+  }
+};
+
+let scenarioActive = false;
+
+// ─── Render ───
+function renderMsg(side, msg) {
+  const container = document.getElementById(`msgs-${side}`);
+  const div = document.createElement("div");
+  const isMine = msg.side === side;
+  div.className = `msg ${side} ${isMine ? "mine" : "theirs"}`;
+  div.innerHTML = `
+    <div class="msg-name">${esc(msg.name)}</div>
+    <div class="msg-text">${esc(msg.text)}</div>
+    <div class="msg-time">${getTime()}</div>
+  `;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function renderMsgBoth(msg) {
+  renderMsg("agent", msg);
+  renderMsg("client", msg);
+}
+
+function addSystemMsg(text) {
+  ["agent", "client"].forEach(side => {
+    const container = document.getElementById(`msgs-${side}`);
+    const div = document.createElement("div");
+    div.className = "msg system";
+    div.textContent = text;
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+  });
+}
+
+// ─── Enviar mensaje (desde cualquier panel) ───
+function sendMsg(side) {
+  const input = document.getElementById(`input-${side}`);
+  const text = input.value.trim();
+  if (!text) return;
+
+  const name = side === "agent" ? AGENT_NAME : CLIENT_NAME;
+
+  const msg = { side, name, text };
+  renderMsgBoth(msg);
+  enableInputs(true);
+
+  input.value = "";
+  document.getElementById(`btn-${side}`).disabled = true;
+  clearTyping(side);
+
+  input.focus();
+}
+
+function onTyping(side) {
+  const input = document.getElementById(`input-${side}`);
+  const btn = document.getElementById(`btn-${side}`);
+  btn.disabled = !input.value.trim();
+}
+
+function clearTyping(side) {
+  document.getElementById(`typing-${side}`).textContent = "";
+}
+
+function enableInputs(enabled) {
+  ["agent", "client"].forEach(side => {
+    document.getElementById(`input-${side}`).disabled = !enabled;
+    if (!enabled) {
+      document.getElementById(`btn-${side}`).disabled = true;
+    }
+  });
+}
+
+// ─── Escenarios ───
+function loadScenario() {
+  const select = document.getElementById("scenario-select");
+  const key = select.value;
+  const scenario = SCENARIOS[key];
+  if (!scenario) return;
+
+  resetChat();
+  scenarioActive = true;
+  document.getElementById("btn-scenario").disabled = true;
+  enableInputs(false);
+
+  addSystemMsg(`🎬 Escenario: ${scenario.title}`);
+  addSystemMsg(`⏳ La simulación comienza en 3 segundos...`);
+
+  let i = 0;
+  const interval = setInterval(() => {
+    if (i >= scenario.messages.length) {
+      clearInterval(interval);
+      scenarioActive = false;
+      document.getElementById("btn-scenario").disabled = false;
+      enableInputs(true);
+      document.getElementById("input-agent").focus();
+      showToast("✅ Simulación completa — ahora podés escribir libremente");
+      return;
+    }
+
+    const msg = scenario.messages[i];
+    const name = msg.side === "agent" ? AGENT_NAME : CLIENT_NAME;
+
+    // Show typing indicator on the sender's panel
+    const typingSide = msg.side;
+    document.getElementById(`typing-${typingSide}`).textContent = `${msg.side === "agent" ? "Agente" : "Cliente"} está escribiendo...`;
+
+    setTimeout(() => {
+      document.getElementById(`typing-${typingSide}`).textContent = "";
+      renderMsgBoth({ side: msg.side, name, text: msg.text });
+    }, 800);
+
+    i++;
+  }, 2200);
+}
+
+function resetChat() {
+  ["agent", "client"].forEach(side => {
+    document.getElementById(`msgs-${side}`).innerHTML = "";
+    document.getElementById(`typing-${side}`).textContent = "";
+    document.getElementById(`input-${side}`).value = "";
+    document.getElementById(`btn-${side}`).disabled = true;
+  });
+  scenarioActive = false;
+  document.getElementById("btn-scenario").disabled = false;
+  enableInputs(true);
+  showToast("⟳ Chat limpiado");
+}
+
+// ─── Helpers ───
+function getTime() {
+  return new Date().toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
+}
+
+function showToast(text) {
+  const el = document.getElementById("toast");
+  el.textContent = text;
+  el.classList.add("show");
+  clearTimeout(el._timer);
+  el._timer = setTimeout(() => el.classList.remove("show"), 3500);
+}
+
+function esc(text) {
+  const d = document.createElement("div");
+  d.textContent = text;
+  return d.innerHTML;
+}
+
+// ─── Init ───
+document.getElementById("input-agent").focus();
+showToast("💬 Seleccioná un escenario y presioná 'Cargar'");
+</script>
+</body>
+</html>

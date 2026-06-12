@@ -146,7 +146,7 @@ export default {
         author: body.author.trim(),
         product: body.product,
         rating: Number(body.rating),
-        approved: false,
+        approved: true,
         createdAt: new Date().toISOString(),
         ip: request.headers.get('CF-Connecting-IP') || 'unknown',
       };

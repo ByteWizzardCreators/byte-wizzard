@@ -30,7 +30,7 @@ const I18N = (() => {
         btnReviews: 'Reseñas',
         btnContact: 'Contacto',
         scroll: 'SCROLL ▼',
-        status: '4 productos activos · 2 demos · AI-first',
+        status: '5 productos activos · 3 demos · AI-first',
       },
 
       // ─── PRODUCTS ───
@@ -43,6 +43,14 @@ const I18N = (() => {
           features: ['Conocimiento completo del estudio', 'Info de productos y demos', 'Stack tecnológico y visión', 'Chat interactivo en vivo'],
           status: 'DEMO',
           link: '→ Probar Demo Bot',
+        },
+        roleplay: {
+          icon: '🎭',
+          name: 'RolePlay Chat',
+          tagline: 'Simulación de Call Center Digital',
+          features: ['Simulación de atención digital', 'Escenarios: reclamos, soporte, ventas', 'Interacción agente-cliente en vivo', 'Entrenamiento para postulantes', 'Multi-canal (chat, WhatsApp)'],
+          status: 'DEMO',
+          link: '→ Probar Demo',
         },
         courier: {
           icon: '🚚',
@@ -246,7 +254,7 @@ const I18N = (() => {
         btnReviews: 'Reviews',
         btnContact: 'Contact',
         scroll: 'SCROLL ▼',
-        status: '4 active products · 2 demos · AI-first',
+        status: '5 active products · 3 demos · AI-first',
       },
       products: {
         title: 'Products',
@@ -257,6 +265,14 @@ const I18N = (() => {
           features: ['Full studio knowledge', 'Product & demo info', 'Tech stack & vision', 'Interactive live chat'],
           status: 'DEMO',
           link: '→ Try Demo Bot',
+        },
+        roleplay: {
+          icon: '🎭',
+          name: 'RolePlay Chat',
+          tagline: 'Call Center Digital Simulation',
+          features: ['Digital customer service simulation', 'Scenarios: claims, support, sales', 'Live agent-client interaction', 'Applicant training tool', 'Multi-channel (chat, WhatsApp)'],
+          status: 'DEMO',
+          link: '→ Try Demo',
         },
         courier: {
           icon: '🚚',
@@ -449,7 +465,7 @@ const I18N = (() => {
         btnReviews: 'Avaliações',
         btnContact: 'Contato',
         scroll: 'ROLAR ▼',
-        status: '4 produtos ativos · 2 demos · AI-first',
+        status: '5 produtos ativos · 3 demos · AI-first',
       },
       products: {
         title: 'Produtos',
@@ -460,6 +476,14 @@ const I18N = (() => {
           features: ['Conhecimento completo do estúdio', 'Informações de produtos e demos', 'Stack tecnológico e visão', 'Chat interativo ao vivo'],
           status: 'DEMO',
           link: '→ Testar Bot Demo',
+        },
+        roleplay: {
+          icon: '🎭',
+          name: 'RolePlay Chat',
+          tagline: 'Simulação de Call Center Digital',
+          features: ['Simulação de atendimento digital', 'Cenários: reclamações, suporte, vendas', 'Interação agente-cliente ao vivo', 'Treinamento para candidatos', 'Multi-canal (chat, WhatsApp)'],
+          status: 'DEMO',
+          link: '→ Testar Demo',
         },
         courier: {
           icon: '🚚',
