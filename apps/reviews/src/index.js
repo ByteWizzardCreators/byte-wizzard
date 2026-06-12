@@ -16,9 +16,13 @@
  */
 
 const VALID_PRODUCTS = ['hermes', 'courier', 'profe', 'clipcraft'];
-const RATE_LIMIT_WINDOW = 60_000; // 1 minute
-const MAX_REQUESTS = 3; // max 3 submissions per IP per minute
 const KV_KEY = 'reviews';
+
+// ─── Rate limiting ───
+const POST_WINDOW_MS = 60_000;    // 1 minute
+const POST_MAX = 3;                // max 3 POST submissions per IP
+const GET_WINDOW_MS = 60_000;      // 1 minute
+const GET_MAX = 60;                // max 60 GET requests per IP (reviews load on scroll)
 
 // ─── CORS headers ───
 function corsHeaders(origin, env) {
@@ -62,23 +66,66 @@ function validateReview(body) {
   return null;
 }
 
-// ─── Rate limiter (per IP) ───
-async function checkRateLimit(request, kv) {
+// ─── Rate limiter (sliding window, per IP) ───
+// Uses 10-second buckets for granular sliding window.
+// Returns { allowed, retryAfter, limit, remaining }
+async function checkRateLimit(request, kv, method) {
   const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
-  const windowKey = `ratelimit:${ip}:${Math.floor(Date.now() / RATE_LIMIT_WINDOW)}`;
-  const count = await kv.get(windowKey, 'text');
-  const current = count ? parseInt(count, 10) : 0;
+  const isPost = method === 'POST';
+  const windowMs = isPost ? POST_WINDOW_MS : GET_WINDOW_MS;
+  const maxReqs = isPost ? POST_MAX : GET_MAX;
 
-  if (current >= MAX_REQUESTS) {
-    return false;
+  // Sliding window: check last N seconds using 10-second buckets
+  const now = Date.now();
+  const bucketSize = 10_000; // 10 second buckets
+  const bucketsInWindow = Math.ceil(windowMs / bucketSize);
+  const prefix = `rl:${ip}:`;
+
+  // Get current bucket keys
+  const bucketKeys = [];
+  for (let i = 0; i < bucketsInWindow; i++) {
+    const bucketTime = Math.floor((now - i * bucketSize) / bucketSize) * bucketSize;
+    bucketKeys.push(`${prefix}${bucketTime}`);
   }
 
-  // Increment and set TTL
-  await kv.put(windowKey, String(current + 1), {
-    expirationTtl: Math.ceil(RATE_LIMIT_WINDOW / 1000),
+  // Fetch all bucket counts in parallel
+  const entries = await Promise.all(
+    bucketKeys.map(k => kv.get(k, 'text').then(v => parseInt(v, 10) || 0))
+  );
+
+  const totalInWindow = entries.reduce((sum, c) => sum + c, 0);
+  const oldestBucket = bucketKeys[bucketKeys.length - 1];
+
+  if (totalInWindow >= maxReqs) {
+    // Calculate when the oldest bucket expires
+    const oldestTime = parseInt(oldestBucket.split(':').pop(), 10);
+    const retryAfter = Math.ceil((oldestTime + bucketSize - now) / 1000);
+    return { allowed: false, retryAfter: Math.max(1, retryAfter), limit: maxReqs, remaining: 0 };
+  }
+
+  // Increment current bucket
+  const currentBucketKey = `${prefix}${Math.floor(now / bucketSize) * bucketSize}`;
+  const currentCount = await kv.get(currentBucketKey, 'text').then(v => parseInt(v, 10) || 0);
+  await kv.put(currentBucketKey, String(currentCount + 1), {
+    expirationTtl: Math.ceil(windowMs / 1000) + 10, // TTL = window + 10s buffer
   });
 
-  return true;
+  return { allowed: true, retryAfter: 0, limit: maxReqs, remaining: maxReqs - totalInWindow - 1 };
+}
+
+// ─── Add rate limit headers to response ───
+function withRateHeaders(response, rl) {
+  const headers = new Headers(response.headers);
+  headers.set('X-RateLimit-Limit', String(rl.limit));
+  headers.set('X-RateLimit-Remaining', String(Math.max(0, rl.remaining)));
+  if (rl.retryAfter > 0) {
+    headers.set('Retry-After', String(rl.retryAfter));
+  }
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
 }
 
 // ─── Get all reviews from KV ───
@@ -108,21 +155,34 @@ export default {
     const kv = env.REVIEWS_KV;
     const adminToken = env.ADMIN_TOKEN;
 
-    // ─── GET /api/reviews — approved reviews ───
+    // ─── GET /api/reviews — approved reviews (rate-limited) ───
     if (method === 'GET' && path === '/api/reviews') {
+      const rl = await checkRateLimit(request, kv, 'GET');
+      if (!rl.allowed) {
+        const resp = error(
+          `Demasiadas solicitudes. Esperá ${rl.retryAfter} segundos.`,
+          429, origin, env
+        );
+        return withRateHeaders(resp, rl);
+      }
+
       const reviews = await getAllReviews(kv);
       const approved = reviews
         .filter(r => r.approved)
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      return json({ reviews: approved }, 200, origin, env);
+      const resp = json({ reviews: approved }, 200, origin, env);
+      return withRateHeaders(resp, rl);
     }
 
-    // ─── POST /api/reviews — submit new review ───
+    // ─── POST /api/reviews — submit new review (rate-limited) ───
     if (method === 'POST' && path === '/api/reviews') {
-      // Rate limit
-      const allowed = await checkRateLimit(request, kv);
-      if (!allowed) {
-        return error('Demasiadas solicitudes. Esperá un minuto antes de enviar otra reseña.', 429, origin, env);
+      const rl = await checkRateLimit(request, kv, 'POST');
+      if (!rl.allowed) {
+        const resp = error(
+          `Demasiadas solicitudes. Esperá ${rl.retryAfter} segundos antes de enviar otra reseña.`,
+          429, origin, env
+        );
+        return withRateHeaders(resp, rl);
       }
 
       let body;
@@ -154,7 +214,8 @@ export default {
       reviews.push(newReview);
       await saveAllReviews(kv, reviews);
 
-      return json({ success: true, id: newReview.id }, 201, origin, env);
+      const createdResp = json({ success: true, id: newReview.id }, 201, origin, env);
+      return withRateHeaders(createdResp, rl);
     }
 
     // ─── Admin endpoints (require Admin-Token header) ───

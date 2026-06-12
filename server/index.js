@@ -17,6 +17,7 @@
 
 const express = require('express');
 const cors = require('cors');
+const rateLimit = require('express-rate-limit');
 const path = require('path');
 const fs = require('fs');
 
@@ -49,35 +50,45 @@ db.exec(`
   )
 `);
 
-// ─── Rate limiter (in-memory) ───
-const rateLimitMap = new Map();
-const RATE_WINDOW = 60_000; // 1 minute
-const RATE_MAX = 3;
+// ─── Rate limiters ───
+// Global limiter: 30 req/min per IP — protects all endpoints from hammering
+const globalLimiter = rateLimit({
+  windowMs: 60 * 1000,       // 1 minute
+  max: 30,                    // 30 requests per minute
+  standardHeaders: true,      // Return RateLimit-* headers
+  legacyHeaders: false,
+  message: { error: 'Demasiadas solicitudes. Esperá un minuto antes de intentar de nuevo.' },
+  keyGenerator: (req) => req.ip || req.connection?.remoteAddress || 'unknown',
+  validate: { xForwardedForHeader: false },
+});
 
-function checkRateLimit(ip) {
-  const now = Date.now();
-  const entry = rateLimitMap.get(ip);
-  if (!entry || (now - entry.windowStart) > RATE_WINDOW) {
-    rateLimitMap.set(ip, { windowStart: now, count: 1 });
-    return true;
-  }
-  if (entry.count >= RATE_MAX) return false;
-  entry.count++;
-  return true;
-}
+// Strict POST limiter: 3 submissions/min per IP — prevents review spam
+const reviewPostLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 3,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Demasiadas solicitudes. Esperá un minuto antes de enviar otra reseña.' },
+  keyGenerator: (req) => req.ip || req.connection?.remoteAddress || 'unknown',
+});
 
-// Clean up old entries every 5 minutes
-setInterval(() => {
-  const now = Date.now();
-  for (const [ip, entry] of rateLimitMap) {
-    if ((now - entry.windowStart) > RATE_WINDOW * 2) rateLimitMap.delete(ip);
-  }
-}, 300_000);
+// Admin limiter: 20 req/min — admin endpoints are internal, no need for strict limit
+const adminLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Demasiadas solicitudes administrativas.' },
+  keyGenerator: (req) => req.ip || req.connection?.remoteAddress || 'unknown',
+});
 
 // ─── Express app ───
 const app = express();
 app.use(express.json({ limit: '10kb' }));
 app.use(cors({ origin: CORS_ORIGIN, methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'] }));
+
+// Apply global limiter to all /api/* routes
+app.use('/api', globalLimiter);
 
 // ─── GET /api/reviews — approved only ───
 app.get('/api/reviews', (req, res) => {
@@ -87,15 +98,9 @@ app.get('/api/reviews', (req, res) => {
   res.json({ reviews: rows });
 });
 
-// ─── POST /api/reviews — submit new review ───
-app.post('/api/reviews', (req, res) => {
+// ─── POST /api/reviews — submit new review (rate-limited) ───
+app.post('/api/reviews', reviewPostLimiter, (req, res) => {
   const ip = req.ip || req.connection?.remoteAddress || 'unknown';
-
-  // Rate limit
-  if (!checkRateLimit(ip)) {
-    return res.status(429).json({ error: 'Demasiadas solicitudes. Esperá un minuto antes de enviar otra reseña.' });
-  }
-
   const { text, author, product, rating } = req.body;
 
   // Validate
@@ -131,13 +136,13 @@ function requireAdmin(req, res, next) {
   next();
 }
 
-// ─── Admin routes ───
-app.get('/api/admin/reviews', requireAdmin, (req, res) => {
+// ─── Admin routes (rate-limited) ───
+app.get('/api/admin/reviews', adminLimiter, requireAdmin, (req, res) => {
   const rows = db.prepare('SELECT * FROM reviews ORDER BY created_at DESC').all();
   res.json({ reviews: rows });
 });
 
-app.patch('/api/admin/reviews/:id', requireAdmin, (req, res) => {
+app.patch('/api/admin/reviews/:id', adminLimiter, requireAdmin, (req, res) => {
   const id = parseInt(req.params.id, 10);
   const { approved } = req.body;
 
@@ -155,7 +160,7 @@ app.patch('/api/admin/reviews/:id', requireAdmin, (req, res) => {
   res.json({ success: true });
 });
 
-app.delete('/api/admin/reviews/:id', requireAdmin, (req, res) => {
+app.delete('/api/admin/reviews/:id', adminLimiter, requireAdmin, (req, res) => {
   const id = parseInt(req.params.id, 10);
 
   const stmt = db.prepare('DELETE FROM reviews WHERE id = ?');
