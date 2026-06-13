@@ -60,15 +60,15 @@ if (rowCount === 0) {
       INSERT INTO reviews (text, author, product, rating, approved, ip)
       VALUES (?, ?, ?, ?, 1, 'seed')
     `).run(
-      'Profe Mágico transformó la forma en que mi hijo aprende inglés. La IA se adapta a su ritmo y los ejercicios son realmente entretenidos.',
-      'María G.', 'profe', 5
+      'Me gustó mucho el traductor, sobre todo porque tiene audios de todo, está muy lindo.',
+      'Johana', 'profe', 5
     );
     db.prepare(`
       INSERT INTO reviews (text, author, product, rating, approved, ip)
       VALUES (?, ?, ?, ?, 1, 'seed')
     `).run(
-      'El bot de Hermes es sorprendentemente rápido y preciso. Responde cualquier duda sobre el estudio al instante.',
-      'Andrés M.', 'hermes', 5
+      'Me interesa mucho, ¿cuándo va a estar?',
+      'Maria', 'clipcraft', 3
     );
   });
   seed();
