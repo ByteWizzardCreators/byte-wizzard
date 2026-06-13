@@ -3,8 +3,8 @@
 > Proyecto: `byte-wizzard`
 > Tipo: Landing page + demos (indie studio)
 > Stack: HTML + CSS + JS vanilla
-> Deploy: Cloudflare Pages o GitHub Pages
-> Repo: No inicializado aún
+> Deploy: Cloudflare Pages (byte-wizzard.xyz) + GitHub Pages (fallback)
+> Repo: https://github.com/ByteWizzardCreators/byte-wizzard
 
 ---
 
@@ -12,8 +12,8 @@
 
 - **Name**: Byte Wizzard (con doble Z, estilo fantasy/mago)
 - **Tagline**: AI-first systems for automation, logistics, education and intelligent assistants.
-- **Motto**: "We don't build ideas. We build working systems."
-- **Tone**: Técnico, directo, con personalidad. Terminal aesthetic.
+- **Motto**: "We don't build ideas. We build working systems." / "No construimos ideas. Construimos sistemas que funcionan."
+- **Tone**: Técnico, directo, con personalidad. Terminal aesthetic. Voseo rioplatense en ES.
 
 ## Products
 
@@ -29,21 +29,72 @@
 
 ```
 byte-wizzard/
-├── AGENTS.md              ← instrucciones del agente (root)
-├── ENGRAM_CONTEXT.md      ← este archivo (root)
-├── web/                   ← landing page (vidriera)
-│   ├── index.html         ← página principal del estudio
-│   └── assets/            ← imágenes, icons (futuro)
-├── apps/                  ← productos reales (referencias)
-│   ├── luna/
-│   │   └── README.md      ← link a live + stack
-│   └── profe-magico/
-│       └── README.md      ← link a live + stack
-├── demos/                 ← experimentos interactivos
-│   └── courier-tms/
-│       └── index.html     ← route optimizer demo
-└── docs/                  ← documentación del proyecto
+├── AGENTS.md                  ← instrucciones del agente (root)
+├── ENGRAM_CONTEXT.md          ← este archivo (root)
+├── index.html                 ← landing page PRINCIPAL
+├── web/index.html             ← landing page alternativa (vidriera)
+├── assets/
+│   ├── i18n.js                ← traducciones EN/ES/PT + KB stack entries
+│   ├── reviews.js             ← cliente de reviews API
+│   ├── anti-devtools.js       ← protección anti-DevTools (7 capas)
+│   ├── styles.css             ← estilos globales
+│   └── terminal*.js           ← terminal animada
+├── server/                    ← Express API (Render)
+│   ├── index.js               ← reviews API (SQLite WAL, rate limiting)
+│   ├── package.json
+│   └── data/reviews.db        ← SQLite DB
+├── apps/                      ← productos reales
+│   ├── reviews/               ← Cloudflare Worker (Reviews API alternativo)
+│   │   ├── src/index.js       ← worker con sliding window rate limiter
+│   │   └── wrangler.toml
+│   ├── luna/README.md
+│   └── profe-magico/README.md
+├── demos/                     ← experimentos interactivos
+│   ├── hermes/index.html      ← demo Hermes bot
+│   ├── courier-tms/index.html ← route optimizer demo
+│   └── roleplay-chat/         ← roleplay chat demo
+└── docs/
 ```
+
+## Architecture
+
+```
+Frontend (index.html)
+    ↓
+REVIEWS_API = 'https://reviews-afib.onrender.com'
+    ↓
+Express Server (Render.com)  ←─── primario activo
+  ├── SQLite WAL (reviews.db)
+  ├── express-rate-limit (global 30/min, POST 3/min, admin 20/min)
+  ├── RateLimit-* + Retry-After headers
+  └── CORS restringido a bytewizzardcreators.github.io + byte-wizzard.xyz
+
+Cloudflare Worker (apps/reviews/)  ←─── secundario (no activo hoy)
+  ├── Cloudflare KV (reviews)
+  ├── Sliding window rate limiter (POST 3/min, GET 60/min)
+  ├── X-RateLimit-* + Retry-After headers
+  └── Admin endpoints con token
+```
+
+## Security Layers (activas)
+
+1. **Rate limiting** — express-rate-limit + Cloudflare sliding window KV
+2. **Anti-DevTools** — script de 7 capas en todas las páginas
+3. **CORS** — origenes restringidos
+4. **Admin-Token** — endpoints de moderación protegidos
+5. **Input validation** — tamaño, formato, producto válido
+6. **Payload limit** — 10kb en Express
+
+## KB Stack — Hermes
+
+Stack real (sin logos inventados):
+- **Edge**: Cloudflare Workers (Luna, reviews API)
+- **Frontend**: Vanilla JS + React + Leaflet (según el proyecto, cero framework pedorro)
+- **Storage**: SQLite WAL (server) + Cloudflare KV (edge)
+- **Data**: Data engineering, geospatial pipelines, transformación serverless
+- **Systems**: Go (Logistics Intelligence, routing, clustering), Python (data processing, ML inference)
+- **Philosophy**: "Herramientas modernas, decisiones conscientes, cero humo."
+- **Certifications**: ISO SQL Security + ISO Security (son dos certificaciones separadas)
 
 ## Design System
 
@@ -60,6 +111,11 @@ byte-wizzard/
 - **Demos usan APIs públicas**: Nominatim (geocoding) + OSRM (routing) — gratis, sin API key.
 - **Terminal aesthetic**: Coherente con el brand.
 - **Mobile first**: Responsive grid, cards se apilan en mobile.
+- **Anti-DevTools antes que ofuscación**: Preferimos rate limiting + detección a ofuscar código.
+- **express-rate-limit > Map manual**: Producción-ready, headers estándar, Retry-After.
+- **KB stack con detalle real aprobado**: "dejalos así no más" — transparencia es el diferenciador.
+- **API Gateway rechazado**: Over-engineering para 6 endpoints. Seguridad actual es suficiente.
+- **CEO entry**: Hermes (no Luna) — Luna no está en la landing page.
 
 ## Related Projects
 
@@ -68,13 +124,11 @@ byte-wizzard/
 - `clipcraft` — Backend render en Render.com
 - `profe-magico` — Frontend live en Render
 - `engram-main` — Central runtime, knowledge base, error registry
+- `reviews` — Cloudflare Worker (apps/reviews/) — alternativa serverless al Express API
 
 ## 🌐 APIs Públicas
 
 Referencia completa: [`knowledge/apis/public-apis.md`](../engram-main/knowledge/apis/public-apis.md)
-
-Esa referencia apunta a [github.com/public-apis/public-apis](https://github.com/public-apis/public-apis) — 1400+ APIs free.
-No están descargadas localmente. Se consultan live cuando se necesitan.
 
 **Quick Reference** (más usadas en demos):
 - Nominatim — geocoding gratuito (sin API key)
@@ -84,5 +138,3 @@ No están descargadas localmente. Se consultan live cuando se necesitan.
 - ExchangeRate-API — divisas
 - Weather (Open-Meteo, OpenWeatherMap)
 - Ipify, ipapi — geolocalización por IP
-
-> Cualquier consulta tipo _"buscame una API de [categoría]"_ se responde consultando el repo público en vivo.

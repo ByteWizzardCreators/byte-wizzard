@@ -50,6 +50,31 @@ db.exec(`
   )
 `);
 
+// ─── Seed DB with default reviews if empty ───
+// Render.com free tier has ephemeral filesystem — every deploy wipes the DB.
+// This ensures reviews always show even after a fresh deploy.
+const rowCount = db.prepare('SELECT COUNT(*) as count FROM reviews').get().count;
+if (rowCount === 0) {
+  const seed = db.transaction(() => {
+    db.prepare(`
+      INSERT INTO reviews (text, author, product, rating, approved, ip)
+      VALUES (?, ?, ?, ?, 1, 'seed')
+    `).run(
+      'Profe Mágico transformó la forma en que mi hijo aprende inglés. La IA se adapta a su ritmo y los ejercicios son realmente entretenidos.',
+      'María G.', 'profe', 5
+    );
+    db.prepare(`
+      INSERT INTO reviews (text, author, product, rating, approved, ip)
+      VALUES (?, ?, ?, ?, 1, 'seed')
+    `).run(
+      'El bot de Hermes es sorprendentemente rápido y preciso. Responde cualquier duda sobre el estudio al instante.',
+      'Andrés M.', 'hermes', 5
+    );
+  });
+  seed();
+  console.log('🌱 Seeded DB with default reviews');
+}
+
 // ─── Rate limiters ───
 // Global limiter: 30 req/min per IP — protects all endpoints from hammering
 const globalLimiter = rateLimit({
