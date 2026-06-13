@@ -64,15 +64,56 @@
       background: radial-gradient(ellipse at 50% 0%, rgba(0,255,170,0.03) 0%, transparent 70%);
       pointer-events: none;
     }
+    .hero-gradient-mesh {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .hero-gradient-mesh .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.15;
+      animation: orb-drift 12s ease-in-out infinite;
+    }
+    .hero-gradient-mesh .orb:nth-child(1) {
+      width: 400px; height: 400px;
+      background: #00d488;
+      top: -100px; left: -100px;
+      animation-delay: 0s;
+    }
+    .hero-gradient-mesh .orb:nth-child(2) {
+      width: 300px; height: 300px;
+      background: #00aaff;
+      bottom: -80px; right: -80px;
+      animation-delay: -4s;
+    }
+    .hero-gradient-mesh .orb:nth-child(3) {
+      width: 200px; height: 200px;
+      background: #a855f7;
+      top: 50%; left: 50%;
+      animation-delay: -8s;
+    }
+    @keyframes orb-drift {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      25% { transform: translate(60px, -40px) scale(1.1); }
+      50% { transform: translate(-30px, 60px) scale(0.9); }
+      75% { transform: translate(40px, 30px) scale(1.05); }
+    }
 
     .terminal-box {
-      background: #0d0d14;
-      border: 1px solid #1a1a2e;
+      background: rgba(13, 13, 20, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(26, 26, 46, 0.8);
       border-radius: 12px;
       padding: 48px 40px;
       max-width: 640px;
       width: 100%;
       position: relative;
+      z-index: 1;
     }
     .terminal-box::before {
       content: '● ● ●';
@@ -186,6 +227,20 @@
       50% { opacity: 0; }
     }
 
+    /* ============================================================
+       SCROLL REVEAL
+       ============================================================ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     /* scroll indicator */
     .scroll-indicator {
       position: absolute;
@@ -216,13 +271,25 @@
     }
 
     .product-card {
-      background: #0d0d14;
-      border: 1px solid #1a1a2e;
+      background: rgba(13, 13, 20, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(26, 26, 46, 0.6);
       border-radius: 12px;
       padding: 32px 28px;
       transition: all 0.3s;
       position: relative;
       overflow: hidden;
+    }
+    .product-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+      box-shadow: 0 0 30px rgba(0, 212, 136, 0.06);
     }
     .product-card::before {
       content: '';
@@ -235,9 +302,11 @@
       transition: opacity 0.3s;
     }
     .product-card:hover {
-      border-color: #2a2a4e;
+      border-color: rgba(0, 212, 136, 0.2);
       transform: translateY(-4px);
+      background: rgba(13, 13, 20, 0.85);
     }
+    .product-card:hover::after { opacity: 1; }
     .product-card:hover::before { opacity: 1; }
 
     .product-card.hermes::before { background: linear-gradient(90deg, #00d488, #00aaff); }
@@ -339,15 +408,20 @@
       gap: 20px;
     }
     .review-card {
-      background: #0d0d14;
-      border: 1px solid #1a1a2e;
+      background: rgba(13, 13, 20, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(26, 26, 46, 0.6);
       border-radius: 12px;
       padding: 28px;
-      transition: border-color 0.3s;
+      transition: all 0.3s;
       display: flex;
       flex-direction: column;
     }
-    .review-card:hover { border-color: #2a2a4e; }
+    .review-card:hover {
+      border-color: rgba(0, 212, 136, 0.2);
+      background: rgba(13, 13, 20, 0.85);
+    }
     .review-text {
       font-size: 0.9rem;
       color: #bbb;
@@ -500,8 +574,10 @@
       gap: 16px;
     }
     .wwd-item {
-      background: #0d0d14;
-      border: 1px solid #1a1a2e;
+      background: rgba(13, 13, 20, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(26, 26, 46, 0.6);
       border-radius: 8px;
       padding: 24px 20px;
       text-align: center;
@@ -511,8 +587,9 @@
       transition: all 0.2s;
     }
     .wwd-item:hover {
-      border-color: #2a2a4e;
+      border-color: rgba(0, 212, 136, 0.2);
       color: #00d488;
+      background: rgba(13, 13, 20, 0.85);
     }
     .wwd-item strong {
       display: block;
@@ -729,6 +806,11 @@
        HERO
        ============================================================ -->
   <header class="hero" id="top">
+    <div class="hero-gradient-mesh">
+      <div class="orb"></div>
+      <div class="orb"></div>
+      <div class="orb"></div>
+    </div>
     <div class="terminal-box">
       <div class="hero-label" data-i18n="hero.label"><span>$</span> ./byte-wizzard --whoami</div>
       <h1 class="hero-title" data-i18n="hero.title">
@@ -755,7 +837,7 @@
   <!-- ============================================================
        PRODUCTS
        ============================================================ -->
-  <section class="products" id="products">
+  <section class="products reveal" id="products">
     <div class="container">
       <h2 class="section-title" data-i18n="products.title">Products</h2>
       <div class="products-grid">
@@ -865,7 +947,7 @@
   <!-- ============================================================
        WHAT WE DO
        ============================================================ -->
-  <section class="what-we-do" id="what">
+  <section class="what-we-do reveal" id="what">
     <div class="container">
       <h2 class="section-title" data-i18n="wwd.title">What We Do</h2>
       <div class="wwd-grid" data-i18n-wwd>
@@ -906,7 +988,7 @@
   <!-- ============================================================
        VISION
        ============================================================ -->
-  <section class="vision" id="vision">
+  <section class="vision reveal" id="vision">
     <div class="container">
       <h2 class="section-title" data-i18n="vision.title">Vision</h2>
       <div class="vision-motto" data-i18n="vision.motto">
@@ -923,7 +1005,7 @@
   <!-- ============================================================
        STACK
        ============================================================ -->
-  <section class="stack" id="stack">
+  <section class="stack reveal" id="stack">
     <div class="container">
       <h2 class="section-title" data-i18n="stack.title">Stack</h2>
       <div class="stack-tags" data-i18n-stack>
@@ -955,7 +1037,7 @@
   <!-- ============================================================
        STATUS
        ============================================================ -->
-  <section class="status-bar" id="status">
+  <section class="status-bar reveal" id="status">
     <div class="container">
       <h2 class="section-title" data-i18n="status.title">Status</h2>
       <div class="status-dots" data-i18n-status>
@@ -978,7 +1060,7 @@
   <!-- ============================================================
        REVIEWS
        ============================================================ -->
-  <section class="reviews" id="reviews">
+  <section class="reviews reveal" id="reviews">
     <div class="container">
       <h2 class="section-title" data-i18n="reviews.title">Reviews</h2>
       <div class="reviews-grid"></div>
@@ -1042,5 +1124,23 @@
   <script src="assets/reviews.js"></script>
   <script src="assets/i18n.js"></script>
   <script src="assets/hermes-widget.js"></script>
+
+  <!-- ─── Scroll Reveal ─── -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -40px 0px',
+      });
+
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    });
+  </script>
 </body>
 </html>

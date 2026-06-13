@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es" translate="no">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Byte Wizzard — AI-first systems</title>
+  <title>Byte Wizzard â€” AI-first systems</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
@@ -41,7 +41,7 @@
     }
     .section-title::before,
     .section-title::after {
-      content: ' ─── ';
+      content: ' â”€â”€â”€ ';
       color: #333;
     }
 
@@ -64,18 +64,59 @@
       background: radial-gradient(ellipse at 50% 0%, rgba(0,255,170,0.03) 0%, transparent 70%);
       pointer-events: none;
     }
+    .hero-gradient-mesh {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .hero-gradient-mesh .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.15;
+      animation: orb-drift 12s ease-in-out infinite;
+    }
+    .hero-gradient-mesh .orb:nth-child(1) {
+      width: 400px; height: 400px;
+      background: #00d488;
+      top: -100px; left: -100px;
+      animation-delay: 0s;
+    }
+    .hero-gradient-mesh .orb:nth-child(2) {
+      width: 300px; height: 300px;
+      background: #00aaff;
+      bottom: -80px; right: -80px;
+      animation-delay: -4s;
+    }
+    .hero-gradient-mesh .orb:nth-child(3) {
+      width: 200px; height: 200px;
+      background: #a855f7;
+      top: 50%; left: 50%;
+      animation-delay: -8s;
+    }
+    @keyframes orb-drift {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      25% { transform: translate(60px, -40px) scale(1.1); }
+      50% { transform: translate(-30px, 60px) scale(0.9); }
+      75% { transform: translate(40px, 30px) scale(1.05); }
+    }
 
     .terminal-box {
-      background: #0d0d14;
-      border: 1px solid #1a1a2e;
+      background: rgba(13, 13, 20, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(26, 26, 46, 0.8);
       border-radius: 12px;
       padding: 48px 40px;
       max-width: 640px;
       width: 100%;
       position: relative;
+      z-index: 1;
     }
     .terminal-box::before {
-      content: '● ● ●';
+      content: 'â— â— â—';
       position: absolute;
       top: 16px;
       left: 24px;
@@ -186,6 +227,20 @@
       50% { opacity: 0; }
     }
 
+    /* ============================================================
+       SCROLL REVEAL
+       ============================================================ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     /* scroll indicator */
     .scroll-indicator {
       position: absolute;
@@ -216,13 +271,25 @@
     }
 
     .product-card {
-      background: #0d0d14;
-      border: 1px solid #1a1a2e;
+      background: rgba(13, 13, 20, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(26, 26, 46, 0.6);
       border-radius: 12px;
       padding: 32px 28px;
       transition: all 0.3s;
       position: relative;
       overflow: hidden;
+    }
+    .product-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+      box-shadow: 0 0 30px rgba(0, 212, 136, 0.06);
     }
     .product-card::before {
       content: '';
@@ -235,9 +302,11 @@
       transition: opacity 0.3s;
     }
     .product-card:hover {
-      border-color: #2a2a4e;
+      border-color: rgba(0, 212, 136, 0.2);
       transform: translateY(-4px);
+      background: rgba(13, 13, 20, 0.85);
     }
+    .product-card:hover::after { opacity: 1; }
     .product-card:hover::before { opacity: 1; }
 
     .product-card.hermes::before { background: linear-gradient(90deg, #00d488, #00aaff); }
@@ -288,7 +357,7 @@
       position: relative;
     }
     .product-features li::before {
-      content: '›';
+      content: 'â€º';
       position: absolute;
       left: 0;
       color: #555;
@@ -304,7 +373,7 @@
     }
     .product-card:hover .product-link { color: #00d488; }
 
-    /* ─── COMING SOON ─── */
+    /* â”€â”€â”€ COMING SOON â”€â”€â”€ */
     .coming-soon {
       padding: 60px 0 80px;
     }
@@ -339,15 +408,20 @@
       gap: 20px;
     }
     .review-card {
-      background: #0d0d14;
-      border: 1px solid #1a1a2e;
+      background: rgba(13, 13, 20, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(26, 26, 46, 0.6);
       border-radius: 12px;
       padding: 28px;
-      transition: border-color 0.3s;
+      transition: all 0.3s;
       display: flex;
       flex-direction: column;
     }
-    .review-card:hover { border-color: #2a2a4e; }
+    .review-card:hover {
+      border-color: rgba(0, 212, 136, 0.2);
+      background: rgba(13, 13, 20, 0.85);
+    }
     .review-text {
       font-size: 0.9rem;
       color: #bbb;
@@ -402,7 +476,7 @@
       padding: 40px 0;
     }
 
-    /* ─── REVIEW FORM ─── */
+    /* â”€â”€â”€ REVIEW FORM â”€â”€â”€ */
     .review-form-section {
       margin-top: 48px;
       padding-top: 40px;
@@ -500,8 +574,10 @@
       gap: 16px;
     }
     .wwd-item {
-      background: #0d0d14;
-      border: 1px solid #1a1a2e;
+      background: rgba(13, 13, 20, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(26, 26, 46, 0.6);
       border-radius: 8px;
       padding: 24px 20px;
       text-align: center;
@@ -511,8 +587,9 @@
       transition: all 0.2s;
     }
     .wwd-item:hover {
-      border-color: #2a2a4e;
+      border-color: rgba(0, 212, 136, 0.2);
       color: #00d488;
+      background: rgba(13, 13, 20, 0.85);
     }
     .wwd-item strong {
       display: block;
@@ -730,6 +807,11 @@
        HERO
        ============================================================ -->
   <header class="hero" id="top">
+    <div class="hero-gradient-mesh">
+      <div class="orb"></div>
+      <div class="orb"></div>
+      <div class="orb"></div>
+    </div>
     <div class="terminal-box">
       <div class="hero-label" data-i18n="hero.label"><span>$</span> ./byte-wizzard --whoami</div>
       <h1 class="hero-title" data-i18n="hero.title">
@@ -741,29 +823,29 @@
         education and intelligent assistants.
       </p>
       <div class="hero-status" data-i18n="hero.status">
-        <span class="dot"></span> 4 active products · 2 demos · AI-first
+        <span class="dot"></span> 4 active products Â· 2 demos Â· AI-first
       </div>
       <div class="hero-actions">
-        <a href="#products" class="btn btn-primary" data-i18n="hero.btnProducts">View Products →</a>
+        <a href="#products" class="btn btn-primary" data-i18n="hero.btnProducts">View Products â†’</a>
         <a href="#reviews" class="btn btn-outline" data-i18n="hero.btnReviews">Reviews</a>
         <a href="#contact" class="btn btn-outline" data-i18n="hero.btnContact">Contact</a>
       </div>
       <div class="hero-cursor"></div>
     </div>
-    <div class="scroll-indicator" data-i18n="hero.scroll">SCROLL ▼</div>
+    <div class="scroll-indicator" data-i18n="hero.scroll">SCROLL â–¼</div>
   </header>
 
   <!-- ============================================================
        PRODUCTS
        ============================================================ -->
-  <section class="products" id="products">
+  <section class="products reveal" id="products">
     <div class="container">
       <h2 class="section-title" data-i18n="products.title">Products</h2>
       <div class="products-grid">
 
         <!-- Hermes -->
         <article class="product-card hermes">
-          <div class="product-icon" data-i18n="products.hermes.icon">⚡</div>
+          <div class="product-icon" data-i18n="products.hermes.icon">âš¡</div>
           <div class="product-status demo" data-i18n="products.hermes.status">DEMO</div>
           <h3 class="product-name" data-i18n="products.hermes.name">Hermes</h3>
           <p class="product-tagline" data-i18n="products.hermes.tagline">Byte Wizzard AI Assistant</p>
@@ -774,13 +856,13 @@
             <li>Interactive live chat</li>
           </ul>
           <a href="demos/hermes/index.html" target="_blank" class="product-link" data-i18n="products.hermes.link">
-            → Try Demo Bot
+            â†’ Try Demo Bot
           </a>
         </article>
 
         <!-- Courier TMS -->
         <article class="product-card courier">
-          <div class="product-icon" data-i18n="products.courier.icon">🚚</div>
+          <div class="product-icon" data-i18n="products.courier.icon">ðŸšš</div>
           <div class="product-status dev" data-i18n="products.courier.status">IN DEVELOPMENT</div>
           <h3 class="product-name" data-i18n="products.courier.name">Courier TMS</h3>
           <p class="product-tagline" data-i18n="products.courier.tagline">Logistics Intelligence System</p>
@@ -793,15 +875,15 @@
             <li>CSV order import</li>
           </ul>
           <a href="demos/courier-tms/index.html" target="_blank" class="product-link" data-i18n="products.courier.link">
-            → Try Demo
+            â†’ Try Demo
           </a>
         </article>
 
-        <!-- Profe Mágico -->
+        <!-- Profe MÃ¡gico -->
         <article class="product-card profe">
-          <div class="product-icon" data-i18n="products.profe.icon">📚</div>
+          <div class="product-icon" data-i18n="products.profe.icon">ðŸ“š</div>
           <div class="product-status live" data-i18n="products.profe.status">LIVE</div>
-          <h3 class="product-name" data-i18n="products.profe.name">Profe Mágico</h3>
+          <h3 class="product-name" data-i18n="products.profe.name">Profe MÃ¡gico</h3>
           <p class="product-tagline" data-i18n="products.profe.tagline">AI Learning System</p>
           <ul class="product-features" data-i18n-features="products.profe.features">
             <li>Interactive AI teaching</li>
@@ -811,7 +893,7 @@
             <li>Guided learning experience</li>
           </ul>
           <a href="https://profe-magico-frontend.onrender.com/" target="_blank" class="product-link" data-i18n="products.profe.link">
-            → Visit site
+            â†’ Visit site
           </a>
         </article>
 
@@ -829,7 +911,7 @@
 
         <!-- ClipCraft -->
         <article class="product-card clipcraft">
-          <div class="product-icon" data-i18n="comingSoon.clipcraft.icon">📱</div>
+          <div class="product-icon" data-i18n="comingSoon.clipcraft.icon">ðŸ“±</div>
           <div class="product-status mvp" data-i18n="comingSoon.clipcraft.status">Internal MVP</div>
           <h3 class="product-name" data-i18n="comingSoon.clipcraft.name">ClipCraft</h3>
           <p class="product-tagline" data-i18n="comingSoon.clipcraft.tagline">Mobile Content Creation Platform</p>
@@ -838,7 +920,7 @@
             <li>Photo & video editing</li>
             <li>Automatic video generation</li>
           </ul>
-          <span class="product-link">→ Internal MVP</span>
+          <span class="product-link">â†’ Internal MVP</span>
         </article>
 
       </div>
@@ -848,37 +930,37 @@
   <!-- ============================================================
        WHAT WE DO
        ============================================================ -->
-  <section class="what-we-do" id="what">
+  <section class="what-we-do reveal" id="what">
     <div class="container">
       <h2 class="section-title" data-i18n="wwd.title">What We Do</h2>
       <div class="wwd-grid" data-i18n-wwd>
         <div class="wwd-item">
-          <div class="emoji">🧠</div>
+          <div class="emoji">ðŸ§ </div>
           <strong>AI Systems</strong>
           Intelligent automation for real processes
         </div>
         <div class="wwd-item">
-          <div class="emoji">⚙️</div>
+          <div class="emoji">âš™ï¸</div>
           <strong>Automation</strong>
           Reduce manual work through smart flows
         </div>
         <div class="wwd-item">
-          <div class="emoji">🚛</div>
+          <div class="emoji">ðŸš›</div>
           <strong>Logistics</strong>
           Route optimization &amp; live tracking
         </div>
         <div class="wwd-item">
-          <div class="emoji">🎓</div>
+          <div class="emoji">ðŸŽ“</div>
           <strong>Education</strong>
           AI-powered learning experiences
         </div>
         <div class="wwd-item">
-          <div class="emoji">📱</div>
+          <div class="emoji">ðŸ“±</div>
           <strong>Mobile</strong>
           React Native &amp; Expo apps
         </div>
         <div class="wwd-item">
-          <div class="emoji">☁️</div>
+          <div class="emoji">â˜ï¸</div>
           <strong>Cloud</strong>
           Cloudflare Workers &amp; edge computing
         </div>
@@ -889,16 +971,16 @@
   <!-- ============================================================
        VISION
        ============================================================ -->
-  <section class="vision" id="vision">
+  <section class="vision reveal" id="vision">
     <div class="container">
       <h2 class="section-title" data-i18n="vision.title">Vision</h2>
       <div class="vision-motto" data-i18n="vision.motto">
-        “We don’t build ideas. <span class="highlight">We build working systems.</span>”
+        â€œWe donâ€™t build ideas. <span class="highlight">We build working systems.</span>â€
       </div>
       <blockquote data-i18n="vision.quote">
-        Reducir trabajo manual a través de sistemas inteligentes<br>
+        Reducir trabajo manual a travÃ©s de sistemas inteligentes<br>
         que automatizan <strong>operaciones reales</strong> en empresas,<br>
-        logística y educación.
+        logÃ­stica y educaciÃ³n.
       </blockquote>
     </div>
   </section>
@@ -906,7 +988,7 @@
   <!-- ============================================================
        STACK
        ============================================================ -->
-  <section class="stack" id="stack">
+  <section class="stack reveal" id="stack">
     <div class="container">
       <h2 class="section-title" data-i18n="stack.title">Stack</h2>
       <div class="stack-tags" data-i18n-stack>
@@ -932,7 +1014,7 @@
   <!-- ============================================================
        STATUS
        ============================================================ -->
-  <section class="status-bar" id="status">
+  <section class="status-bar reveal" id="status">
     <div class="container">
       <h2 class="section-title" data-i18n="status.title">Status</h2>
       <div class="status-dots" data-i18n-status>
@@ -955,44 +1037,44 @@
   <!-- ============================================================
        REVIEWS
        ============================================================ -->
-  <section class="reviews" id="reviews">
+  <section class="reviews reveal" id="reviews">
     <div class="container">
       <h2 class="section-title" data-i18n="reviews.title">Reviews</h2>
       <div class="reviews-grid"></div>
 
       <!-- Review form -->
       <div class="review-form-section" id="review-form-section">
-        <h3 data-i18n-form="title">Dejá tu reseña</h3>
+        <h3 data-i18n-form="title">DejÃ¡ tu reseÃ±a</h3>
         <form class="review-form" id="review-form">
           <div>
             <label for="review-author" data-i18n-form="nameLabel">Tu nombre</label>
-            <input type="text" id="review-author" required minlength="2" placeholder="María">
+            <input type="text" id="review-author" required minlength="2" placeholder="MarÃ­a">
           </div>
           <div>
             <label for="review-product" data-i18n-form="productLabel">Producto</label>
             <select id="review-product">
-              <option value="profe">Profe Mágico</option>
+              <option value="profe">Profe MÃ¡gico</option>
               <option value="courier">Courier TMS</option>
               <option value="hermes">Hermes - AI Assistant</option>
               <option value="clipcraft">ClipCraft</option>
             </select>
           </div>
           <div>
-            <label for="review-rating" data-i18n-form="ratingLabel">Calificación</label>
+            <label for="review-rating" data-i18n-form="ratingLabel">CalificaciÃ³n</label>
             <select id="review-rating">
-              <option value="5">★★★★★</option>
-              <option value="4">★★★★○</option>
-              <option value="3">★★★○○</option>
-              <option value="2">★★○○○</option>
-              <option value="1">★○○○○</option>
+              <option value="5">â˜…â˜…â˜…â˜…â˜…</option>
+              <option value="4">â˜…â˜…â˜…â˜…â—‹</option>
+              <option value="3">â˜…â˜…â˜…â—‹â—‹</option>
+              <option value="2">â˜…â˜…â—‹â—‹â—‹</option>
+              <option value="1">â˜…â—‹â—‹â—‹â—‹</option>
             </select>
           </div>
           <div></div>
           <div class="full-width">
             <label for="review-text" data-i18n-form="textLabel">Tu experiencia</label>
-            <textarea id="review-text" required minlength="10" placeholder="¿Qué te pareció el producto?"></textarea>
+            <textarea id="review-text" required minlength="10" placeholder="Â¿QuÃ© te pareciÃ³ el producto?"></textarea>
           </div>
-          <button type="submit" class="btn btn-primary btn-submit" data-i18n-form="submit">Enviar reseña</button>
+          <button type="submit" class="btn btn-primary btn-submit" data-i18n-form="submit">Enviar reseÃ±a</button>
           <div class="review-form-status" aria-live="polite"></div>
         </form>
       </div>
@@ -1005,12 +1087,12 @@
   <footer id="contact">
     <div class="brand" data-i18n="footer.brand">BYTE <span class="accent">WIZZARD</span></div>
     <p class="tagline" data-i18n="footer.tagline">AI &amp; Software Systems Studio</p>
-    <p class="built-by" data-i18n="footer.builtBy">Built by Matías Bagnasco — AI Systems Developer</p>
+    <p class="built-by" data-i18n="footer.builtBy">Built by MatÃ­as Bagnasco â€” AI Systems Developer</p>
     <div class="contact-links">
       <a href="mailto:bytewizzards@gmail.com">bytewizzards@gmail.com</a>
     </div>
     <div class="divider"></div>
-    <p class="copyright" data-i18n="footer.copyright">© 2026 Byte Wizzard — Real products. Real systems.</p>
+    <p class="copyright" data-i18n="footer.copyright">Â© 2026 Byte Wizzard â€” Real products. Real systems.</p>
   </footer>
 
   <script>
@@ -1018,5 +1100,25 @@
   </script>
   <script src="../assets/reviews.js"></script>
   <script src="../assets/i18n.js"></script>
+
+  <!-- ─── Scroll Reveal ─── -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -40px 0px',
+      });
+
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    });
+  </script>
 </body>
 </html>
+
+
