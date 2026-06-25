@@ -1,4 +1,4 @@
-# Byte Wizzard — ENGRAM Context
+﻿# Byte Wizzard â€” ENGRAM Context
 
 > Proyecto: `byte-wizzard`
 > Tipo: Landing page + demos (indie studio)
@@ -13,85 +13,86 @@
 - **Name**: Byte Wizzard (con doble Z, estilo fantasy/mago)
 - **Tagline**: AI-first systems for automation, logistics, education and intelligent assistants.
 - **Motto**: "We don't build ideas. We build working systems." / "No construimos ideas. Construimos sistemas que funcionan."
-- **Tone**: Técnico, directo, con personalidad. Terminal aesthetic. Voseo rioplatense en ES.
+- **Tone**: TÃ©cnico, directo, con personalidad. Terminal aesthetic. Voseo rioplatense en ES.
 
 ## Products
 
 | Product | Description | Status | URL |
 |---------|-------------|--------|-----|
-| Luna | AI Business Assistant — memoria persistente, chat, emails, soporte | ✅ Live | https://luna.wizzardbyte.workers.dev |
-| Hermes | Byte Wizzard AI Assistant — demo bot del estudio | ✅ Demo | `demos/hermes/` |
-| Profe Mágico | AI Learning System — inglés con IA para niños | ✅ Live | https://profe-magico-frontend.onrender.com/ |
-| Courier TMS | Logistics Intelligence System — rutas, GPS, clustering | 🚧 Demo | `demos/courier-tms/` |
-| ClipCraft | Mobile Content Creation — edición, render cloud | 🔧 In dev | — |
+| Luna | AI Business Assistant â€” memoria persistente, chat, emails, soporte | âœ… Live | https://luna.wizzardbyte.workers.dev |
+| Hermes | Byte Wizzard AI Assistant â€” demo bot del estudio | âœ… Demo | `demos/hermes/` |
+| Profe MÃ¡gico | AI Learning System â€” inglÃ©s con IA para niÃ±os | âœ… Live | https://profe-magico-frontend.onrender.com/ |
+| Courier TMS | Logistics Intelligence System â€” rutas, GPS, clustering | ðŸš§ Demo | `demos/courier-tms/` |
+| OmniConnect | Call Center Intelligence Platform â€” 19 KPIs, 3 perfiles, tiempo real | âœ… Working System | `demos/OmniConnect/` |
+| ClipCraft | Mobile Content Creation â€” ediciÃ³n, render cloud | ðŸ”§ In dev | â€” |
 
 ## Project Structure
 
 ```
 byte-wizzard/
-├── AGENTS.md                  ← instrucciones del agente (root)
-├── ENGRAM_CONTEXT.md          ← este archivo (root)
-├── index.html                 ← landing page PRINCIPAL
-├── web/index.html             ← landing page alternativa (vidriera)
-├── assets/
-│   ├── i18n.js                ← traducciones EN/ES/PT + KB stack entries
-│   ├── reviews.js             ← cliente de reviews API
-│   ├── anti-devtools.js       ← protección anti-DevTools (7 capas)
-│   ├── styles.css             ← estilos globales
-│   └── terminal*.js           ← terminal animada
-├── server/                    ← Express API (Render)
-│   ├── index.js               ← reviews API (SQLite WAL, rate limiting)
-│   ├── package.json
-│   └── data/reviews.db        ← SQLite DB
-├── apps/                      ← productos reales
-│   ├── reviews/               ← Cloudflare Worker (Reviews API alternativo)
-│   │   ├── src/index.js       ← worker con sliding window rate limiter
-│   │   └── wrangler.toml
-│   ├── luna/README.md
-│   └── profe-magico/README.md
-├── demos/                     ← experimentos interactivos
-│   ├── hermes/index.html      ← demo Hermes bot
-│   ├── courier-tms/index.html ← route optimizer demo
-│   └── roleplay-chat/         ← roleplay chat demo
-└── docs/
+â”œâ”€â”€ AGENTS.md                  â† instrucciones del agente (root)
+â”œâ”€â”€ ENGRAM_CONTEXT.md          â† este archivo (root)
+â”œâ”€â”€ index.html                 â† landing page PRINCIPAL
+â”œâ”€â”€ web/index.html             â† landing page alternativa (vidriera)
+â”œâ”€â”€ assets/
+â”‚   â”œâ”€â”€ i18n.js                â† traducciones EN/ES/PT + KB stack entries
+â”‚   â”œâ”€â”€ reviews.js             â† cliente de reviews API
+â”‚   â”œâ”€â”€ anti-devtools.js       â† protecciÃ³n anti-DevTools (7 capas)
+â”‚   â”œâ”€â”€ styles.css             â† estilos globales
+â”‚   â””â”€â”€ terminal*.js           â† terminal animada
+â”œâ”€â”€ server/                    â† Express API (Render)
+â”‚   â”œâ”€â”€ index.js               â† reviews API (SQLite WAL, rate limiting)
+â”‚   â”œâ”€â”€ package.json
+â”‚   â””â”€â”€ data/reviews.db        â† SQLite DB
+â”œâ”€â”€ apps/                      â† productos reales
+â”‚   â”œâ”€â”€ reviews/               â† Cloudflare Worker (Reviews API alternativo)
+â”‚   â”‚   â”œâ”€â”€ src/index.js       â† worker con sliding window rate limiter
+â”‚   â”‚   â””â”€â”€ wrangler.toml
+â”‚   â”œâ”€â”€ luna/README.md
+â”‚   â””â”€â”€ profe-magico/README.md
+â”œâ”€â”€ demos/                     â† experimentos interactivos
+â”‚   â”œâ”€â”€ hermes/index.html      â† demo Hermes bot
+â”‚   â”œâ”€â”€ courier-tms/index.html â† route optimizer demo
+â”‚   â””â”€â”€ roleplay-chat/         â† roleplay chat demo
+â””â”€â”€ docs/
 ```
 
 ## Architecture
 
 ```
 Frontend (index.html)
-    ↓
+    â†“
 REVIEWS_API = 'https://reviews-afib.onrender.com'
-    ↓
-Express Server (Render.com)  ←─── primario activo
-  ├── SQLite WAL (reviews.db)
-  ├── express-rate-limit (global 30/min, POST 3/min, admin 20/min)
-  ├── RateLimit-* + Retry-After headers
-  └── CORS restringido a bytewizzardcreators.github.io + byte-wizzard.xyz
+    â†“
+Express Server (Render.com)  â†â”€â”€â”€ primario activo
+  â”œâ”€â”€ SQLite WAL (reviews.db)
+  â”œâ”€â”€ express-rate-limit (global 30/min, POST 3/min, admin 20/min)
+  â”œâ”€â”€ RateLimit-* + Retry-After headers
+  â””â”€â”€ CORS restringido a bytewizzardcreators.github.io + byte-wizzard.xyz
 
-Cloudflare Worker (apps/reviews/)  ←─── secundario (no activo hoy)
-  ├── Cloudflare KV (reviews)
-  ├── Sliding window rate limiter (POST 3/min, GET 60/min)
-  ├── X-RateLimit-* + Retry-After headers
-  └── Admin endpoints con token
+Cloudflare Worker (apps/reviews/)  â†â”€â”€â”€ secundario (no activo hoy)
+  â”œâ”€â”€ Cloudflare KV (reviews)
+  â”œâ”€â”€ Sliding window rate limiter (POST 3/min, GET 60/min)
+  â”œâ”€â”€ X-RateLimit-* + Retry-After headers
+  â””â”€â”€ Admin endpoints con token
 ```
 
 ## Security Layers (activas)
 
-1. **Rate limiting** — express-rate-limit + Cloudflare sliding window KV
-2. **Anti-DevTools** — script de 7 capas en todas las páginas
-3. **CORS** — origenes restringidos
-4. **Admin-Token** — endpoints de moderación protegidos
-5. **Input validation** — tamaño, formato, producto válido
-6. **Payload limit** — 10kb en Express
+1. **Rate limiting** â€” express-rate-limit + Cloudflare sliding window KV
+2. **Anti-DevTools** â€” script de 7 capas en todas las pÃ¡ginas
+3. **CORS** â€” origenes restringidos
+4. **Admin-Token** â€” endpoints de moderaciÃ³n protegidos
+5. **Input validation** â€” tamaÃ±o, formato, producto vÃ¡lido
+6. **Payload limit** â€” 10kb en Express
 
-## KB Stack — Hermes
+## KB Stack â€” Hermes
 
 Stack real (sin logos inventados):
 - **Edge**: Cloudflare Workers (Luna, reviews API)
-- **Frontend**: Vanilla JS + React + Leaflet (según el proyecto, cero framework pedorro)
+- **Frontend**: Vanilla JS + React + Leaflet (segÃºn el proyecto, cero framework pedorro)
 - **Storage**: SQLite WAL (server) + Cloudflare KV (edge)
-- **Data**: Data engineering, geospatial pipelines, transformación serverless
+- **Data**: Data engineering, geospatial pipelines, transformaciÃ³n serverless
 - **Systems**: Go (Logistics Intelligence, routing, clustering), Python (data processing, ML inference)
 - **Philosophy**: "Herramientas modernas, decisiones conscientes, cero humo."
 - **Certifications**: ISO SQL Security + ISO Security (son dos certificaciones separadas)
@@ -106,35 +107,35 @@ Stack real (sin logos inventados):
 ## Key Decisions
 
 - **Zero framework**: Vanilla HTML/CSS/JS. No React, no build step.
-- **Separación clara**: `web/` para landing, `demos/` para experimentos, `apps/` para productos reales.
-- **AGENTS.md en root**: OpenCode lo busca automáticamente en la raíz del proyecto.
-- **Demos usan APIs públicas**: Nominatim (geocoding) + OSRM (routing) — gratis, sin API key.
+- **SeparaciÃ³n clara**: `web/` para landing, `demos/` para experimentos, `apps/` para productos reales.
+- **AGENTS.md en root**: OpenCode lo busca automÃ¡ticamente en la raÃ­z del proyecto.
+- **Demos usan APIs pÃºblicas**: Nominatim (geocoding) + OSRM (routing) â€” gratis, sin API key.
 - **Terminal aesthetic**: Coherente con el brand.
 - **Mobile first**: Responsive grid, cards se apilan en mobile.
-- **Anti-DevTools antes que ofuscación**: Preferimos rate limiting + detección a ofuscar código.
-- **express-rate-limit > Map manual**: Producción-ready, headers estándar, Retry-After.
-- **KB stack con detalle real aprobado**: "dejalos así no más" — transparencia es el diferenciador.
+- **Anti-DevTools antes que ofuscaciÃ³n**: Preferimos rate limiting + detecciÃ³n a ofuscar cÃ³digo.
+- **express-rate-limit > Map manual**: ProducciÃ³n-ready, headers estÃ¡ndar, Retry-After.
+- **KB stack con detalle real aprobado**: "dejalos asÃ­ no mÃ¡s" â€” transparencia es el diferenciador.
 - **API Gateway rechazado**: Over-engineering para 6 endpoints. Seguridad actual es suficiente.
-- **CEO entry**: Hermes (no Luna) — Luna no está en la landing page.
+- **CEO entry**: Hermes (no Luna) â€” Luna no estÃ¡ en la landing page.
 
 ## Related Projects
 
-- `luna` — Cloudflare Worker, KV, Workers AI (Llama 3) — `C:\Proyectos\luna`
-- `courier-tms` — Planning inicial — `C:\Proyectos\courier-tms`
-- `clipcraft` — Backend render en Render.com
-- `profe-magico` — Frontend live en Render
-- `engram-main` — Central runtime, knowledge base, error registry
-- `reviews` — Cloudflare Worker (apps/reviews/) — alternativa serverless al Express API
+- `luna` â€” Cloudflare Worker, KV, Workers AI (Llama 3) â€” `C:\Proyectos\luna`
+- `courier-tms` â€” Planning inicial â€” `C:\Proyectos\courier-tms`
+- `clipcraft` â€” Backend render en Render.com
+- `profe-magico` â€” Frontend live en Render
+- `engram-main` â€” Central runtime, knowledge base, error registry
+- `reviews` â€” Cloudflare Worker (apps/reviews/) â€” alternativa serverless al Express API
 
-## 🌐 APIs Públicas
+## ðŸŒ APIs PÃºblicas
 
 Referencia completa: [`knowledge/apis/public-apis.md`](../engram-main/knowledge/apis/public-apis.md)
 
-**Quick Reference** (más usadas en demos):
-- Nominatim — geocoding gratuito (sin API key)
-- OSRM — routing y optimización de rutas
-- Leaflet + OpenStreetMap — mapas interactivos
-- REST Countries — datos de países
-- ExchangeRate-API — divisas
+**Quick Reference** (mÃ¡s usadas en demos):
+- Nominatim â€” geocoding gratuito (sin API key)
+- OSRM â€” routing y optimizaciÃ³n de rutas
+- Leaflet + OpenStreetMap â€” mapas interactivos
+- REST Countries â€” datos de paÃ­ses
+- ExchangeRate-API â€” divisas
 - Weather (Open-Meteo, OpenWeatherMap)
-- Ipify, ipapi — geolocalización por IP
+- Ipify, ipapi â€” geolocalizaciÃ³n por IP

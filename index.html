@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es" translate="no">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Byte Wizzard — AI-first systems</title>
+  <title>Byte Wizzard â€” AI-first systems</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
@@ -41,7 +41,7 @@
     }
     .section-title::before,
     .section-title::after {
-      content: ' ─── ';
+      content: ' â”€â”€â”€ ';
       color: #333;
     }
 
@@ -116,7 +116,7 @@
       z-index: 1;
     }
     .terminal-box::before {
-      content: '● ● ●';
+      content: 'â— â— â—';
       position: absolute;
       top: 16px;
       left: 24px;
@@ -313,6 +313,7 @@
     .product-card.courier::before { background: linear-gradient(90deg, #ff6b35, #ffb347); }
     .product-card.clipcraft::before { background: linear-gradient(90deg, #a855f7, #ec4899); }
     .product-card.profe::before { background: linear-gradient(90deg, #3b82f6, #06b6d4); }
+    .product-card.OmniConnect::before { background: linear-gradient(90deg, #6366f1, #3b82f6); }
 
     .product-status {
       display: inline-block;
@@ -357,7 +358,7 @@
       position: relative;
     }
     .product-features li::before {
-      content: '›';
+      content: 'â€º';
       position: absolute;
       left: 0;
       color: #555;
@@ -373,7 +374,7 @@
     }
     .product-card:hover .product-link { color: #00d488; }
 
-    /* ─── COMING SOON ─── */
+    /* â”€â”€â”€ COMING SOON â”€â”€â”€ */
     .coming-soon {
       padding: 60px 0 80px;
     }
@@ -476,7 +477,7 @@
       padding: 40px 0;
     }
 
-    /* ─── REVIEW FORM ─── */
+    /* â”€â”€â”€ REVIEW FORM â”€â”€â”€ */
     .review-form-section {
       margin-top: 48px;
       padding-top: 40px;
@@ -822,16 +823,16 @@
         education and intelligent assistants.
       </p>
       <div class="hero-status" data-i18n="hero.status">
-        <span class="dot"></span> 5 active products · 3 demos · AI-first
+        <span class="dot"></span> 5 active products Â· 3 demos Â· AI-first
       </div>
       <div class="hero-actions">
-        <a href="#products" class="btn btn-primary" data-i18n="hero.btnProducts">View Products →</a>
+        <a href="#products" class="btn btn-primary" data-i18n="hero.btnProducts">View Products â†’</a>
         <a href="#reviews" class="btn btn-outline" data-i18n="hero.btnReviews">Reviews</a>
         <a href="#contact" class="btn btn-outline" data-i18n="hero.btnContact">Contact</a>
       </div>
       <div class="hero-cursor"></div>
     </div>
-    <div class="scroll-indicator" data-i18n="hero.scroll">SCROLL ▼</div>
+    <div class="scroll-indicator" data-i18n="hero.scroll">SCROLL â–¼</div>
   </header>
 
   <!-- ============================================================
@@ -844,74 +845,95 @@
 
         <!-- Hermes -->
         <article class="product-card hermes">
-          <div class="product-icon" data-i18n="products.hermes.icon">⚡</div>
+          <div class="product-icon" data-i18n="products.hermes.icon">âš¡</div>
           <div class="product-status demo" data-i18n="products.hermes.status">DEMO</div>
           <h3 class="product-name" data-i18n="products.hermes.name">Hermes</h3>
           <p class="product-tagline" data-i18n="products.hermes.tagline">Byte Wizzard AI Assistant</p>
           <ul class="product-features" data-i18n-features="products.hermes.features">
             <li>Conocimiento completo del estudio</li>
             <li>Info de productos y demos</li>
-            <li>Stack tecnológico y visión</li>
+            <li>Stack tecnolÃ³gico y visiÃ³n</li>
             <li>Chat interactivo en vivo</li>
           </ul>
           <a href="demos/hermes/index.html" target="_blank" class="product-link" data-i18n="products.hermes.link">
-            → Try Demo Bot
+            â†’ Try Demo Bot
           </a>
         </article>
 
         <!-- RolePlay Chat -->
         <article class="product-card hermes">
-          <div class="product-icon" data-i18n="products.roleplay.icon">🎭</div>
+          <div class="product-icon" data-i18n="products.roleplay.icon">ðŸŽ­</div>
           <div class="product-status demo" data-i18n="products.roleplay.status">DEMO</div>
           <h3 class="product-name" data-i18n="products.roleplay.name">RolePlay Chat</h3>
           <p class="product-tagline" data-i18n="products.roleplay.tagline">Call Center Digital Simulation</p>
           <ul class="product-features" data-i18n-features="products.roleplay.features">
-            <li>Simulación de atención digital</li>
+            <li>SimulaciÃ³n de atenciÃ³n digital</li>
             <li>Escenarios: reclamos, soporte, ventas</li>
-            <li>Interacción agente-cliente en vivo</li>
+            <li>InteracciÃ³n agente-cliente en vivo</li>
             <li>Entrenamiento para postulantes</li>
             <li>Multi-canal (chat, WhatsApp)</li>
           </ul>
           <a href="demos/roleplay-chat/index.html" target="_blank" class="product-link" data-i18n="products.roleplay.link">
-            → Try Demo
+            â†’ Try Demo
           </a>
         </article>
 
         <!-- Courier TMS -->
         <article class="product-card courier">
-          <div class="product-icon" data-i18n="products.courier.icon">🚚</div>
+          <div class="product-icon" data-i18n="products.courier.icon">ðŸšš</div>
           <div class="product-status dev" data-i18n="products.courier.status">EN DESARROLLO</div>
           <h3 class="product-name" data-i18n="products.courier.name">Courier TMS</h3>
           <p class="product-tagline" data-i18n="products.courier.tagline">Logistics Intelligence System</p>
           <ul class="product-features" data-i18n-features="products.courier.features">
-            <li>Agrupación inteligente por zonas</li>
-            <li>Optimización de rutas (TSP)</li>
+            <li>AgrupaciÃ³n inteligente por zonas</li>
+            <li>OptimizaciÃ³n de rutas (TSP)</li>
             <li>Tracking GPS en tiempo real</li>
             <li>App para repartidores</li>
             <li>Panel administrativo completo</li>
-            <li>Importación de órdenes CSV</li>
+            <li>ImportaciÃ³n de Ã³rdenes CSV</li>
           </ul>
           <a href="demos/courier-tms/index.html" target="_blank" class="product-link" data-i18n="products.courier.link">
-            → Try Demo
+            â†’ Try Demo
           </a>
         </article>
 
-        <!-- Profe Mágico -->
+        <!-- Profe MÃ¡gico -->
         <article class="product-card profe">
-          <div class="product-icon" data-i18n="products.profe.icon">📚</div>
+          <div class="product-icon" data-i18n="products.profe.icon">ðŸ“š</div>
           <div class="product-status live" data-i18n="products.profe.status">LIVE</div>
-          <h3 class="product-name" data-i18n="products.profe.name">Profe Mágico</h3>
+          <h3 class="product-name" data-i18n="products.profe.name">Profe MÃ¡gico</h3>
           <p class="product-tagline" data-i18n="products.profe.tagline">AI Learning System</p>
           <ul class="product-features" data-i18n-features="products.profe.features">
-            <li>Enseñanza interactiva con IA</li>
-            <li>Traducción y audio automático</li>
-            <li>Contenido adaptado para niños</li>
-            <li>Ejercicios dinámicos</li>
+            <li>EnseÃ±anza interactiva con IA</li>
+            <li>TraducciÃ³n y audio automÃ¡tico</li>
+            <li>Contenido adaptado para niÃ±os</li>
+            <li>Ejercicios dinÃ¡micos</li>
             <li>Experiencia educativa guiada</li>
           </ul>
           <a href="https://profe-magico-frontend.onrender.com/" target="_blank" class="product-link" data-i18n="products.profe.link">
-            → Visit site
+            â†’ Visit site
           </a>
+        </article>
+
+        <!-- OmniConnect -->
+        <article class="product-card OmniConnect">
+          <div class="product-icon" data-i18n="products.OmniConnect.icon">🌐</div>
+          <div class="product-status dev" data-i18n="products.OmniConnect.status">EN DESARROLLO</div>
+          <h3 class="product-name" data-i18n="products.OmniConnect.name">OmniConnect</h3>
+          <p class="product-tagline" data-i18n="products.OmniConnect.tagline">Call Center Intelligence Platform</p>
+          <ul class="product-features" data-i18n-features="products.OmniConnect.features">
+            <li>19 KPIs modelados desde Dengo</li>
+            <li>3 perfiles: Admin, Supervisor, Operador</li>
+            <li>Dashboards en tiempo real con WebSocket</li>
+            <li>Gestión omnicanal (WhatsApp, email, phone)</li>
+            <li>Autenticación JWT + roles RBAC</li>
+            <li>Validación de entrada, paginación, rate limiting</li>
+            <li>Cache inteligente con invalidación por WebSocket</li>
+            <li>Timeouts configurables + slow query logging</li>
+            <li>Backup automático de SQLite con retención</li>
+            <li>Despliegue: Docker, PM2 o systemd</li>
+          </ul>
+          <span class="product-link" data-i18n="products.OmniConnect.link">Node.js · Express · SQLite WAL · WebSocket · JWT</span>
         </article>
 
       </div>
@@ -923,21 +945,21 @@
        ============================================================ -->
   <section class="coming-soon">
     <div class="container">
-      <h2 class="section-title" data-i18n="comingSoon.title">Próximamente</h2>
+      <h2 class="section-title" data-i18n="comingSoon.title">PrÃ³ximamente</h2>
       <div class="coming-soon-grid">
 
         <!-- ClipCraft -->
         <article class="product-card clipcraft">
-          <div class="product-icon" data-i18n="comingSoon.clipcraft.icon">📱</div>
+          <div class="product-icon" data-i18n="comingSoon.clipcraft.icon">ðŸ“±</div>
           <div class="product-status mvp" data-i18n="comingSoon.clipcraft.status">MVP Interno</div>
           <h3 class="product-name" data-i18n="comingSoon.clipcraft.name">ClipCraft</h3>
           <p class="product-tagline" data-i18n="comingSoon.clipcraft.tagline">Mobile Content Creation Platform</p>
           <ul class="product-features" data-i18n-features="comingSoon.clipcraft.features">
-            <li>Plataforma de creación de contenido multimedia</li>
-            <li>Edición de fotos y videos</li>
-            <li>Generación automática de videos</li>
+            <li>Plataforma de creaciÃ³n de contenido multimedia</li>
+            <li>EdiciÃ³n de fotos y videos</li>
+            <li>GeneraciÃ³n automÃ¡tica de videos</li>
           </ul>
-          <span class="product-link" data-i18n="comingSoon.clipcraft.status">→ MVP Interno</span>
+          <span class="product-link" data-i18n="comingSoon.clipcraft.status">â†’ MVP Interno</span>
         </article>
 
       </div>
@@ -952,32 +974,32 @@
       <h2 class="section-title" data-i18n="wwd.title">What We Do</h2>
       <div class="wwd-grid" data-i18n-wwd>
         <div class="wwd-item">
-          <div class="emoji">🧠</div>
+          <div class="emoji">ðŸ§ </div>
           <strong>AI Systems</strong>
           Intelligent automation for real processes
         </div>
         <div class="wwd-item">
-          <div class="emoji">⚙️</div>
+          <div class="emoji">âš™ï¸</div>
           <strong>Automation</strong>
           Reduce manual work through smart flows
         </div>
         <div class="wwd-item">
-          <div class="emoji">🚛</div>
+          <div class="emoji">ðŸš›</div>
           <strong>Logistics</strong>
           Route optimization &amp; live tracking
         </div>
         <div class="wwd-item">
-          <div class="emoji">🎓</div>
+          <div class="emoji">ðŸŽ“</div>
           <strong>Education</strong>
           AI-powered learning experiences
         </div>
         <div class="wwd-item">
-          <div class="emoji">📱</div>
+          <div class="emoji">ðŸ“±</div>
           <strong>Mobile</strong>
           React Native &amp; Expo apps
         </div>
         <div class="wwd-item">
-          <div class="emoji">☁️</div>
+          <div class="emoji">â˜ï¸</div>
           <strong>Cloud</strong>
           Cloudflare Workers &amp; edge computing
         </div>
@@ -992,12 +1014,12 @@
     <div class="container">
       <h2 class="section-title" data-i18n="vision.title">Vision</h2>
       <div class="vision-motto" data-i18n="vision.motto">
-        “We don’t build ideas. <span class="highlight">We build working systems.</span>”
+        â€œWe donâ€™t build ideas. <span class="highlight">We build working systems.</span>â€
       </div>
       <blockquote data-i18n="vision.quote">
-        Reducir trabajo manual a través de sistemas inteligentes<br>
+        Reducir trabajo manual a travÃ©s de sistemas inteligentes<br>
         que automatizan <strong>operaciones reales</strong> en empresas,<br>
-        logística y educación.
+        logÃ­stica y educaciÃ³n.
       </blockquote>
     </div>
   </section>
@@ -1067,37 +1089,37 @@
 
       <!-- Review form -->
       <div class="review-form-section" id="review-form-section">
-        <h3 data-i18n-form="title">Dejá tu reseña</h3>
+        <h3 data-i18n-form="title">DejÃ¡ tu reseÃ±a</h3>
         <form class="review-form" id="review-form">
           <div>
             <label for="review-author" data-i18n-form="nameLabel">Tu nombre</label>
-            <input type="text" id="review-author" required minlength="2" placeholder="María">
+            <input type="text" id="review-author" required minlength="2" placeholder="MarÃ­a">
           </div>
           <div>
             <label for="review-product" data-i18n-form="productLabel">Producto</label>
             <select id="review-product">
-              <option value="profe">Profe Mágico</option>
+              <option value="profe">Profe MÃ¡gico</option>
               <option value="courier">Courier TMS</option>
               <option value="hermes">Hermes - AI Assistant</option>
               <option value="clipcraft">ClipCraft</option>
             </select>
           </div>
           <div>
-            <label for="review-rating" data-i18n-form="ratingLabel">Calificación</label>
+            <label for="review-rating" data-i18n-form="ratingLabel">CalificaciÃ³n</label>
             <select id="review-rating">
-              <option value="5">★★★★★</option>
-              <option value="4">★★★★○</option>
-              <option value="3">★★★○○</option>
-              <option value="2">★★○○○</option>
-              <option value="1">★○○○○</option>
+              <option value="5">â˜…â˜…â˜…â˜…â˜…</option>
+              <option value="4">â˜…â˜…â˜…â˜…â—‹</option>
+              <option value="3">â˜…â˜…â˜…â—‹â—‹</option>
+              <option value="2">â˜…â˜…â—‹â—‹â—‹</option>
+              <option value="1">â˜…â—‹â—‹â—‹â—‹</option>
             </select>
           </div>
           <div></div>
           <div class="full-width">
             <label for="review-text" data-i18n-form="textLabel">Tu experiencia</label>
-            <textarea id="review-text" required minlength="10" placeholder="¿Qué te pareció el producto?"></textarea>
+            <textarea id="review-text" required minlength="10" placeholder="Â¿QuÃ© te pareciÃ³ el producto?"></textarea>
           </div>
-          <button type="submit" class="btn btn-primary btn-submit" data-i18n-form="submit">Enviar reseña</button>
+          <button type="submit" class="btn btn-primary btn-submit" data-i18n-form="submit">Enviar reseÃ±a</button>
           <div class="review-form-status" aria-live="polite"></div>
         </form>
       </div>
@@ -1110,12 +1132,12 @@
   <footer id="contact">
     <div class="brand" data-i18n="footer.brand">BYTE <span class="accent">WIZZARD</span></div>
     <p class="tagline" data-i18n="footer.tagline">AI &amp; Software Systems Studio</p>
-    <p class="built-by" data-i18n="footer.builtBy">Built by Matías Bagnasco — AI Systems Developer</p>
+    <p class="built-by" data-i18n="footer.builtBy">Built by MatÃ­as Bagnasco â€” AI Systems Developer</p>
     <div class="contact-links">
       <a href="mailto:bytewizzards@gmail.com">bytewizzards@gmail.com</a>
     </div>
     <div class="divider"></div>
-    <p class="copyright" data-i18n="footer.copyright">© 2026 Byte Wizzard — Real products. Real systems.</p>
+    <p class="copyright" data-i18n="footer.copyright">Â© 2026 Byte Wizzard â€” Real products. Real systems.</p>
   </footer>
 
   <script>
@@ -1125,7 +1147,7 @@
   <script src="assets/i18n.js"></script>
   <script src="assets/hermes-widget.js"></script>
 
-  <!-- ─── Scroll Reveal ─── -->
+  <!-- â”€â”€â”€ Scroll Reveal â”€â”€â”€ -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const observer = new IntersectionObserver((entries) => {

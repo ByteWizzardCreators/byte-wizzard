@@ -1,0 +1,842 @@
+﻿<!DOCTYPE html>
+<html lang="es" translate="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OmniConnect â€” Byte Wizzard Showcase</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0f;
+      color: #e0e0e0;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* â”€â”€â”€ HEADER â”€â”€â”€ */
+    .demo-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 24px;
+      background: #0d0d14;
+      border-bottom: 1px solid #1a1a2e;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .demo-header .brand {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 800;
+      font-size: 13px;
+      color: #555;
+    }
+    .demo-header .brand .accent { color: #00d488; }
+    .demo-header h1 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 700;
+      color: #e0e0e0;
+    }
+    .demo-header h1 span { color: #00d488; }
+    .demo-header .badge {
+      font-size: 9px;
+      background: #3b82f622;
+      color: #3b82f6;
+      border: 1px solid #3b82f633;
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+    }
+    .back-link {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: #666;
+      transition: color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .back-link:hover { color: #00d488; }
+
+    /* â”€â”€â”€ HERO â”€â”€â”€ */
+    .hero {
+      min-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 24px 40px;
+      position: relative;
+      text-align: center;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(59,130,246,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: #555;
+      margin-bottom: 24px;
+      letter-spacing: 0.15em;
+    }
+    .hero-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 800;
+      line-height: 1.05;
+      margin-bottom: 20px;
+      letter-spacing: -0.03em;
+    }
+    .hero-title .accent { background: linear-gradient(135deg, #3b82f6, #6366f1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero-title .sub { font-size: 0.45em; display: block; color: #555; margin-top: 8px; letter-spacing: 0.1em; -webkit-text-fill-color: #555; }
+    .hero-subtitle {
+      font-size: 1.05rem;
+      color: #888;
+      max-width: 560px;
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+    .hero-stats {
+      display: flex;
+      gap: 40px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: #666;
+      margin-bottom: 40px;
+    }
+    .hero-stats span { color: #3b82f6; font-weight: 700; }
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: #3b82f6;
+      background: rgba(59,130,246,0.08);
+      border: 1px solid rgba(59,130,246,0.2);
+      padding: 10px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+    .hero-cta:hover { background: rgba(59,130,246,0.15); border-color: rgba(59,130,246,0.4); transform: translateY(-2px); }
+
+    /* â”€â”€â”€ SCROLL INDICATOR â”€â”€â”€ */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      color: #444;
+      letter-spacing: 0.2em;
+      animation: scrollBounce 2s infinite;
+    }
+    @keyframes scrollBounce { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(8px); } }
+
+    /* â”€â”€â”€ SECTION â”€â”€â”€ */
+    section { padding: 80px 24px; }
+    .container { max-width: 1000px; margin: 0 auto; }
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: #555;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .section-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .section-desc {
+      font-size: 0.95rem;
+      color: #888;
+      max-width: 600px;
+      line-height: 1.7;
+      margin-bottom: 48px;
+    }
+
+    /* â”€â”€â”€ PROFILE CARDS â”€â”€â”€ */
+    .profile-grid {
+      display: grid;
+      gap: 24px;
+    }
+    .profile-card {
+      background: rgba(13,13,20,0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(26,26,46,0.6);
+      border-radius: 14px;
+      padding: 40px 36px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+    .profile-card:hover {
+      border-color: rgba(59,130,246,0.2);
+      transform: translateY(-3px);
+    }
+    .profile-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      opacity: 0.6;
+    }
+    .profile-card.admin::before { background: linear-gradient(90deg, #3b82f6, #6366f1); }
+    .profile-card.supervisor::before { background: linear-gradient(90deg, #00d488, #00aaff); }
+    .profile-card.operator::before { background: linear-gradient(90deg, #f59e0b, #ec4899); }
+    .profile-card .role-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 4px;
+      letter-spacing: 0.1em;
+      margin-bottom: 16px;
+    }
+    .profile-card.admin .role-tag { background: #3b82f622; color: #3b82f6; border: 1px solid #3b82f633; }
+    .profile-card.supervisor .role-tag { background: #00d48822; color: #00d488; border: 1px solid #00d48833; }
+    .profile-card.operator .role-tag { background: #f59e0b22; color: #f59e0b; border: 1px solid #f59e0b33; }
+    .profile-card .role-icon { font-size: 2rem; margin-bottom: 12px; }
+    .profile-card h3 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .profile-card .role-sub {
+      font-size: 0.8rem;
+      color: #666;
+      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 20px;
+    }
+    .profile-card ul { list-style: none; }
+    .profile-card ul li {
+      font-size: 0.88rem;
+      color: #999;
+      padding: 5px 0;
+      padding-left: 20px;
+      position: relative;
+    }
+    .profile-card ul li::before {
+      content: 'â–¸';
+      position: absolute;
+      left: 0;
+      color: #444;
+    }
+    .profile-card.admin ul li::before { color: #3b82f6; }
+    .profile-card.supervisor ul li::before { color: #00d488; }
+    .profile-card.operator ul li::before { color: #f59e0b; }
+
+    /* â”€â”€â”€ PROFILE DASHBOARD MOCKUPS â”€â”€â”€ */
+    .profile-dash {
+      margin-top: 24px;
+      background: rgba(10,10,15,0.6);
+      border: 1px solid rgba(26,26,46,0.4);
+      border-radius: 10px;
+      padding: 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .profile-dash .dash-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(26,26,46,0.4);
+    }
+    .profile-dash .dash-dots { display: flex; gap: 5px; }
+    .profile-dash .dash-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+    }
+    .profile-dash .dash-dot.r { background: #ef4444; }
+    .profile-dash .dash-dot.y { background: #f59e0b; }
+    .profile-dash .dash-dot.g { background: #10b981; }
+    .profile-dash .dash-title { color: #555; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; }
+    .profile-dash .dash-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 8px;
+    }
+    .profile-dash .dash-kpi {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 6px;
+      padding: 10px;
+      text-align: center;
+    }
+    .profile-dash .dash-kpi .kpi-val {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #e0e0e0;
+    }
+    .profile-dash .dash-kpi .kpi-label {
+      font-size: 0.55rem;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-top: 2px;
+    }
+    .profile-dash .dash-kpi.up .kpi-val { color: #10b981; }
+    .profile-dash .dash-kpi.mid .kpi-val { color: #f59e0b; }
+    .profile-dash .dash-kpi.down .kpi-val { color: #ef4444; }
+    .profile-dash .dash-kpi.info .kpi-val { color: #3b82f6; }
+    .profile-dash .dash-table {
+      margin-top: 8px;
+      overflow-x: auto;
+    }
+    .profile-dash table { width: 100%; border-collapse: collapse; font-size: 0.65rem; }
+    .profile-dash th, .profile-dash td { padding: 6px 8px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .profile-dash th { color: #555; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+    .profile-dash td { color: #888; }
+    .profile-dash tr:hover td { color: #e0e0e0; }
+
+    /* â”€â”€â”€ FEATURES GRID â”€â”€â”€ */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+    .feature-card {
+      background: rgba(13,13,20,0.75);
+      border: 1px solid rgba(26,26,46,0.6);
+      border-radius: 10px;
+      padding: 24px;
+      transition: all 0.3s;
+    }
+    .feature-card:hover { border-color: rgba(59,130,246,0.2); transform: translateY(-2px); }
+    .feature-card .f-icon { font-size: 1.5rem; margin-bottom: 12px; }
+    .feature-card h4 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .feature-card p {
+      font-size: 0.82rem;
+      color: #888;
+      line-height: 1.5;
+    }
+
+    /* â”€â”€â”€ TECH STACK â”€â”€â”€ */
+    .tech-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 20px;
+    }
+    .tech-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      padding: 4px 12px;
+      border-radius: 4px;
+      color: #777;
+      transition: all 0.2s;
+    }
+    .tech-tag:hover { border-color: #3b82f633; color: #3b82f6; background: #3b82f608; }
+
+    /* â”€â”€â”€ HERMES EMBED â”€â”€â”€ */
+    .hermes-section {
+      background: radial-gradient(ellipse at 50% 100%, rgba(0,212,136,0.03) 0%, transparent 60%);
+    }
+    .hermes-embed {
+      background: #0d0d14;
+      border: 1px solid #1a1a2e;
+      border-radius: 12px;
+      overflow: hidden;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .hermes-embed .hermes-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 20px;
+      border-bottom: 1px solid #1a1a2e;
+    }
+    .hermes-embed .hermes-avatar {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, #00d488, #00aaff);
+      border-radius: 50%;
+      display: flex;
+      align-items: center; justify-content: center;
+      font-size: 1rem;
+    }
+    .hermes-embed .hermes-info { flex: 1; }
+    .hermes-embed .hermes-name { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; font-weight: 600; }
+    .hermes-embed .hermes-status { font-size: 0.7rem; color: #10b981; }
+    .hermes-embed .hermes-body {
+      padding: 20px;
+      min-height: 300px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .hermes-embed .msg {
+      margin-bottom: 16px;
+      display: flex;
+      gap: 10px;
+    }
+    .hermes-embed .msg.bot { align-items: flex-start; }
+    .hermes-embed .msg .bubble {
+      background: #14141e;
+      border: 1px solid #1a1a2e;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: #ccc;
+      max-width: 80%;
+    }
+    .hermes-embed .msg.bot .bubble { border-top-left-radius: 4px; }
+    .hermes-embed .msg .bubble strong { color: #e0e0e0; }
+    .hermes-embed .msg .bubble em { color: #888; }
+    .hermes-embed .hermes-suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 12px 20px;
+      border-top: 1px solid #1a1a2e;
+    }
+    .hermes-embed .suggestion-chip {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      background: rgba(0,212,136,0.06);
+      border: 1px solid rgba(0,212,136,0.15);
+      color: #00d488;
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .hermes-embed .suggestion-chip:hover { background: rgba(0,212,136,0.12); border-color: rgba(0,212,136,0.3); }
+    .hermes-embed .hermes-footer {
+      padding: 12px 20px;
+      border-top: 1px solid #1a1a2e;
+      display: flex;
+      gap: 8px;
+    }
+    .hermes-embed .hermes-footer input {
+      flex: 1;
+      background: #14141e;
+      border: 1px solid #1a1a2e;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: #e0e0e0;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .hermes-embed .hermes-footer input:focus { border-color: #3b82f6; }
+    .hermes-embed .hermes-footer input::placeholder { color: #555; }
+    .hermes-embed .hermes-footer button {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      background: #00d488;
+      color: #0a0a0f;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .hermes-embed .hermes-footer button:hover { background: #00b870; }
+
+    /* â”€â”€â”€ CTA â”€â”€â”€ */
+    .cta-section {
+      text-align: center;
+      padding: 80px 24px;
+    }
+    .cta-section .hero-cta { font-size: 0.9rem; padding: 14px 32px; }
+
+    /* â”€â”€â”€ REVEAL ANIMATION â”€â”€â”€ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* â”€â”€â”€ RESPONSIVE â”€â”€â”€ */
+    @media (max-width: 600px) {
+      .hero-title { font-size: 2rem; }
+      .hero-stats { flex-direction: column; gap: 8px; align-items: center; }
+      .profile-card { padding: 28px 20px; }
+      .profile-dash .dash-grid { grid-template-columns: repeat(2, 1fr); }
+      .demo-header h1 { font-size: 12px; }
+      section { padding: 50px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- â•â•â• HEADER â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <header class="demo-header">
+    <a href="../../index.html" class="back-link">â† Byte Wizzard</a>
+    <h1><span>OmniConnect</span> Â· Showcase</h1>
+    <span class="badge">WORKING SYSTEM</span>
+  </header>
+
+  <!-- â•â•â• HERO â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <section class="hero">
+    <div class="hero-label">./OmniConnect --intro</div>
+    <h1 class="hero-title">
+      <span class="accent">OmniConnect</span>
+      <span class="sub">Call Center Intelligence Platform</span>
+    </h1>
+    <p class="hero-subtitle">
+      Plataforma integral de gestiÃ³n omnicanal para call centers.
+      Dashboards analÃ­ticos en tiempo real, KPIs replicando Dengo,
+      y perfiles diferenciados para <strong>Admin</strong>, 
+      <strong>Supervisor</strong> y <strong>Operador</strong>.
+    </p>
+    <div class="hero-stats">
+      <span>200+</span> Agents Â· <span>19</span> KPIs Â· <span>3</span> Profiles Â· <span>Real-time</span>
+    </div>
+    <a href="#profiles" class="hero-cta">â–¼ Explorar Perfiles</a>
+    <div class="scroll-indicator">SCROLL â–¼</div>
+  </section>
+
+  <!-- â•â•â• WHAT IS OmniConnect â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <section id="about">
+    <div class="container">
+      <div class="reveal">
+        <div class="section-label">./OmniConnect --about</div>
+        <h2 class="section-title">Â¿QuÃ© es OmniConnect?</h2>
+        <p class="section-desc" style="max-width:700px;">
+          OmniConnect es un sistema de gestiÃ³n de call center omnicanal desarrollado en Node.js + SQLite.
+          No es un demo ni un prototipo â€” es un sistema funcional con WebSockets en tiempo real,
+          dashboards analÃ­ticos con 19 KPIs, perfiles con permisos diferenciados,
+          y asignaciÃ³n automÃ¡tica round-robin de interacciones.
+        </p>
+      </div>
+      <div class="features-grid" style="margin-top:32px;">
+        <div class="feature-card reveal">
+          <div class="f-icon">ðŸ“Š</div>
+          <h4>Dashboards AnalÃ­ticos</h4>
+          <p>KPIs en tiempo real replicando Dengo: TMO, ocupaciÃ³n, conversiÃ³n, NDA, ACW, GPH, SPH. Tablas mensuales, charts CSS y filtros dinÃ¡micos.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="f-icon">ðŸ”Œ</div>
+          <h4>WebSocket en Vivo</h4>
+          <p>ConexiÃ³n persistente con el servidor. Las mÃ©tricas se actualizan automÃ¡ticamente cuando ocurre una interacciÃ³n nueva o cambia un estado.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="f-icon">ðŸ‘¥</div>
+          <h4>3 Perfiles</h4>
+          <p>Admin (gestiÃ³n total), Supervisor (monitoreo + reportes), Operador (bandeja de interacciones). Cada uno con su interfaz y permisos especÃ­ficos.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="f-icon">ðŸ”„</div>
+          <h4>Omnicanal Real</h4>
+          <p>WhatsApp, email, phone, social media. AsignaciÃ³n automÃ¡tica round-robin, colas inteligentes y SLA tracking por interacciÃ³n.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="f-icon">ðŸ“ˆ</div>
+          <h4>MÃ©tricas Reales</h4>
+          <p>19 KPIs modelados desde el dashboard de Dengo (Power BI). OcupaciÃ³n Erlang, utilizaciÃ³n, TMO por agente, tendencias mensuales.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="f-icon">ðŸ”</div>
+          <h4>Auth + Roles</h4>
+          <p>AutenticaciÃ³n JWT con middleware. Rutas protegidas por rol. Cada perfil accede solo a lo que necesita.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- â•â•â• PROFILES â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <section id="profiles" style="background: radial-gradient(ellipse at 50% 0%, rgba(59,130,246,0.03) 0%, transparent 60%);">
+    <div class="container">
+      <div class="reveal">
+        <div class="section-label">./OmniConnect --profiles</div>
+        <h2 class="section-title">Tres Perfiles. Un Sistema.</h2>
+        <p class="section-desc">
+          OmniConnect se adapta al rol de cada usuario. Desde la visiÃ³n global del Admin
+          hasta el dÃ­a a dÃ­a del Operador, cada perfil tiene exactamente lo que necesita.
+        </p>
+      </div>
+
+      <div class="profile-grid">
+
+        <!-- â”€â”€â”€ ADMIN â”€â”€â”€ -->
+        <div class="profile-card admin reveal">
+          <div class="role-tag">ðŸ‘‘ ADMIN</div>
+          <h3>Administrador</h3>
+          <p class="role-sub">VisiÃ³n global + control total</p>
+          <ul>
+            <li>Dashboard analÃ­tico con todos los KPIs consolidados</li>
+            <li>Panel de administraciÃ³n: usuarios, campaÃ±as, equipos</li>
+            <li>GestiÃ³n de campos dinÃ¡micos y formularios</li>
+            <li>Acceso a reportes exportables</li>
+            <li>SupervisiÃ³n de todos los agentes en tiempo real</li>
+            <li>ConfiguraciÃ³n de reglas de asignaciÃ³n y SLA</li>
+          </ul>
+          <div class="profile-dash">
+            <div class="dash-header">
+              <div class="dash-dots"><span class="dash-dot r"></span><span class="dash-dot y"></span><span class="dash-dot g"></span></div>
+              <span class="dash-title">Dashboard Admin Â· Vista General</span>
+            </div>
+            <div class="dash-grid">
+              <div class="dash-kpi up"><div class="kpi-val">1,247</div><div class="kpi-label">Recibidas Hoy</div></div>
+              <div class="dash-kpi up"><div class="kpi-val">92.3%</div><div class="kpi-label">% AtenciÃ³n</div></div>
+              <div class="dash-kpi mid"><div class="kpi-val">245s</div><div class="kpi-label">TMO</div></div>
+              <div class="dash-kpi up"><div class="kpi-val">78%</div><div class="kpi-label">OcupaciÃ³n</div></div>
+              <div class="dash-kpi info"><div class="kpi-val">24/32</div><div class="kpi-label">Agentes</div></div>
+            </div>
+            <div class="dash-table">
+              <table>
+                <tr><th>Agente</th><th>Interacciones</th><th>TMO</th><th>ConversiÃ³n</th><th>Estado</th></tr>
+                <tr><td>sherligan.gomez</td><td>6,860</td><td>245s</td><td>57%</td><td style="color:#10b981;">Disponible</td></tr>
+                <tr><td>carlos.rodriguez</td><td>5,920</td><td>312s</td><td>43%</td><td style="color:#f59e0b;">Descanso</td></tr>
+                <tr><td>ana.martinez</td><td>7,145</td><td>198s</td><td>71%</td><td style="color:#10b981;">Disponible</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- â”€â”€â”€ SUPERVISOR â”€â”€â”€ -->
+        <div class="profile-card supervisor reveal">
+          <div class="role-tag">ðŸ” SUPERVISOR</div>
+          <h3>Supervisor</h3>
+          <p class="role-sub">Monitoreo de equipos + reportes operativos</p>
+          <ul>
+            <li>Dashboard con KPIs de su equipo asignado</li>
+            <li>Panel de supervisiÃ³n en vivo de agentes</li>
+            <li>Reportes de rendimiento por agente y campaÃ±a</li>
+            <li>Tablero de control con mÃ©tricas clave</li>
+            <li>Alertas de SLA y rendimiento</li>
+            <li>Historial de interacciones del equipo</li>
+          </ul>
+          <div class="profile-dash">
+            <div class="dash-header">
+              <div class="dash-dots"><span class="dash-dot r"></span><span class="dash-dot y"></span><span class="dash-dot g"></span></div>
+              <span class="dash-title">Dashboard Supervisor Â· Equipo Ventas</span>
+            </div>
+            <div class="dash-grid" style="grid-template-columns:repeat(3,1fr);">
+              <div class="dash-kpi up"><div class="kpi-val">86%</div><div class="kpi-label">ConversiÃ³n</div></div>
+              <div class="dash-kpi mid"><div class="kpi-val">228s</div><div class="kpi-label">TMO Prom</div></div>
+              <div class="dash-kpi info"><div class="kpi-val">8</div><div class="kpi-label">Agentes Online</div></div>
+            </div>
+            <div class="dash-table">
+              <table>
+                <tr><th>Agente</th><th>Llamadas</th><th>Ventas</th><th>Conv.</th><th>TMO</th><th>Status</th></tr>
+                <tr><td>operador1</td><td>166</td><td>0</td><td>0%</td><td>0:00</td><td style="color:#10b981;">Disponible</td></tr>
+                <tr><td>operador3</td><td>162</td><td>0</td><td>0%</td><td>0:00</td><td style="color:#10b981;">Disponible</td></tr>
+                <tr><td>operador4</td><td>150</td><td>0</td><td>0%</td><td>0:00</td><td style="color:#10b981;">Disponible</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- â”€â”€â”€ OPERATOR â”€â”€â”€ -->
+        <div class="profile-card operator reveal">
+          <div class="role-tag">ðŸŽ§ OPERATOR</div>
+          <h3>Operador</h3>
+          <p class="role-sub">Bandeja de interacciones + atenciÃ³n omnicanal</p>
+          <ul>
+            <li>Bandeja unificada con interacciones entrantes</li>
+            <li>AtenciÃ³n omnicanal: chat, WhatsApp, email, llamada</li>
+            <li>Historial de interacciones propias</li>
+            <li>Cambio de estado: disponible, descanso, no disponible</li>
+            <li>Notificaciones en tiempo real de nuevas interacciones</li>
+            <li>MÃ©tricas personales: TMO, conversiÃ³n, ACW</li>
+          </ul>
+          <div class="profile-dash">
+            <div class="dash-header">
+              <div class="dash-dots"><span class="dash-dot r"></span><span class="dash-dot y"></span><span class="dash-dot g"></span></div>
+              <span class="dash-title">Panel Operador Â· Bandeja Activa</span>
+            </div>
+            <div class="dash-table">
+              <table>
+                <tr><th>Contacto</th><th>Canal</th><th>Motivo</th><th>Estado</th><th>Espera</th></tr>
+                <tr><td>MarÃ­a GarcÃ­a</td><td style="color:#25d366;">WhatsApp</td><td>Consulta sobre producto</td><td style="color:#f59e0b;">En espera</td><td>00:45</td></tr>
+                <tr><td>Juan PÃ©rez</td><td style="color:#3b82f6;">Email</td><td>Seguimiento pedido</td><td style="color:#10b981;">Asignada</td><td>01:20</td></tr>
+                <tr><td>Ana MartÃ­nez</td><td style="color:#ef4444;">Phone</td><td>Reclamo facturaciÃ³n</td><td style="color:#10b981;">En curso</td><td>00:32</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- â•â•â• HERMES â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <section class="hermes-section" id="hermes">
+    <div class="container">
+      <div class="reveal" style="text-align:center;">
+        <div class="section-label">./hermes --explain OmniConnect</div>
+        <h2 class="section-title">Hermes te lo explica</h2>
+        <p class="section-desc" style="margin:0 auto 40px;">
+          El asistente IA de Byte Wizzard conoce OmniConnect al detalle.
+          Preguntale lo que quieras.
+        </p>
+      </div>
+
+      <div class="hermes-embed reveal">
+        <div class="hermes-header">
+          <div class="hermes-avatar">âš¡</div>
+          <div class="hermes-info">
+            <div class="hermes-name">Hermes</div>
+            <div class="hermes-status">â— Online â€” OmniConnect Specialist</div>
+          </div>
+        </div>
+        <div class="hermes-body" id="hermes-chat">
+          <div class="msg bot">
+            <div class="bubble">
+              <strong>Â¡Hola!</strong> Soy <strong>Hermes</strong> âš¡, el asistente de Byte Wizzard.<br><br>
+              Conozco <strong>OmniConnect</strong> al detalle â€” es una plataforma de gestiÃ³n de call centers
+              omnicanal con dashboards analÃ­ticos en tiempo real, perfiles diferenciados,
+              y 19 KPIs modelados desde Dengo.<br><br>
+              HacÃ© clic en cualquier sugerencia o escribime tu pregunta:
+            </div>
+          </div>
+        </div>
+        <div class="hermes-suggestions" id="hermes-suggestions">
+          <span class="suggestion-chip" onclick="askHermes('What is OmniConnect?')">Â¿QuÃ© es OmniConnect?</span>
+          <span class="suggestion-chip" onclick="askHermes('Tell me about OmniConnect profiles')">Perfiles (Admin, Supervisor, Op.)</span>
+          <span class="suggestion-chip" onclick="askHermes('What KPIs does OmniConnect have?')">Â¿QuÃ© KPIs tiene?</span>
+          <span class="suggestion-chip" onclick="askHermes('OmniConnect tech stack')">TecnologÃ­as</span>
+        </div>
+        <div class="hermes-footer">
+          <input type="text" id="hermes-input" placeholder="Preguntale a Hermes sobre OmniConnect..." onkeydown="if(event.key==='Enter') askHermes(this.value)">
+          <button onclick="askHermes(document.getElementById('hermes-input').value)">Enviar</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- â•â•â• TECH STACK â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <section id="tech">
+    <div class="container">
+      <div class="reveal">
+        <div class="section-label">./OmniConnect --stack</div>
+        <h2 class="section-title">TecnologÃ­as</h2>
+        <p class="section-desc">
+          Stack moderno, eficiente, sin sobreingenierÃ­a.
+          Construido con tecnologÃ­as que escalan desde el dÃ­a uno.
+        </p>
+        <div class="tech-tags">
+          <span class="tech-tag">Node.js</span>
+          <span class="tech-tag">Express</span>
+          <span class="tech-tag">SQLite WAL</span>
+          <span class="tech-tag">WebSocket</span>
+          <span class="tech-tag">JWT Auth</span>
+          <span class="tech-tag">Vanilla JS</span>
+          <span class="tech-tag">HTML5</span>
+          <span class="tech-tag">CSS3 Grid</span>
+          <span class="tech-tag">REST API</span>
+          <span class="tech-tag">Better-SQLite3</span>
+          <span class="tech-tag">Socket.IO</span>
+          <span class="tech-tag">10+ endpoints</span>
+          <span class="tech-tag">Middleware RBAC</span>
+          <span class="tech-tag">Dengo KPIs</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- â•â•â• CTA â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <section class="cta-section" id="cta">
+    <div class="reveal">
+      <h2 class="section-title" style="margin-bottom:20px;">Â¿QuerÃ©s verlo en acciÃ³n?</h2>
+      <p style="color:#888;margin-bottom:32px;max-width:500px;margin-left:auto;margin-right:auto;font-size:0.9rem;line-height:1.6;">
+        OmniConnect corre en localhost con datos de prueba. PodÃ©s explorar el cÃ³digo
+        o pedir una demo completa con datos reales.
+      </p>
+      <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+        <a href="http://localhost:3000" target="_blank" class="hero-cta" style="font-size:0.85rem;">ðŸš€ Abrir OmniConnect</a>
+        <a href="https://github.com/ByteWizzardCreators/byte-wizzard" target="_blank" class="hero-cta" style="font-size:0.85rem;background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.1);color:#888;">Ver en GitHub</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- â•â•â• FOOTER â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <footer style="padding:24px;text-align:center;border-top:1px solid #1a1a2e;">
+    <p style="font-size:0.7rem;color:#444;font-family:'JetBrains Mono',monospace;">
+      Â© 2026 Byte Wizzard â€” <span style="color:#555;">OmniConnect Showcase</span>
+    </p>
+  </footer>
+
+  <script>
+    // â”€â”€â”€ REVEAL ON SCROLL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // â”€â”€â”€ HERMES KNOWLEDGE BASE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    const HERMES_KB = {
+      'OmniConnect intro': `<strong>OmniConnect</strong> es una plataforma de gestiÃ³n de call centers omnicanal, construida completamente desde cero con <strong>Node.js + SQLite</strong>. No es un demo ni un prototipo â€” es un sistema funcional con WebSockets en tiempo real, dashboards analÃ­ticos con 19 KPIs modelados desde <strong>Dengo</strong> (el dashboard de Power BI que usan en Rossi), y perfiles con permisos diferenciados para Admin, Supervisor y Operador.<br><br>Actualmente gestiona <strong>631 interacciones</strong> y <strong>2985 eventos de estado</strong> en su base de datos SQLite. Soporta canales WhatsApp, email, phone y social media.`,
+      'what is OmniConnect': `<strong>OmniConnect</strong> es una plataforma de gestiÃ³n de call centers omnicanal, construida completamente desde cero con <strong>Node.js + SQLite</strong>. No es un demo ni un prototipo â€” es un sistema funcional con WebSockets en tiempo real, dashboards analÃ­ticos con 19 KPIs modelados desde <strong>Dengo</strong> (el dashboard de Power BI que usan en Rossi), y perfiles con permisos diferenciados para Admin, Supervisor y Operador.<br><br>Actualmente gestiona <strong>631 interacciones</strong> y <strong>2985 eventos de estado</strong> en su base de datos SQLite. Soporta canales WhatsApp, email, phone y social media.`,
+      'profiles': `OmniConnect tiene <strong>3 perfiles</strong> con interfaces y permisos distintos:<br><br><strong>ðŸ‘‘ Admin</strong> â€” Dashboard global con todos los KPIs, panel de administraciÃ³n de usuarios/campaÃ±as/equipos, gestiÃ³n de campos dinÃ¡micos, reportes exportables. VisiÃ³n de 360Â°.<br><br><strong>ðŸ” Supervisor</strong> â€” Monitoreo de equipos asignados, KPIs del equipo, reportes de rendimiento, alertas de SLA. Perfecto para Team Leaders.<br><br><strong>ðŸŽ§ Operador</strong> â€” Bandeja unificada de interacciones omnicanal, atenciÃ³n en vivo, historial propio, cambio de estado, mÃ©tricas personales.<br><br>Cada perfil usa <strong>autenticaciÃ³n JWT</strong> con middlewares que protegen rutas segÃºn el rol.`,
+      'kpis': `OmniConnect tiene <strong>19 KPIs</strong> modelados desde el dashboard de Dengo (Power BI):<br><br><strong>Core:</strong> Recibidas, Atendidas, Abandonadas, % AtenciÃ³n, TMO (tiempo medio de operaciÃ³n)<br><br><strong>Secundarios:</strong> ConversiÃ³n, ACW (after-call work), OcupaciÃ³n (Erlang), UtilizaciÃ³n, NDA (nivel de atenciÃ³n), GPH (gestiones por hora), SPH (ventas por hora), TPR (tiempo promedio de respuesta)<br><br><strong>Adicionales:</strong> Agentes disponibles, tendencias mensuales, breakdown por agente, SLA tracking (30s threshold)<br><br>Los KPIs se calculan en SQL puro con funciones ventana y se sirven via REST + WebSocket.`,
+      'tech stack': `<strong>Stack de OmniConnect:</strong><br><br>â€¢ <strong>Backend:</strong> Node.js + Express + Better-SQLite3 (WAL mode)<br>â€¢ <strong>Tiempo real:</strong> Socket.IO + polling fallback cada 60s<br>â€¢ <strong>Auth:</strong> JWT con middleware RBAC (admin/supervisor/operator)<br>â€¢ <strong>Frontend:</strong> Vanilla JS + HTML + CSS Grid (sin frameworks)<br>â€¢ <strong>Charts:</strong> Barras CSS vanilla, sin librerÃ­as externas<br>â€¢ <strong>DB:</strong> SQLite WAL con 8MB cache, 256MB mmap, synchronous=NORMAL<br>â€¢ <strong>Endpoints:</strong> 10+ REST endpoints + WebSocket events<br>â€¢ <strong>KPIs:</strong> Modelados desde Dengo (Power BI) con thresholds de color coding`,
+      'dengo': `Â¡Buena pregunta! Los KPIs de OmniConnect estÃ¡n modelados desde <strong>Dengo</strong>, el dashboard de Power BI que usan en Rossi (200+ agentes).<br><br>Extraje los queries de ejecuciÃ³n directa del iframe de Power BI â€” entrando al iframe, yendo a la pestaÃ±a Network, filtrando por "executeQueries", y copiando el JSON de respuesta.<br><br>Los ranges reales de Dengo:<br>â€¢ TMO: 157-433 segundos<br>â€¢ OcupaciÃ³n: 27-82%<br>â€¢ UtilizaciÃ³n: 84-95%<br>â€¢ ACW: 2-18%<br>â€¢ ConversiÃ³n: 0-99%<br><br>Color coding: â‰¥85% verde, â‰¥70% amarillo, &lt;70% rojo. TMO â‰¤300s verde, â‰¤420s amarillo. OcupaciÃ³n 65-80% es la zona Ã³ptima Erlang.`,
+      'default': `Puedo contarte todo sobre OmniConnect. ElegÃ­ una de estas opciones:<br><br>â€¢ <strong>"What is OmniConnect?"</strong> â€” quÃ© es y para quÃ© sirve<br>â€¢ <strong>"Tell me about OmniConnect profiles"</strong> â€” Admin, Supervisor, Operador<br>â€¢ <strong>"What KPIs does OmniConnect have?"</strong> â€” los 19 KPIs modelados desde Dengo<br>â€¢ <strong>"OmniConnect tech stack"</strong> â€” Node.js, SQLite, WebSocket, Vanilla JS<br>â€¢ <strong>"Tell me about Dengo"</strong> â€” cÃ³mo se modelaron los KPIs desde Power BI`,
+    };
+
+    function askHermes(input) {
+      const chat = document.getElementById('hermes-chat');
+      const inputEl = document.getElementById('hermes-input');
+      const text = (typeof input === 'string' ? input : input?.value || '').trim();
+      if (!text) return;
+
+      // Add user message
+      chat.innerHTML += `<div class="msg" style="justify-content:flex-end;"><div class="bubble" style="background:#1a1a2e;border-top-right-radius:4px;border-color:#2a2a3e;">${text}</div></div>`;
+      if (inputEl) inputEl.value = '';
+      chat.scrollTop = chat.scrollHeight;
+
+      // Find answer
+      const lower = text.toLowerCase();
+      let answer = HERMES_KB['default'];
+      if (lower.includes('what is OmniConnect') || lower.includes('quÃ‰ es') || lower.includes('que es') || lower.includes('explica') || lower.includes('about') || lower.includes('intro')) {
+        answer = HERMES_KB['what is OmniConnect'];
+      } else if (lower.includes('profile') || lower.includes('perfil') || lower.includes('admin') || lower.includes('supervisor') || lower.includes('operator') || lower.includes('operador') || lower.includes('rol')) {
+        answer = HERMES_KB['profiles'];
+      } else if (lower.includes('kpi') || lower.includes('mÃ©trica') || lower.includes('metrica') || lower.includes('indicador') || lower.includes('tmo') || lower.includes('conversion') || lower.includes('ocupacion')) {
+        answer = HERMES_KB['kpis'];
+      } else if (lower.includes('tech') || lower.includes('stack') || lower.includes('tecnolog') || lower.includes('node') || lower.includes('sqlite') || lower.includes('framework') || lower.includes('backend') || lower.includes('frontend')) {
+        answer = HERMES_KB['tech stack'];
+      } else if (lower.includes('dengo') || lower.includes('power bi') || lower.includes('powerbi') || lower.includes('query') || lower.includes('execute')) {
+        answer = HERMES_KB['dengo'];
+      }
+
+      // Bot typing delay
+      setTimeout(() => {
+        chat.innerHTML += `<div class="msg bot"><div class="bubble">${answer}</div></div>`;
+        chat.scrollTop = chat.scrollHeight;
+      }, 400);
+    }
+  </script>
+</body>
+</html>
