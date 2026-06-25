@@ -141,20 +141,10 @@
   })();
 
   // ───────────────────────────────────────────────────────────────
-  // 5. TEXT SELECTION & DRAG RESTRICTION
+  // 5. TEXT SELECTION — enabled for usability
   // ───────────────────────────────────────────────────────────────
-  document.addEventListener('selectstart', function (e) {
-    // Allow selection inside input/textarea elements for forms
-    var tag = e.target.tagName;
-    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
-    e.preventDefault();
-    return false;
-  });
-
-  document.addEventListener('dragstart', function (e) {
-    e.preventDefault();
-    return false;
-  });
+  // Selection is allowed so visitors can copy technical content.
+  // Right-click context menu and keyboard shortcuts remain blocked.
 
   // ───────────────────────────────────────────────────────────────
   // 6. IFRAME EMBED BLOCK (CSP meta tag)
