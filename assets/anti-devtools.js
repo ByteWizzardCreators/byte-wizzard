@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Anti-DevTools — Byte Wizzard Landing Page Protection
  *
  * Multilayer deterrent against casual inspection:
@@ -141,11 +141,11 @@
   })();
 
   // ───────────────────────────────────────────────────────────────
-  // 5. TEXT SELECTION — enabled for usability
+  // 5. TEXT SELECTION & DRAG RESTRICTION
   // ───────────────────────────────────────────────────────────────
-  // Selection is allowed so visitors can copy technical content.
-  // Right-click context menu and keyboard shortcuts remain blocked.
-
+// Text selection: fully enabled for non-input elements, link right-click, and native
+// browser selection. Disabled only on <img> to prevent easy screenshot theft.
+// The original selectstart/dragstart anti-copy code was removed to avoid annoyance.
   // ───────────────────────────────────────────────────────────────
   // 6. IFRAME EMBED BLOCK (CSP meta tag)
   // ───────────────────────────────────────────────────────────────
