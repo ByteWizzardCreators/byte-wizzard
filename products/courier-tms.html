@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es" translate="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Courier TMS — Byte Wizzard</title>
+  <meta name="description" content="Sistema de inteligencia logística: optimización de rutas, agrupación por zonas y tracking GPS en tiempo real para empresas de delivery.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body data-product="courier-tms">
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="../index.html" class="brand">BYTE <span class="accent">WIZZARD</span></a>
+      <div class="nav-links">
+        <a href="../index.html#products" data-i18n="nav.products"></a>
+        <a href="../index.html#reviews" data-i18n="nav.reviews"></a>
+        <a href="../index.html#contact" data-i18n="nav.contact"></a>
+      </div>
+      <div class="lang-switcher">
+        <button class="lang-btn active" data-lang="es" onclick="I18N.setLang('es')">ES</button>
+        <button class="lang-btn" data-lang="en" onclick="I18N.setLang('en')">EN</button>
+        <button class="lang-btn" data-lang="pt" onclick="I18N.setLang('pt')">PT</button>
+      </div>
+    </div>
+  </nav>
+  <main class="pdp">
+    <article class="pdp-hero">
+      <div class="pdp-hero-inner">
+        <div id="pdp-icon" class="pdp-icon"></div>
+        <span id="pdp-badge" class="pdp-badge"></span>
+        <h1 id="pdp-name" class="pdp-name"></h1>
+        <p id="pdp-tagline" class="pdp-tagline"></p>
+        <div id="pdp-actions" class="pdp-actions"></div>
+      </div>
+    </article>
+    <section class="pdp-section">
+      <h2 class="pdp-section-title" data-i18n="pdp.sectionDescription"></h2>
+      <p id="pdp-description" class="pdp-description"></p>
+    </section>
+    <section class="pdp-section">
+      <h2 class="pdp-section-title" data-i18n="pdp.sectionSpecs"></h2>
+      <table id="pdp-specs" class="pdp-specs">
+        <tbody id="pdp-specs-body"></tbody>
+      </table>
+    </section>
+    <section class="pdp-section">
+      <h2 class="pdp-section-title" data-i18n="pdp.sectionUseCases"></h2>
+      <ul id="pdp-usecases" class="pdp-usecases"></ul>
+    </section>
+    <a id="pdp-back" class="pdp-back" href="../index.html" data-i18n="pdp.back"></a>
+  </main>
+  <script src="../assets/i18n.js"></script>
+  <script src="../assets/products.js"></script>
+  <script src="../assets/products-ui.js"></script>
+</body>
+</html>

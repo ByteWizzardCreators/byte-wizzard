@@ -34,6 +34,11 @@ const I18N = (() => {
         status: '<span class="dot"></span> <span data-products-count></span> productos activos · <span data-demos-count></span> demos · AI-first',
       },
 
+      // ─── PRODUCTS SECTION (landing grid title) ───
+      products: {
+        title: 'Productos',
+      },
+
       // ─── CARD CTA (landing cards) ───
       cardCta: {
         pdp: 'Ver ficha',
@@ -247,6 +252,11 @@ const I18N = (() => {
         status: '<span class="dot"></span> <span data-products-count></span> active products · <span data-demos-count></span> demos · AI-first',
       },
 
+      // ─── PRODUCTS SECTION (landing grid title) ───
+      products: {
+        title: 'Products',
+      },
+
       // ─── CARD CTA (landing cards) ───
       cardCta: {
         pdp: 'View details',
@@ -447,6 +457,11 @@ const I18N = (() => {
         scroll: 'ROLAR ▼',
         // counts are filled by products-ui.js from the PRODUCTS registry
         status: '<span class="dot"></span> <span data-products-count></span> produtos ativos · <span data-demos-count></span> demos · AI-first',
+      },
+
+      // ─── PRODUCTS SECTION (landing grid title) ───
+      products: {
+        title: 'Produtos',
       },
 
       // ─── CARD CTA (landing cards) ───
