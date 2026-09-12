@@ -149,6 +149,7 @@ const I18N = (() => {
         brand: 'BYTE <span class="accent">WIZZARD</span>',
         tagline: 'Estudio de Sistemas IA & Software',
         builtBy: 'Built by Matías Bagnasco — AI Systems Developer',
+        designerBy: 'Jennifer Lado Product Design & QA',
         copyright: '© 2026 Byte Wizzard — Productos reales. Sistemas reales.',
       },
 
@@ -356,6 +357,7 @@ const I18N = (() => {
         brand: 'BYTE <span class="accent">WIZZARD</span>',
         tagline: 'AI & Software Systems Studio',
         builtBy: 'Built by Matías Bagnasco — AI Systems Developer',
+        designerBy: 'Jennifer Lado Product Design & QA',
         copyright: '© 2026 Byte Wizzard — Real products. Real systems.',
       },
 
@@ -563,6 +565,7 @@ const I18N = (() => {
         brand: 'BYTE <span class="accent">WIZZARD</span>',
         tagline: 'Estúdio de Sistemas IA & Software',
         builtBy: 'Built by Matías Bagnasco — AI Systems Developer',
+        designerBy: 'Jennifer Lado Product Design & QA',
         copyright: '© 2026 Byte Wizzard — Produtos reais. Sistemas reais.',
       },
 
