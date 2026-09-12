@@ -4,7 +4,7 @@
  *
  * Usage:
  *   <span data-i18n="hero.title">BYTE WIZZARD</span>
- *   <img data-i18n-alt="products.hermes.icon">
+ *   <img data-i18n-alt="footer.brand">
  *
  * Language switcher:
  *   <button onclick="setLang('en')">EN</button>
@@ -19,7 +19,7 @@ const I18N = (() => {
   const TRANSLATIONS = {
     es: {
       // ─── NAV ───
-      nav: { products: 'Productos', what: 'Qué Hacemos', vision: 'Visión', stack: 'Stack', status: 'Estado', contact: 'Contacto' },
+      nav: { products: 'Productos', what: 'Qué Hacemos', vision: 'Visión', stack: 'Stack', status: 'Estado', reviews: 'Reseñas', contact: 'Contacto' },
 
       // ─── HERO ───
       hero: {
@@ -30,53 +30,31 @@ const I18N = (() => {
         btnReviews: 'Reseñas',
         btnContact: 'Contacto',
         scroll: 'SCROLL ▼',
-        status: '5 productos activos · 3 demos · AI-first',
+        // counts are filled by products-ui.js from the PRODUCTS registry
+        status: '<span class="dot"></span> <span data-products-count></span> productos activos · <span data-demos-count></span> demos · AI-first',
       },
 
-      // ─── PRODUCTS ───
-      products: {
-        title: 'Productos',
-        hermes: {
-          icon: '⚡',
-          name: 'Hermes',
-          tagline: 'Byte Wizzard AI Assistant',
-          features: ['Conocimiento completo del estudio', 'Info de productos y demos', 'Stack tecnológico y visión', 'Chat interactivo en vivo'],
-          status: 'DEMO',
-          link: '→ Probar Demo Bot',
-        },
-        roleplay: {
-          icon: '🎭',
-          name: 'RolePlay Chat',
-          tagline: 'Simulación de Call Center Digital',
-          features: ['Simulación de atención digital', 'Escenarios: reclamos, soporte, ventas', 'Interacción agente-cliente en vivo', 'Entrenamiento para postulantes', 'Multi-canal (chat, WhatsApp)'],
-          status: 'DEMO',
-          link: '→ Probar Demo',
-        },
-        courier: {
-          icon: '🚚',
-          name: 'Courier TMS',
-          tagline: 'Logistics Intelligence System',
-          features: ['Agrupación inteligente por zonas', 'Optimización de rutas (TSP)', 'Tracking GPS en tiempo real', 'App para repartidores', 'Panel administrativo completo', 'Importación de órdenes CSV'],
-          status: 'EN DESARROLLO',
-          link: '→ Probar Demo (en desarrollo)',
-        },
-        profe: {
-          icon: '📚',
-          name: 'Profe Mágico',
-          tagline: 'AI Learning System',
-          features: ['Enseñanza interactiva con IA', 'Traducción y audio automático', 'Contenido adaptado para niños', 'Ejercicios dinámicos', 'Experiencia educativa guiada'],
-          status: 'LIVE',
-          link: '→ Visitar sitio',
-        },
-          OmniConnect: {
-            icon: '🌐',
-            name: 'OmniConnect',
-            tagline: 'Call Center Intelligence Platform',
-            features: ['Dashboards en tiempo real', 'Gestión omnicanal (WhatsApp, email, llamadas)', 'KPIs inteligentes y reportes automatizados', 'Perfiles personalizables por rol', 'Historial completo de interacciones', 'Alertas y notificaciones configurables', 'Monitoreo de operaciones en vivo', 'Migración asistida desde cualquier plataforma'],
-            status: 'EN DESARROLLO',
-            link: '',
-          },
+      // ─── CARD CTA (landing cards) ───
+      cardCta: {
+        pdp: 'Ver ficha',
+        demo: 'Probar demo',
+        live: 'Visitar sitio',
+        contact: 'Contactar',
       },
+
+      // ─── PDP CHROME (product detail pages) ───
+      pdp: {
+        back: '← Volver',
+        sectionDescription: 'Descripción',
+        sectionSpecs: 'Ficha técnica',
+        sectionUseCases: 'Casos de uso',
+        sectionActions: 'Probálo',
+        notAvailable: 'No disponible',
+      },
+
+      // ─── PRODUCTS CONTENT ───
+      // Product names, taglines, features, status labels, descriptions,
+      // specs, use cases and SEO moved to assets/products.js (window.PRODUCTS).
 
       // ─── PRÓXIMAMENTE ───
       comingSoon: {
@@ -256,7 +234,7 @@ const I18N = (() => {
     // ENGLISH
     // ═══════════════════════════════════════════════════
     en: {
-      nav: { products: 'Products', what: 'What We Do', vision: 'Vision', stack: 'Stack', status: 'Status', contact: 'Contact' },
+      nav: { products: 'Products', what: 'What We Do', vision: 'Vision', stack: 'Stack', status: 'Status', reviews: 'Reviews', contact: 'Contact' },
       hero: {
         label: './byte-wizzard --whoami',
         title: 'BYTE<br><span class="accent">WIZZARD</span>',
@@ -265,51 +243,31 @@ const I18N = (() => {
         btnReviews: 'Reviews',
         btnContact: 'Contact',
         scroll: 'SCROLL ▼',
-        status: '5 active products · 3 demos · AI-first',
+        // counts are filled by products-ui.js from the PRODUCTS registry
+        status: '<span class="dot"></span> <span data-products-count></span> active products · <span data-demos-count></span> demos · AI-first',
       },
-      products: {
-        title: 'Products',
-        hermes: {
-          icon: '⚡',
-          name: 'Hermes',
-          tagline: 'Byte Wizzard AI Assistant',
-          features: ['Full studio knowledge', 'Product & demo info', 'Tech stack & vision', 'Interactive live chat'],
-          status: 'DEMO',
-          link: '→ Try Demo Bot',
-        },
-        roleplay: {
-          icon: '🎭',
-          name: 'RolePlay Chat',
-          tagline: 'Call Center Digital Simulation',
-          features: ['Digital customer service simulation', 'Scenarios: claims, support, sales', 'Live agent-client interaction', 'Applicant training tool', 'Multi-channel (chat, WhatsApp)'],
-          status: 'DEMO',
-          link: '→ Try Demo',
-        },
-        courier: {
-          icon: '🚚',
-          name: 'Courier TMS',
-          tagline: 'Logistics Intelligence System',
-          features: ['Smart zone clustering', 'Route optimization (TSP)', 'Real-time GPS tracking', 'Driver mobile app', 'Complete admin panel', 'CSV order import'],
-          status: 'IN DEVELOPMENT',
-          link: '→ Try Demo (in development)',
-        },
-        profe: {
-          icon: '📚',
-          name: 'Profe Mágico',
-          tagline: 'AI Learning System',
-          features: ['Interactive AI teaching', 'Auto translation & audio', 'Kids-friendly content', 'Dynamic exercises', 'Guided learning experience'],
-          status: 'LIVE',
-          link: '→ Visit site',
-        },
-          OmniConnect: {
-            icon: '🌐',
-            name: 'OmniConnect',
-            tagline: 'Call Center Intelligence Platform',
-            features: ['Real-time dashboards', 'Omnichannel management (WhatsApp, email, calls)', 'Smart KPIs and automated reports', 'Customizable role-based profiles', 'Complete interaction history', 'Configurable alerts and notifications', 'Live operations monitoring', 'Assisted migration from any platform'],
-            status: 'IN DEVELOPMENT',
-            link: '',
-          },
+
+      // ─── CARD CTA (landing cards) ───
+      cardCta: {
+        pdp: 'View details',
+        demo: 'Try the demo',
+        live: 'Visit site',
+        contact: 'Contact us',
       },
+
+      // ─── PDP CHROME (product detail pages) ───
+      pdp: {
+        back: '← Back',
+        sectionDescription: 'Description',
+        sectionSpecs: 'Tech specs',
+        sectionUseCases: 'Use cases',
+        sectionActions: 'Try it',
+        notAvailable: 'Not available',
+      },
+
+      // ─── PRODUCTS CONTENT ───
+      // Product names, taglines, features, status labels, descriptions,
+      // specs, use cases and SEO moved to assets/products.js (window.PRODUCTS).
       comingSoon: {
         title: 'Coming Soon',
         clipcraft: {
@@ -478,7 +436,7 @@ const I18N = (() => {
     // PORTUGUÊS
     // ═══════════════════════════════════════════════════
     pt: {
-      nav: { products: 'Produtos', what: 'O Que Fazemos', vision: 'Visão', stack: 'Stack', status: 'Status', contact: 'Contato' },
+      nav: { products: 'Produtos', what: 'O Que Fazemos', vision: 'Visão', stack: 'Stack', status: 'Status', reviews: 'Avaliações', contact: 'Contato' },
       hero: {
         label: './byte-wizzard --whoami',
         title: 'BYTE<br><span class="accent">WIZZARD</span>',
@@ -487,51 +445,31 @@ const I18N = (() => {
         btnReviews: 'Avaliações',
         btnContact: 'Contato',
         scroll: 'ROLAR ▼',
-        status: '5 produtos ativos · 3 demos · AI-first',
+        // counts are filled by products-ui.js from the PRODUCTS registry
+        status: '<span class="dot"></span> <span data-products-count></span> produtos ativos · <span data-demos-count></span> demos · AI-first',
       },
-      products: {
-        title: 'Produtos',
-        hermes: {
-          icon: '⚡',
-          name: 'Hermes',
-          tagline: 'Assistente IA da Byte Wizzard',
-          features: ['Conhecimento completo do estúdio', 'Informações de produtos e demos', 'Stack tecnológico e visão', 'Chat interativo ao vivo'],
-          status: 'DEMO',
-          link: '→ Testar Bot Demo',
-        },
-        roleplay: {
-          icon: '🎭',
-          name: 'RolePlay Chat',
-          tagline: 'Simulação de Call Center Digital',
-          features: ['Simulação de atendimento digital', 'Cenários: reclamações, suporte, vendas', 'Interação agente-cliente ao vivo', 'Treinamento para candidatos', 'Multi-canal (chat, WhatsApp)'],
-          status: 'DEMO',
-          link: '→ Testar Demo',
-        },
-        courier: {
-          icon: '🚚',
-          name: 'Courier TMS',
-          tagline: 'Sistema de Inteligência Logística',
-          features: ['Agrupamento inteligente por zona', 'Otimização de rotas (TSP)', 'Tracking GPS em tempo real', 'App para entregadores', 'Painel administrativo completo', 'Importação de pedidos CSV'],
-          status: 'EM DESENVOLVIMENTO',
-          link: '→ Testar Demo (em desenvolvimento)',
-        },
-        profe: {
-          icon: '📚',
-          name: 'Profe Mágico',
-          tagline: 'Sistema de Aprendizagem com IA',
-          features: ['Ensino interativo com IA', 'Tradução e áudio automáticos', 'Conteúdo adaptado para crianças', 'Exercícios dinâmicos', 'Experiência educativa guiada'],
-          status: 'LIVE',
-          link: '→ Visitar site',
-        },
-          OmniConnect: {
-            icon: '🌐',
-            name: 'OmniConnect',
-            tagline: 'Call Center Intelligence Platform',
-            features: ['Dashboards em tempo real', 'Gestão omnicanal (WhatsApp, email, chamadas)', 'KPIs inteligentes e relatórios automatizados', 'Perfis personalizáveis por função', 'Histórico completo de interações', 'Alertas e notificações configuráveis', 'Monitoramento de operações ao vivo', 'Migração assistida de qualquer plataforma'],
-            status: 'EM DESENVOLVIMENTO',
-            link: '',
-          },
+
+      // ─── CARD CTA (landing cards) ───
+      cardCta: {
+        pdp: 'Ver ficha',
+        demo: 'Testar demo',
+        live: 'Visitar site',
+        contact: 'Contatar',
       },
+
+      // ─── PDP CHROME (product detail pages) ───
+      pdp: {
+        back: '← Voltar',
+        sectionDescription: 'Descrição',
+        sectionSpecs: 'Ficha técnica',
+        sectionUseCases: 'Casos de uso',
+        sectionActions: 'Experimente',
+        notAvailable: 'Não disponível',
+      },
+
+      // ─── PRODUCTS CONTENT ───
+      // Product names, taglines, features, status labels, descriptions,
+      // specs, use cases and SEO moved to assets/products.js (window.PRODUCTS).
       comingSoon: {
         title: 'Em Breve',
         clipcraft: {
